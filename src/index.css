@@ -4,6 +4,9 @@
 
 @layer base {
 	body {
-		@apply bg-[#dddddd];
+	}
+	input,
+	textarea {
+		outline: none;
 	}
 }

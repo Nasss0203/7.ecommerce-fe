@@ -1,7 +1,16 @@
-import React from 'react';
+import { Outlet } from 'react-router-dom';
+import HeaderCustomer from './HeaderCustomer';
 
-const LayoutCustomer = ({ children }: { children: React.ReactNode }) => {
-	return <div>{children}</div>;
+const LayoutCustomer = () => {
+	return (
+		<div className='flex flex-col '>
+			<HeaderCustomer></HeaderCustomer>
+			<div className='container'>
+				<Outlet></Outlet>
+			</div>
+			<footer></footer>
+		</div>
+	);
 };
 
 export default LayoutCustomer;
