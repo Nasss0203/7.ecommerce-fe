@@ -50,10 +50,10 @@ const Card = () => {
 				<div className='items-center justify-center hidden w-8 h-8 p-2 text-sm font-medium rounded lg:flex bg-primary-100 text-primary-500 '>
 					<FaRegHeart />
 				</div>
-				<div className='flex items-center justify-center flex-1 w-8 h-8 gap-2 p-2 text-white rounded bg-primary-500'>
+				<button className='flex items-center justify-center flex-1 w-8 h-8 gap-2 p-2 text-white rounded bg-primary-500'>
 					<FaCartShopping />
 					<span className='text-sm font-bold leading-8'>Add to card</span>
-				</div>
+				</button>
 			</div>
 		</div>
 	);

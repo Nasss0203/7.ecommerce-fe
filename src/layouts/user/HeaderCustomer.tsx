@@ -6,6 +6,8 @@ import { GoPerson } from 'react-icons/go';
 import { IoIosArrowDown } from 'react-icons/io';
 import { ModeToggle } from '@/components/ui/mode-toggle';
 import { Link } from 'react-router-dom';
+import { useContext } from 'react';
+import AuthContext from '@/context/AuthContext';
 
 const HeaderCustomer = () => {
 	return (

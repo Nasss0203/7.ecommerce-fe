@@ -5,12 +5,14 @@ import './index.css';
 import { ThemeProvider } from './components/theme-provider.tsx';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { Toaster } from './components/ui/toaster.tsx';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
-	<React.StrictMode>
-		<ThemeProvider defaultTheme='dark' storageKey='vite-ui-theme'>
-			<App />
-			<ToastContainer />
-		</ThemeProvider>
-	</React.StrictMode>,
+	// <React.StrictMode>
+	<ThemeProvider defaultTheme='dark' storageKey='vite-ui-theme'>
+		<App />
+		<ToastContainer />
+		<Toaster />
+	</ThemeProvider>,
+	// </React.StrictMode>,
 );

@@ -1,12 +1,5 @@
-import HeaderAdmin from '@/layouts/admin/HeaderAdmin';
-import React from 'react';
-
 const DashboardAdmin = () => {
-	return (
-		<div className=''>
-			<HeaderAdmin>Dashboard</HeaderAdmin>
-		</div>
-	);
+	return <div className=''></div>;
 };
 
 export default DashboardAdmin;
