@@ -12,6 +12,17 @@ const ElectronicAttributesSchema = z.object({
 	product_auth: z.string().optional(), // Assuming ObjectId translates to a string
 });
 
+const LaptopAttributesSchema = z.object({
+	brand: z.string(),
+	ram: z.number(),
+	screen: z.number(),
+	data: z.number(),
+	product_auth: z.string().optional(), // Assuming ObjectId translates to a string
+	// Add additional attributes specific to laptops if needed
+	battery_life: z.string().optional(),
+	keyboard_layout: z.string().optional(),
+});
+
 // Define the main product schema
 export const CreateNewProductBody = z.object({
 	product_name: z.string(),
@@ -23,7 +34,11 @@ export const CreateNewProductBody = z.object({
 	product_quantity: z.number(),
 	product_stock: z.number().optional(),
 	product_category: ProductCategorySchema, // Using the defined enum schema
-	product_attributes: ElectronicAttributesSchema, // Using the defined mixed schema
+	product_attributes: z.union([
+		ElectronicAttributesSchema,
+		LaptopAttributesSchema,
+		// Add more schemas for other product categories if needed
+	]),
 	product_auth: z.string().optional(), // Assuming Schema.Types.ObjectId translates to a string
 });
 

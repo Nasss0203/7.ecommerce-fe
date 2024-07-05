@@ -4,7 +4,7 @@ axios.defaults.baseURL = 'http://localhost:3000/v1/api/';
 
 const instance = axios.create({
 	baseURL: 'http://localhost:3000/v1/api/',
-	timeout: 1000,
+	// timeout: 1000,
 	headers: {
 		'x-api-key': `${import.meta.env.VITE_API_KEY}`,
 	},
@@ -12,11 +12,12 @@ const instance = axios.create({
 
 // Add a request interceptor
 instance.interceptors.request.use(
-	function (config) {
+	async (config) => {
 		// Do something before request is sent
 		if (!config.headers['x-api-key']) {
 			config.headers['x-api-key'] = import.meta.env.VITE_API_KEY;
 		}
+
 		return config;
 	},
 	function (error) {

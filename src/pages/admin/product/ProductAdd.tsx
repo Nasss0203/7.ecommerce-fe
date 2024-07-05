@@ -15,7 +15,7 @@ import {
 	CreateNewProductType,
 } from '@/validator/product.schema';
 import { zodResolver } from '@hookform/resolvers/zod';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
 	Select,
@@ -26,11 +26,20 @@ import {
 } from '@/components/ui/select';
 import { categoryOptions } from '@/constants/category';
 import { QuillEditor } from '@/components/quill';
+import { createNewProduct } from '@/api/product.api';
+import { toast } from 'react-toastify';
+import axios from '../../../api/axios';
+import { isAuthenticated } from '@/api/auth.api';
 
 const ProductAdd = () => {
+	const user = isAuthenticated();
+	const _id = user?.metadata?.data?._id;
+
 	const navigate = useNavigate();
 	const [selectedCategory, setSelectedCategory] =
 		useState<string>('Electronics');
+	const [fileUpload, setFileUpload] = useState<File | null>(null);
+
 	const form = useForm<CreateNewProductType>({
 		resolver: zodResolver(CreateNewProductBody),
 		defaultValues: {
@@ -40,20 +49,64 @@ const ProductAdd = () => {
 			product_price: 0,
 			product_quantity: 0,
 			product_category: 'Electronics',
-			product_auth: '',
-			product_stock: 0,
+			product_auth: _id,
+			// product_stock: 0,
 			product_attributes: {
 				brand: '',
 				data: 0,
 				ram: 0,
 				screen: 0,
-				product_auth: '',
+				// product_auth: _id,
 			},
 		},
 	});
 
-	async function onSubmit(values: CreateNewProductType) {
-		console.log(`values`, values);
+	const handleFileChange = async (values: any) => {
+		if (values.target.files && values.target.files[0]) {
+			setFileUpload(values.target.files[0]);
+		}
+	};
+
+	async function onSubmit(values: any) {
+		try {
+			const formData = new FormData();
+
+			if (fileUpload) {
+				formData.append('file', fileUpload);
+			}
+
+			if (fileUpload) {
+				const uploadResponse = await axios.post('/upload/thumb', formData, {
+					headers: {
+						'Content-Type': 'multipart/form-data',
+					},
+					onUploadProgress: (progressEvent) => {
+						if (progressEvent && progressEvent.loaded && progressEvent.total) {
+							const percentCompleted = Math.round(
+								(progressEvent.loaded * 100) / progressEvent.total,
+							);
+							console.log(`Upload progress: ${percentCompleted}%`);
+						}
+					},
+				});
+
+				console.log(
+					'uploadResponse: ',
+					uploadResponse.data?.metadata?.thumb_url,
+				);
+
+				values.product_thumb = uploadResponse.data?.metadata?.thumb_url;
+			}
+			const response = await createNewProduct(values);
+			if (response) {
+				form.reset();
+			}
+			console.log('response: ', response);
+			toast.success('Product created successfully');
+		} catch (error) {
+			console.error('Error during product creation:', error);
+			toast.error('Create new product unsuccessful. Please try again.');
+		}
 	}
 	return (
 		<div className='flex flex-col gap-5'>
@@ -156,7 +209,7 @@ const ProductAdd = () => {
 											<Input
 												type='file'
 												placeholder='Enter product name'
-												{...field}
+												onChange={handleFileChange}
 											/>
 										</FormControl>
 										<FormMessage />
@@ -276,18 +329,12 @@ function CategoryForm(props: { form: any; category: string }) {
 						/>
 						<FormField
 							control={form.control}
-							name='product_attributes.screen'
+							name='product_attributes.brand'
 							render={({ field }) => (
 								<FormItem>
-									<FormLabel>Screen</FormLabel>
+									<FormLabel>Brand</FormLabel>
 									<FormControl>
-										<Input
-											type='number'
-											{...field}
-											onChange={(e) =>
-												field.onChange(parseFloat(e.target.value))
-											}
-										/>
+										<Input {...field} />
 									</FormControl>
 								</FormItem>
 							)}

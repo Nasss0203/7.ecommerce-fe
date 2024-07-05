@@ -30,9 +30,9 @@ const SignInPage = () => {
 	async function onSubmit(values: SignInBodyType) {
 		console.log('values: ', values);
 		try {
-			const res = await signIn(values);
-			console.log('Sign in successful:', res);
-			if (res) {
+			const response = await signIn(values);
+			console.log('Sign in successful:', response);
+			if (response) {
 				navigate('/');
 			}
 		} catch (error) {

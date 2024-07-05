@@ -18,9 +18,7 @@ import {
 
 const LayoutAdmin = () => {
 	const auth = useAuth();
-	console.log('auth: ', auth);
 	const data = auth?.currentAuth?.metadata;
-	console.log('data: ', data);
 	const dataAuth = data?.data;
 	console.log('dataAuth: ', dataAuth);
 	return (
