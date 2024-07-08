@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { TSidebar, sidebar } from '@/constants/sidebar';
 import { useState } from 'react';
-import { NavLink } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 
 const Sidebar = () => {
 	const [menuSidebar, setMenuSidebar] = useState<boolean>(false);
@@ -10,9 +10,9 @@ const Sidebar = () => {
 
 	return (
 		<div className=' bg-[#1C2434] dark:bg-[#24303f]'>
-			<div className='flex justify-center px-10 py-5'>
+			<Link to={'/admin/dashboard'} className='flex justify-center px-10 py-5'>
 				<h1 className='text-3xl font-bold text-white'>Dashboard</h1>
-			</div>
+			</Link>
 			<div className='flex flex-col gap-1 px-5 mt-5 '>
 				{sidebar.map((item: TSidebar, index) => (
 					<NavSidebar

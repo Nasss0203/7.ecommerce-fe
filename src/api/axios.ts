@@ -1,22 +1,20 @@
+import { Mutex } from 'async-mutex';
 import axios from 'axios';
-
+const mutex = new Mutex();
 axios.defaults.baseURL = 'http://localhost:3000/v1/api/';
 
 const instance = axios.create({
-	baseURL: 'http://localhost:3000/v1/api/',
-	// timeout: 1000,
+	baseURL: import.meta.env.VITE_URL as string,
 	headers: {
-		'x-api-key': `${import.meta.env.VITE_API_KEY}`,
+		'x-api-key': import.meta.env.VITE_API_KEY as string,
 	},
+	// withCredentials: true,
 });
 
 // Add a request interceptor
 instance.interceptors.request.use(
-	async (config) => {
+	function (config) {
 		// Do something before request is sent
-		if (!config.headers['x-api-key']) {
-			config.headers['x-api-key'] = import.meta.env.VITE_API_KEY;
-		}
 
 		return config;
 	},

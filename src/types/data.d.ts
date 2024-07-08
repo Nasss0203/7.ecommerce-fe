@@ -41,14 +41,22 @@ export interface ILaptops {
 }
 
 export interface IProduct {
+	_id?: string | undefined;
 	product_auth?: string | undefined;
 	product_name: string;
 	product_thumb: string;
-	product_description: string;
+	product_description?: string;
+	product_slug?: string;
 	product_price: number;
 	product_quantity: number;
 	product_discount?: number;
 	product_stock?: number;
 	product_category: string;
 	product_attributes: IElectronics;
+}
+
+export interface IProductResponse<T> {
+	message: string;
+	metadata: T[];
+	status: number;
 }

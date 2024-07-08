@@ -4,6 +4,7 @@
 
 @layer base {
 	body {
+		font-family: 'Roboto', sans-serif;
 	}
 	input,
 	textarea {

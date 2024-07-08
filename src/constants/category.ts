@@ -12,4 +12,8 @@ const categoryOptions: ICategory[] = [
 	},
 ];
 
-export { categoryOptions };
+const categoryForm = {
+	ELECTTRONICS: 'Electronics',
+};
+
+export { categoryOptions, categoryForm };

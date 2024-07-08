@@ -1,11 +1,27 @@
+import { findAllProducts } from '@/api/product.api';
 import { Card } from '@/components/card';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { BsCart } from 'react-icons/bs';
 import { FaCartShopping, FaRegHeart, FaStar } from 'react-icons/fa6';
 import { IoIosArrowRoundForward, IoMdHeartEmpty } from 'react-icons/io';
 import { Link } from 'react-router-dom';
 
 const HomePage = () => {
+	const [dataProduct, setDataProduct] = useState<any>();
+	console.log('dataProduct: ', dataProduct);
+
+	useEffect(() => {
+		getAllProducts();
+	}, []);
+
+	const getAllProducts = async () => {
+		const response = await findAllProducts();
+		setDataProduct(response);
+	};
+	const product = dataProduct?.metadata;
+	console.log('product: ', product);
+	if (!product) return null;
+
 	return (
 		<div className=''>
 			<div className='flex flex-col gap-6'>
@@ -21,11 +37,15 @@ const HomePage = () => {
 					</Link>
 				</div>
 				<div className='grid grid-cols-2 gap-2 md:gap-3 2xl:grid-cols-6 xl:grid-cols-5'>
-					{Array(10)
-						.fill(0)
-						.map((item, index) => (
-							<Card key={index}></Card>
-						))}
+					{product.map((item: any, index: any) => (
+						<Card
+							slug={item.product_slug}
+							_id={item._id}
+							key={index}
+							image={item.product_thumb}
+							name={item.product_name}
+							price={item.product_price}></Card>
+					))}
 				</div>
 			</div>
 		</div>

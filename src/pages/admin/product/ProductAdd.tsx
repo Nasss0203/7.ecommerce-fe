@@ -15,7 +15,7 @@ import {
 	CreateNewProductType,
 } from '@/validator/product.schema';
 import { zodResolver } from '@hookform/resolvers/zod';
-import React, { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
 	Select,
@@ -24,12 +24,13 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from '@/components/ui/select';
-import { categoryOptions } from '@/constants/category';
+import { categoryForm, categoryOptions } from '@/constants/category';
 import { QuillEditor } from '@/components/quill';
 import { createNewProduct } from '@/api/product.api';
 import { toast } from 'react-toastify';
-import axios from '../../../api/axios';
 import { isAuthenticated } from '@/api/auth.api';
+import { FormBackground, FormElectronic, FormGrid } from '@/components/form';
+import { uploadFile } from '@/api/upload.api';
 
 const ProductAdd = () => {
 	const user = isAuthenticated();
@@ -50,13 +51,11 @@ const ProductAdd = () => {
 			product_quantity: 0,
 			product_category: 'Electronics',
 			product_auth: _id,
-			// product_stock: 0,
 			product_attributes: {
 				brand: '',
 				data: 0,
 				ram: 0,
 				screen: 0,
-				// product_auth: _id,
 			},
 		},
 	});
@@ -67,47 +66,32 @@ const ProductAdd = () => {
 		}
 	};
 
-	async function onSubmit(values: any) {
+	async function onSubmit(values: CreateNewProductType) {
 		try {
 			const formData = new FormData();
-
 			if (fileUpload) {
 				formData.append('file', fileUpload);
 			}
 
 			if (fileUpload) {
-				const uploadResponse = await axios.post('/upload/thumb', formData, {
-					headers: {
-						'Content-Type': 'multipart/form-data',
-					},
-					onUploadProgress: (progressEvent) => {
-						if (progressEvent && progressEvent.loaded && progressEvent.total) {
-							const percentCompleted = Math.round(
-								(progressEvent.loaded * 100) / progressEvent.total,
-							);
-							console.log(`Upload progress: ${percentCompleted}%`);
-						}
-					},
-				});
+				const uploadResponse = await uploadFile(formData);
+				console.log('uploadResponse: ', uploadResponse?.metadata?.thumb_url);
 
-				console.log(
-					'uploadResponse: ',
-					uploadResponse.data?.metadata?.thumb_url,
-				);
-
-				values.product_thumb = uploadResponse.data?.metadata?.thumb_url;
+				values.product_thumb = uploadResponse?.metadata?.thumb_url;
 			}
+
 			const response = await createNewProduct(values);
 			if (response) {
 				form.reset();
+				setFileUpload(null);
 			}
-			console.log('response: ', response);
 			toast.success('Product created successfully');
 		} catch (error) {
 			console.error('Error during product creation:', error);
 			toast.error('Create new product unsuccessful. Please try again.');
 		}
 	}
+
 	return (
 		<div className='flex flex-col gap-5'>
 			<Header>Create New Product</Header>
@@ -216,9 +200,7 @@ const ProductAdd = () => {
 									</FormItem>
 								)}
 							/>
-							<CategoryForm
-								form={form}
-								category={selectedCategory}></CategoryForm>
+							<CategoryForm category={selectedCategory}></CategoryForm>
 						</FormBackground>
 						<FormBackground>
 							<FormField
@@ -252,95 +234,12 @@ const ProductAdd = () => {
 	);
 };
 
-function FormBackground({ children }: { children: React.ReactNode }) {
-	return (
-		<div className='dark:bg-[#313d4a] bg-[#eff4fb] px-5 py-4 rounded-md space-y-3 min-h-screen'>
-			{children}
-		</div>
-	);
-}
-
-function FormGrid({ children }: { children: React.ReactNode }) {
-	return <div className='grid grid-cols-2 gap-5'>{children}</div>;
-}
-
-function CategoryForm(props: { form: any; category: string }) {
-	const { form, category } = props;
+function CategoryForm(props: { category: string }) {
+	const { category } = props;
 	return (
 		<>
-			{category === 'Electronics' ? (
-				<>
-					<FormGrid>
-						<FormField
-							control={form.control}
-							name='product_attributes.ram'
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>Ram</FormLabel>
-									<FormControl>
-										<Input
-											type='number'
-											{...field}
-											onChange={(e) =>
-												field.onChange(parseFloat(e.target.value))
-											}
-										/>
-									</FormControl>
-								</FormItem>
-							)}
-						/>
-						<FormField
-							control={form.control}
-							name='product_attributes.screen'
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>Screen</FormLabel>
-									<FormControl>
-										<Input
-											type='number'
-											{...field}
-											onChange={(e) =>
-												field.onChange(parseFloat(e.target.value))
-											}
-										/>
-									</FormControl>
-								</FormItem>
-							)}
-						/>
-					</FormGrid>
-					<FormGrid>
-						<FormField
-							control={form.control}
-							name='product_attributes.data'
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>Data</FormLabel>
-									<FormControl>
-										<Input
-											type='number'
-											{...field}
-											onChange={(e) =>
-												field.onChange(parseFloat(e.target.value))
-											}
-										/>
-									</FormControl>
-								</FormItem>
-							)}
-						/>
-						<FormField
-							control={form.control}
-							name='product_attributes.brand'
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>Brand</FormLabel>
-									<FormControl>
-										<Input {...field} />
-									</FormControl>
-								</FormItem>
-							)}
-						/>
-					</FormGrid>
-				</>
+			{category === categoryForm.ELECTTRONICS ? (
+				<FormElectronic></FormElectronic>
 			) : category === 'Laptops' ? (
 				<div>Laptops</div>
 			) : category === 'Tablets' ? (
@@ -349,4 +248,5 @@ function CategoryForm(props: { form: any; category: string }) {
 		</>
 	);
 }
+
 export default ProductAdd;

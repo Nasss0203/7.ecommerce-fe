@@ -103,6 +103,9 @@ module.exports = {
           '50': '#F2F4F5',
         },
       },
+      fontFamily: {
+        serif: ['Roboto', 'serif'], // Replace 'YourSerifFont' with your desired serif font
+      },
     },
   },
   plugins: [require("tailwindcss-animate")],

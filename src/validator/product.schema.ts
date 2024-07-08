@@ -18,7 +18,6 @@ const LaptopAttributesSchema = z.object({
 	screen: z.number(),
 	data: z.number(),
 	product_auth: z.string().optional(), // Assuming ObjectId translates to a string
-	// Add additional attributes specific to laptops if needed
 	battery_life: z.string().optional(),
 	keyboard_layout: z.string().optional(),
 });
@@ -30,7 +29,6 @@ export const CreateNewProductBody = z.object({
 	product_price: z.number(),
 	product_description: z.string().optional(),
 	// product_image: z.array(z.string()),
-	// product_slug: z.string(),
 	product_quantity: z.number(),
 	product_stock: z.number().optional(),
 	product_category: ProductCategorySchema, // Using the defined enum schema
