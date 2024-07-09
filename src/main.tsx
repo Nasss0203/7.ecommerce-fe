@@ -6,13 +6,17 @@ import { ThemeProvider } from './components/theme-provider.tsx';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Toaster } from './components/ui/toaster.tsx';
+import { Provider } from 'react-redux';
+import { store } from './redux/store.ts';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
 	// <React.StrictMode>
 	<ThemeProvider defaultTheme='dark' storageKey='vite-ui-theme'>
-		<App />
-		<ToastContainer />
-		<Toaster />
+		<Provider store={store}>
+			<App />
+			<ToastContainer />
+			<Toaster />
+		</Provider>
 	</ThemeProvider>,
 	// </React.StrictMode>,
 );

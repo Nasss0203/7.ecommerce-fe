@@ -13,11 +13,6 @@ import {
 	SortingState,
 	VisibilityState,
 	flexRender,
-	getCoreRowModel,
-	getFilteredRowModel,
-	getPaginationRowModel,
-	getSortedRowModel,
-	useReactTable,
 } from '@tanstack/react-table';
 import { IProduct, IProductResponse } from '@/types/data';
 import { Checkbox } from '../ui/checkbox';
@@ -25,40 +20,51 @@ import {
 	actionPublishProduct,
 	findAllDraftsForShop,
 	findAllProducts,
-	findAllPublishForShop,
 } from '@/api/product.api';
 import { Input } from '../ui/input';
 import { DialogImage } from '../dialog';
+import { useDataTable } from '@/hooks/useDataTable';
+import {
+	AlertDialog,
+	AlertDialogAction,
+	AlertDialogCancel,
+	AlertDialogContent,
+	AlertDialogDescription,
+	AlertDialogFooter,
+	AlertDialogHeader,
+	AlertDialogTitle,
+	AlertDialogTrigger,
+} from '../ui/alert-dialog';
+import { useAppDispatch, useAppSelector } from '@/redux/hooks';
+import {
+	actionPublish,
+	fetchAllDraftProduct,
+	resetFetchDraft,
+} from '@/redux/slice/product.slice';
 const TableDraft = () => {
 	const [sorting, setSorting] = useState<SortingState>([]);
 	const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
 	const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
 	const [rowSelection, setRowSelection] = useState({});
-	const [dataProduct, setDataProduct] = useState<IProductResponse<IProduct>>();
-	const [draft, setDraft] = useState<IProductResponse<IProduct>>();
-	console.log('published: ', draft);
+
+	const dispatch = useAppDispatch();
+	const product = useAppSelector((state) => state.product.listProduct);
+	const isPublish = useAppSelector((state) => state.product.isPublish);
 
 	useEffect(() => {
-		// getAllProducts();
-		getListDraft();
+		if (isPublish === true) {
+			dispatch(resetFetchDraft());
+		}
+	}, [isPublish]);
+
+	useEffect(() => {
+		dispatch(fetchAllDraftProduct());
 	}, []);
 
-	const getAllProducts = async () => {
-		const response = await findAllProducts();
-		setDataProduct(response);
-	};
-
-	const getListDraft = async () => {
-		const response = await findAllDraftsForShop();
-		setDraft(response);
-	};
-
-	const actionPublish = async (id: string) => {
-		const response = await actionPublishProduct(id);
-		return response;
-	};
-
-	const product = draft?.metadata || [];
+	// const actionPublish = async (id: string) => {
+	// 	const response = await actionPublishProduct(id);
+	// 	return response;
+	// };
 
 	const columns: ColumnDef<IProduct>[] = [
 		{
@@ -132,35 +138,46 @@ const TableDraft = () => {
 			accessorKey: '_id',
 			header: 'Action',
 			cell: ({ row }) => (
-				<button
-					onClick={() => actionPublish(row.getValue('_id'))}
-					className='px-3 py-2 bg-red-500 rounded-md'>
-					unPublish
-				</button>
+				<AlertDialog>
+					<AlertDialogTrigger className='px-3 py-2 font-medium text-white bg-blue-500 rounded-md'>
+						Publish
+					</AlertDialogTrigger>
+					<AlertDialogContent>
+						<AlertDialogHeader>
+							<AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+							<AlertDialogDescription>
+								This action cannot be undone. This will permanently delete your
+								account and remove your data from our servers.
+							</AlertDialogDescription>
+						</AlertDialogHeader>
+						<AlertDialogFooter>
+							<AlertDialogCancel>Cancel</AlertDialogCancel>
+							<AlertDialogAction
+								onClick={() => dispatch(actionPublish(row.getValue('_id')))}>
+								Continue
+							</AlertDialogAction>
+						</AlertDialogFooter>
+					</AlertDialogContent>
+				</AlertDialog>
 			),
 		},
 	];
 
-	const table = useReactTable({
+	const table = useDataTable({
 		data: product,
 		columns,
-		onSortingChange: setSorting,
-		onColumnFiltersChange: setColumnFilters,
-		getCoreRowModel: getCoreRowModel(),
-		getPaginationRowModel: getPaginationRowModel(),
-		getSortedRowModel: getSortedRowModel(),
-		getFilteredRowModel: getFilteredRowModel(),
-		onColumnVisibilityChange: setColumnVisibility,
-		onRowSelectionChange: setRowSelection,
-		state: {
-			sorting,
-			columnFilters,
-			columnVisibility,
-			rowSelection,
-		},
+		setSorting,
+		setColumnFilters,
+		setColumnVisibility,
+		setRowSelection,
+		columnFilters,
+		columnVisibility,
+		rowSelection,
+		sorting,
 	});
 
 	if (!product && !table) return null;
+
 	return (
 		<div className='w-full'>
 			<div className='flex items-center py-4'>

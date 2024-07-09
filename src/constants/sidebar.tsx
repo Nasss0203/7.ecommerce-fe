@@ -3,6 +3,7 @@ import { TiHome } from 'react-icons/ti';
 import { AiFillProduct } from 'react-icons/ai';
 import { IoMdArrowDropdown, IoMdArrowDropup } from 'react-icons/io';
 import { GoDotFill } from 'react-icons/go';
+import { RiListOrdered } from 'react-icons/ri';
 
 export type TSidebar = {
 	title: string;
@@ -37,5 +38,10 @@ export const sidebar: TSidebar[] = [
 				icon: <GoDotFill />,
 			},
 		],
+	},
+	{
+		title: 'Order',
+		path: '/admin/order',
+		icon: <RiListOrdered />,
 	},
 ];

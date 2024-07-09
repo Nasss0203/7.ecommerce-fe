@@ -118,23 +118,19 @@ export const actionPublishProduct = async (id: string) => {
 
 export const unActionPublishProduct = async (id: string) => {
 	try {
-		// const { refreshToken, userId } = returnUserIdAndRefreshToken();
-		const user = isAuthenticated();
-		const refreshToken = user?.metadata?.tokens?.refreshToken;
-		const client = user?.metadata?.data?._id;
-		console.log('userId: ', client);
-		console.log('refreshToken: ', refreshToken);
+		const { refreshToken, userId } = returnUserIdAndRefreshToken();
+
 		const response = await axios.post(
 			`/product/unpublish/${id}`,
 			{},
 			{
 				headers: {
-					'x-client-id': client,
+					'x-client-id': userId,
 					'x-rtoken-id': refreshToken,
 				},
 			},
 		);
-		const data = response;
+		const data = response?.data;
 		return data;
 	} catch (error) {
 		console.error('Error action unpublish product', error);

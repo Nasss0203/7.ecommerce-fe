@@ -13,53 +13,54 @@ import {
 	SortingState,
 	VisibilityState,
 	flexRender,
-	getCoreRowModel,
-	getFilteredRowModel,
-	getPaginationRowModel,
-	getSortedRowModel,
-	useReactTable,
 } from '@tanstack/react-table';
 import { IProduct, IProductResponse } from '@/types/data';
 import { Checkbox } from '../ui/checkbox';
 import {
-	actionPublishProduct,
 	findAllProducts,
 	findAllPublishForShop,
 	unActionPublishProduct,
 } from '@/api/product.api';
+import {
+	AlertDialog,
+	AlertDialogAction,
+	AlertDialogCancel,
+	AlertDialogContent,
+	AlertDialogDescription,
+	AlertDialogFooter,
+	AlertDialogHeader,
+	AlertDialogTitle,
+	AlertDialogTrigger,
+} from '../ui/alert-dialog';
 import { Input } from '../ui/input';
 import { DialogImage } from '../dialog';
+import { useDataTable } from '@/hooks/useDataTable';
+import { useAppDispatch, useAppSelector } from '@/redux/hooks';
+import {
+	actionUnPublish,
+	findAllPublishProduct,
+	resetFetchPublish,
+} from '@/redux/slice/product.slice';
 
 const TablePublish = () => {
 	const [sorting, setSorting] = useState<SortingState>([]);
 	const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
 	const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
 	const [rowSelection, setRowSelection] = useState({});
-	const [dataProduct, setDataProduct] = useState<IProductResponse<IProduct>>();
-	const [published, setPublished] = useState<IProductResponse<IProduct>>();
-	console.log('published: ', published);
+
+	const dispatch = useAppDispatch();
+	const product = useAppSelector((state) => state.product.listProduct);
+	const isUnPublish = useAppSelector((state) => state.product.isUnPublish);
 
 	useEffect(() => {
-		// getAllProducts();
-		getListPublish();
+		if (isUnPublish === true) {
+			dispatch(resetFetchPublish());
+		}
+	}, [isUnPublish]);
+
+	useEffect(() => {
+		dispatch(findAllPublishProduct());
 	}, []);
-
-	const getAllProducts = async () => {
-		const response = await findAllProducts();
-		setDataProduct(response);
-	};
-
-	const getListPublish = async () => {
-		const response = await findAllPublishForShop();
-		setPublished(response);
-	};
-
-	const actionUnPublish = async (id: string) => {
-		const response = await unActionPublishProduct(id);
-		return response;
-	};
-
-	const product = published?.metadata || [];
 
 	const columns: ColumnDef<IProduct>[] = [
 		{
@@ -133,32 +134,46 @@ const TablePublish = () => {
 			accessorKey: '_id',
 			header: 'Action',
 			cell: ({ row }) => (
-				<button
-					onClick={() => actionUnPublish(row.getValue('_id'))}
-					className='px-3 py-2 bg-red-500 rounded-md'>
-					unPublish
-				</button>
+				<>
+					<AlertDialog>
+						<AlertDialogTrigger className='px-3 py-2 text-white bg-red-500 rounded-md'>
+							unPublish
+						</AlertDialogTrigger>
+						<AlertDialogContent>
+							<AlertDialogHeader>
+								<AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+								<AlertDialogDescription>
+									This action cannot be undone. This will permanently delete
+									your account and remove your data from our servers.
+								</AlertDialogDescription>
+							</AlertDialogHeader>
+							<AlertDialogFooter>
+								<AlertDialogCancel>Cancel</AlertDialogCancel>
+								<AlertDialogAction
+									onClick={() =>
+										dispatch(actionUnPublish(row.getValue('_id')))
+									}>
+									Continue
+								</AlertDialogAction>
+							</AlertDialogFooter>
+						</AlertDialogContent>
+					</AlertDialog>
+				</>
 			),
 		},
 	];
 
-	const table = useReactTable({
+	const table = useDataTable({
 		data: product,
 		columns,
-		onSortingChange: setSorting,
-		onColumnFiltersChange: setColumnFilters,
-		getCoreRowModel: getCoreRowModel(),
-		getPaginationRowModel: getPaginationRowModel(),
-		getSortedRowModel: getSortedRowModel(),
-		getFilteredRowModel: getFilteredRowModel(),
-		onColumnVisibilityChange: setColumnVisibility,
-		onRowSelectionChange: setRowSelection,
-		state: {
-			sorting,
-			columnFilters,
-			columnVisibility,
-			rowSelection,
-		},
+		setSorting,
+		setColumnFilters,
+		setColumnVisibility,
+		setRowSelection,
+		columnFilters,
+		columnVisibility,
+		rowSelection,
+		sorting,
 	});
 
 	if (!product && !table) return null;
