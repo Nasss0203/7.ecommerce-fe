@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { TiHome } from 'react-icons/ti';
-import { AiFillProduct } from 'react-icons/ai';
-import { IoMdArrowDropdown, IoMdArrowDropup } from 'react-icons/io';
-import { GoDotFill } from 'react-icons/go';
-import { RiListOrdered } from 'react-icons/ri';
+import { AiFillProduct } from "react-icons/ai";
+import { GoDotFill } from "react-icons/go";
+import { IoMdArrowDropdown, IoMdArrowDropup } from "react-icons/io";
+import { RiListOrdered } from "react-icons/ri";
+import { TiHome } from "react-icons/ti";
 
 export type TSidebar = {
 	title: string;
@@ -16,32 +16,32 @@ export type TSidebar = {
 
 export const sidebar: TSidebar[] = [
 	{
-		title: 'Dashboard',
-		path: '/admin/dashboard',
+		title: "Dashboard",
+		path: "/admin/dashboard",
 		icon: <TiHome />,
 	},
 	{
-		title: 'Product',
-		path: '/admin/product',
+		title: "Product",
+		path: "/admin/product",
 		iconDown: <IoMdArrowDropdown />,
 		iconUp: <IoMdArrowDropup />,
 		icon: <AiFillProduct />,
 		menu: [
 			{
-				title: 'Create product',
-				path: '/admin/product/product-add',
+				title: "Create product",
+				path: "/admin/product/product-add",
 				icon: <GoDotFill />,
 			},
 			{
-				title: 'List product',
-				path: '/admin/product/product-list',
+				title: "List product",
+				path: "/admin/product/product-list",
 				icon: <GoDotFill />,
 			},
 		],
 	},
 	{
-		title: 'Order',
-		path: '/admin/order',
+		title: "Order",
+		path: "/admin/order",
 		icon: <RiListOrdered />,
 	},
 ];

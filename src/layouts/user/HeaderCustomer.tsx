@@ -8,8 +8,26 @@ import { ModeToggle } from '@/components/ui/mode-toggle';
 import { Link } from 'react-router-dom';
 import { useContext } from 'react';
 import AuthContext from '@/context/AuthContext';
+import { useAppDispatch, useAppSelector } from '@/redux/hooks';
+import {
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuItem,
+	DropdownMenuLabel,
+	DropdownMenuSeparator,
+	DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import { FaUserLock } from 'react-icons/fa6';
+import { logOut } from '@/redux/slice/auth.slice';
+import { isAuthenticated } from '@/utils';
 
 const HeaderCustomer = () => {
+	const dispatch = useAppDispatch();
+	const isAuthentication = useAppSelector(
+		(state) => state.auth.isAuthenticated,
+	);
+	const auth = isAuthenticated();
+	const data = auth?.data;
 	return (
 		<div className='flex flex-col'>
 			<header className='bg-secondary-700'>
@@ -57,9 +75,37 @@ const HeaderCustomer = () => {
 							<span>
 								<IoMdHeartEmpty />
 							</span>
-							<span>
-								<GoPerson />
-							</span>
+							{isAuthentication === true && data ? (
+								<DropdownMenu>
+									<DropdownMenuTrigger>
+										<div className='text-white outline-none bg-secondary-700 '>
+											<GoPerson />
+										</div>
+									</DropdownMenuTrigger>
+									<DropdownMenuContent className='w-[200px] mr-9 mt-2.5'>
+										<DropdownMenuLabel>My Account</DropdownMenuLabel>
+										<DropdownMenuSeparator />
+										<DropdownMenuItem onClick={() => dispatch(logOut())}>
+											Logout
+										</DropdownMenuItem>
+									</DropdownMenuContent>
+								</DropdownMenu>
+							) : (
+								<DropdownMenu>
+									<DropdownMenuTrigger>
+										<div className='text-white outline-none bg-secondary-700 '>
+											<FaUserLock />
+										</div>
+									</DropdownMenuTrigger>
+									<DropdownMenuContent className='w-[200px] mr-9 mt-2.5'>
+										<DropdownMenuLabel>My Account</DropdownMenuLabel>
+										<DropdownMenuSeparator />
+										<DropdownMenuItem>
+											<Link to={'/sign-in'}>Login</Link>
+										</DropdownMenuItem>
+									</DropdownMenuContent>
+								</DropdownMenu>
+							)}
 						</div>
 					</div>
 				</div>

@@ -1,6 +1,6 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Header } from '@/layouts/admin';
 import { TableDraft, TablePublish } from '@/components/table';
+import { Header } from '@/components/header';
 
 const ProductList = () => {
 	return (

@@ -1,11 +1,11 @@
-import { findProductById } from '@/api/product.api';
-import { IProduct, IProductResponse } from '@/types/data';
-import React, { useEffect, useState } from 'react';
-import { useLocation, useParams } from 'react-router-dom';
-import { RiSubtractFill } from 'react-icons/ri';
-import { LuPlus } from 'react-icons/lu';
-import { Button } from '@/components/ui/button';
-import { BsCart3 } from 'react-icons/bs';
+import { findProductById } from "@/api/product.api";
+import { Button } from "@/components/ui/button";
+import { IProduct } from "@/types/data";
+import { useEffect, useState } from "react";
+import { BsCart3 } from "react-icons/bs";
+import { LuPlus } from "react-icons/lu";
+import { RiSubtractFill } from "react-icons/ri";
+import { useLocation } from "react-router-dom";
 
 interface IMeta<T> {
 	message: string;
@@ -17,7 +17,7 @@ const DetailProductHome = () => {
 	const [dataProduct, setDataProduct] = useState<IMeta<IProduct>>();
 	const location = useLocation();
 	const searchParams = new URLSearchParams(location.search);
-	const _id = searchParams.get('id');
+	const _id = searchParams.get("id");
 
 	useEffect(() => {
 		if (_id) {
@@ -30,12 +30,12 @@ const DetailProductHome = () => {
 			const response = await findProductById(id);
 			setDataProduct(response);
 		} catch (error) {
-			console.error('Error fetching product by ID', error);
+			console.error("Error fetching product by ID", error);
 		}
 	};
 
 	const product = dataProduct?.metadata;
-	console.log('product: ', product);
+	console.log("product: ", product);
 	if (!product) return null;
 
 	return (
@@ -54,7 +54,9 @@ const DetailProductHome = () => {
 					<div></div>
 				</div>
 				<div className='space-y-5'>
-					<h3 className='text-2xl font-bold text-gray-900 '>Description</h3>
+					<h3 className='text-2xl font-bold text-gray-900 '>
+						Description
+					</h3>
 					{/* <div className='w-full max-h-[400px]'>
 						{product.product_description}
 					</div> */}
@@ -93,15 +95,15 @@ const DetailProductHome = () => {
 				<div className='flex items-center gap-3'>
 					<div className='flex items-center gap-3'>
 						<span className='font-serif text-2xl leading-8 text-secondary-600'>
-							{product?.product_price.toLocaleString('vi-VN', {
-								style: 'currency',
-								currency: 'VND',
+							{product?.product_price.toLocaleString("vi-VN", {
+								style: "currency",
+								currency: "VND",
 							})}
 						</span>
 						<span className='font-serif text-lg leading-6 text-gray-500 line-through'>
-							{product?.product_price.toLocaleString('vi-VN', {
-								style: 'currency',
-								currency: 'VND',
+							{product?.product_price.toLocaleString("vi-VN", {
+								style: "currency",
+								currency: "VND",
 							})}
 						</span>
 					</div>

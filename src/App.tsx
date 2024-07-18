@@ -1,67 +1,70 @@
-import React, { Suspense, lazy } from 'react';
-import { RouterProvider, createBrowserRouter } from 'react-router-dom';
-import { AuthProvider } from './context/AuthContext';
+import { Suspense, lazy } from "react";
+import { RouterProvider, createBrowserRouter } from "react-router-dom";
 
 //Admin
-const LayoutAdmin = lazy(() => import('@/layouts/admin/LayoutAdmin'));
-const DashboardAdmin = lazy(() => import('@/pages/admin/DashboardAdmin'));
+const LayoutAdmin = lazy(() => import("@/layouts/admin/LayoutAdmin"));
+const DashboardAdmin = lazy(() => import("@/pages/admin/DashboardAdmin"));
 
 //Product
-const ProductAdmin = lazy(() => import('@/pages/admin/product/ProductAdmin'));
-const ProductAdd = lazy(() => import('@/pages/admin/product/ProductAdd'));
-const ProductList = lazy(() => import('@/pages/admin/product/ProductList'));
+const ProductAdmin = lazy(() => import("@/pages/admin/product/ProductAdmin"));
+const ProductAdd = lazy(() => import("@/pages/admin/product/ProductAdd"));
+const ProductList = lazy(() => import("@/pages/admin/product/ProductList"));
 
-const LayoutCustomer = lazy(() => import('@/layouts/user/LayoutCustomer'));
-const HomePage = lazy(() => import('@/pages/user/HomePage'));
-const DetailProductHome = lazy(() => import('@/pages/user/DetailProductHome'));
+const LayoutCustomer = lazy(() => import("@/layouts/user/LayoutCustomer"));
+const HomePage = lazy(() => import("@/pages/user/HomePage"));
+const DetailProductHome = lazy(() => import("@/pages/user/DetailProductHome"));
 
 //Auth
-const SignUpPage = lazy(() => import('@/pages/auth/SignUpPage'));
-const SignInPage = lazy(() => import('@/pages/auth/SignInPage'));
+const SignUpPage = lazy(() => import("@/pages/auth/SignUpPage"));
+const SignInPage = lazy(() => import("@/pages/auth/SignInPage"));
 
 function App() {
-	const Loading = () => <div>Loading...</div>;
+	const Loading = () => (
+		<div className='animate-spin'>
+			<div className='w-5 h-5 border rounded-full border-neutral-400 border-t-transparent'></div>
+		</div>
+	);
 	const router = createBrowserRouter([
 		{
-			path: 'admin',
+			path: "admin",
 			element: <LayoutAdmin />,
 			children: [
 				{
-					path: 'dashboard',
+					path: "dashboard",
 					element: <DashboardAdmin />,
 				},
 				{
-					path: 'product',
+					path: "product",
 					element: <ProductAdmin />,
 				},
 				{
-					path: 'product/product-add',
+					path: "product/product-add",
 					element: <ProductAdd />,
 				},
 				{
-					path: 'product/product-list',
+					path: "product/product-list",
 					element: <ProductList />,
 				},
 			],
 		},
 		{
-			path: '',
+			path: "",
 			element: <LayoutCustomer />,
 			children: [
 				{
-					path: '',
+					path: "",
 					element: <HomePage />,
 				},
 				{
-					path: ':id',
+					path: ":id",
 					element: <DetailProductHome />,
 				},
 				{
-					path: 'sign-up',
+					path: "sign-up",
 					element: <SignUpPage />,
 				},
 				{
-					path: 'sign-in',
+					path: "sign-in",
 					element: <SignInPage />,
 				},
 			],
@@ -70,9 +73,9 @@ function App() {
 
 	return (
 		<Suspense fallback={<Loading></Loading>}>
-			<AuthProvider>
-				<RouterProvider router={router} />
-			</AuthProvider>
+			{/* <AuthProvider>
+			</AuthProvider> */}
+			<RouterProvider router={router} />
 		</Suspense>
 	);
 }

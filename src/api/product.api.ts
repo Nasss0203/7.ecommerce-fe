@@ -1,24 +1,10 @@
 import { IProduct } from '@/types/data';
 import axios from './axios';
-import { isAuthenticated } from './auth.api';
-
-const returnUserIdAndRefreshToken = () => {
-	const user = isAuthenticated();
-	const refreshToken = user?.metadata?.tokens?.refreshToken as string;
-	const userId = user?.metadata?.data?._id as string;
-
-	return {
-		refreshToken,
-		userId,
-	};
-};
+import { getUserIdAndToken, isAuthenticated } from '@/utils';
 
 export const createNewProduct = async (ProductController: IProduct) => {
 	try {
-		const user = isAuthenticated();
-		const refreshToken = user?.metadata?.tokens?.refreshToken;
-		const client = user?.metadata?.data?._id;
-
+		const { refreshToken, userId } = getUserIdAndToken();
 		const response = await axios.post(
 			'/product',
 			{
@@ -26,7 +12,7 @@ export const createNewProduct = async (ProductController: IProduct) => {
 			},
 			{
 				headers: {
-					'x-client-id': client,
+					'x-client-id': userId,
 					'x-rtoken-id': refreshToken,
 				},
 			},
@@ -63,7 +49,7 @@ export const findProductById = async (id: string) => {
 //Publish
 export const findAllDraftsForShop = async () => {
 	try {
-		const { refreshToken, userId } = returnUserIdAndRefreshToken();
+		const { refreshToken, userId } = getUserIdAndToken();
 		const response = await axios.get('/product/drafts/all', {
 			headers: {
 				'x-client-id': userId,
@@ -80,13 +66,16 @@ export const findAllDraftsForShop = async () => {
 
 export const findAllPublishForShop = async () => {
 	try {
-		const { refreshToken, userId } = returnUserIdAndRefreshToken();
+		const { refreshToken, userId } = getUserIdAndToken();
+		console.log('userId: ', userId);
+		console.log('refreshToken: ', refreshToken);
 		const response = await axios.get('/product/publish/all', {
 			headers: {
 				'x-client-id': userId,
 				'x-rtoken-id': refreshToken,
 			},
 		});
+
 		const data = response?.data;
 		return data;
 	} catch (error) {
@@ -97,7 +86,8 @@ export const findAllPublishForShop = async () => {
 
 export const actionPublishProduct = async (id: string) => {
 	try {
-		const { refreshToken, userId } = returnUserIdAndRefreshToken();
+		const { refreshToken, userId } = getUserIdAndToken();
+
 		const response = await axios.post(
 			`/product/publish/${id}`,
 			{},
@@ -118,7 +108,7 @@ export const actionPublishProduct = async (id: string) => {
 
 export const unActionPublishProduct = async (id: string) => {
 	try {
-		const { refreshToken, userId } = returnUserIdAndRefreshToken();
+		const { refreshToken, userId } = getUserIdAndToken();
 
 		const response = await axios.post(
 			`/product/unpublish/${id}`,

@@ -16,11 +16,17 @@ import {
 } from '@tanstack/react-table';
 import { IProduct, IProductResponse } from '@/types/data';
 import { Checkbox } from '../ui/checkbox';
+
 import {
-	findAllProducts,
-	findAllPublishForShop,
-	unActionPublishProduct,
-} from '@/api/product.api';
+	Pagination,
+	PaginationContent,
+	PaginationEllipsis,
+	PaginationItem,
+	PaginationLink,
+	PaginationNext,
+	PaginationPrevious,
+} from '@/components/ui/pagination';
+
 import {
 	AlertDialog,
 	AlertDialogAction,
@@ -41,12 +47,18 @@ import {
 	findAllPublishProduct,
 	resetFetchPublish,
 } from '@/redux/slice/product.slice';
+import { Button } from '../ui/button';
+import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io';
 
 const TablePublish = () => {
 	const [sorting, setSorting] = useState<SortingState>([]);
 	const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
 	const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
 	const [rowSelection, setRowSelection] = useState({});
+	const [pagination, setPagination] = useState({
+		pageIndex: 0, //initial page index
+		pageSize: 10, //default page size
+	});
 
 	const dispatch = useAppDispatch();
 	const product = useAppSelector((state) => state.product.listProduct);
@@ -89,23 +101,13 @@ const TablePublish = () => {
 			accessorKey: 'product_name',
 			header: 'Name',
 			cell: ({ row }) => (
-				<div className='capitalize'>{row.getValue('product_name')}</div>
+				<span className='max-w-[180px] line-clamp-1'>
+					{row.getValue('product_name')}
+				</span>
 			),
 		},
 		{
 			accessorKey: 'product_thumb',
-			// header: ({ column }) => {
-			// 	return (
-			// 		<Button
-			// 			variant='ghost'
-			// 			onClick={() =>
-			// 				column.toggleSorting(column.getIsSorted() === 'asc')
-			// 			}>
-			// 			Email
-			// 			<ArrowUpDown className='w-4 h-4 ml-2' />
-			// 		</Button>
-			// 	);
-			// },
 			header: 'Image',
 			cell: ({ row }) => (
 				<DialogImage image={row.getValue('product_thumb')}></DialogImage>
@@ -190,34 +192,9 @@ const TablePublish = () => {
 					}
 					className='max-w-sm'
 				/>
-				{/* <DropdownMenu>
-					<DropdownMenuTrigger asChild>
-						<Button variant='outline' className='ml-auto'>
-							Columns <ChevronDown className='w-4 h-4 ml-2' />
-						</Button>
-					</DropdownMenuTrigger>
-					<DropdownMenuContent align='end'>
-						{table
-							.getAllColumns()
-							.filter((column) => column.getCanHide())
-							.map((column) => {
-								return (
-									<DropdownMenuCheckboxItem
-										key={column.id}
-										className='capitalize'
-										checked={column.getIsVisible()}
-										onCheckedChange={(value) =>
-											column.toggleVisibility(!!value)
-										}>
-										{column.id}
-									</DropdownMenuCheckboxItem>
-								);
-							})}
-					</DropdownMenuContent>
-				</DropdownMenu> */}
 			</div>
-			<div className='border rounded-md'>
-				<Table>
+			<div className='h-full overflow-y-auto border rounded-md'>
+				<Table className=''>
 					<TableHeader>
 						{table.getHeaderGroups().map((headerGroup) => (
 							<TableRow key={headerGroup.id}>
@@ -264,28 +241,36 @@ const TablePublish = () => {
 					</TableBody>
 				</Table>
 			</div>
-			{/* <div className='flex items-center justify-end py-4 space-x-2'>
+			<div className='flex items-center justify-end py-4 space-x-2'>
 				<div className='flex-1 text-sm text-muted-foreground'>
 					{table.getFilteredSelectedRowModel()?.rows.length} of
 					{table.getFilteredRowModel()?.rows.length} row(s) selected.
 				</div>
 				<div className='space-x-2'>
-					<Button
-						variant='outline'
-						size='sm'
-						onClick={() => table.previousPage()}
-						disabled={!table.getCanPreviousPage()}>
-						Previous
-					</Button>
-					<Button
-						variant='outline'
-						size='sm'
-						onClick={() => table.nextPage()}
-						disabled={!table.getCanNextPage()}>
-						Next
-					</Button>
+					<Pagination>
+						<PaginationContent>
+							<PaginationItem>
+								<Button
+									variant='outline'
+									size='sm'
+									onClick={() => table.previousPage()}
+									disabled={!table.getCanPreviousPage()}>
+									<IoIosArrowBack />
+								</Button>
+							</PaginationItem>
+							<PaginationItem>
+								<Button
+									variant='outline'
+									size='sm'
+									onClick={() => table.nextPage()}
+									disabled={!table.getCanNextPage()}>
+									<IoIosArrowForward />
+								</Button>
+							</PaginationItem>
+						</PaginationContent>
+					</Pagination>
 				</div>
-			</div> */}
+			</div>
 		</div>
 	);
 };

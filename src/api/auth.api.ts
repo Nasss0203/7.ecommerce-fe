@@ -1,5 +1,6 @@
 import { IAuth } from '@/types/data';
 import axios from './axios';
+import { getUserIdAndToken } from '@/utils';
 
 export const register = async ({ name, email, password }: IAuth) => {
 	try {
@@ -21,11 +22,10 @@ export const signIn = async ({ email, password }: IAuth) => {
 			email,
 			password,
 		});
-		const token = response.data.metadata.tokens;
+		const token = response.data.metadata.tokens?.refreshToken;
 		if (token) {
-			localStorage.setItem('user', JSON.stringify(response.data));
+			localStorage.setItem('auth', JSON.stringify(response.data));
 		}
-
 		return response.data;
 	} catch (error) {
 		console.error('Error during sign in:', error);
@@ -33,10 +33,20 @@ export const signIn = async ({ email, password }: IAuth) => {
 	}
 };
 
-export const isAuthenticated = () => {
-	const user = localStorage.getItem('user');
-	if (!user) {
-		return {};
+export const logout = async () => {
+	try {
+		const { accessToken, userId } = getUserIdAndToken();
+		const response = await axios.post('/auth/logout', {
+			header: {
+				Authorization: accessToken,
+				'x-client-id': userId,
+			},
+		});
+		console.log('response: ', response);
+		const data = response?.data;
+		return data;
+	} catch (error) {
+		console.error('Error during log out:', error);
+		throw error;
 	}
-	return JSON.parse(user);
 };

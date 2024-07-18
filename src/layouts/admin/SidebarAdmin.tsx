@@ -4,12 +4,12 @@ import { TSidebar, sidebar } from '@/constants/sidebar';
 import { useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 
-const Sidebar = () => {
+const SidebarAdmin = () => {
 	const [menuSidebar, setMenuSidebar] = useState<boolean>(false);
 	const showSidebar = () => setMenuSidebar(!menuSidebar);
 
 	return (
-		<div className=' bg-[#1C2434] dark:bg-[#24303f]'>
+		<div className=' bg-[#1C2434] dark:bg-[#24303f] hidden 2xl:block'>
 			<Link to={'/admin/dashboard'} className='flex justify-center px-10 py-5'>
 				<h1 className='text-3xl font-bold text-white'>Dashboard</h1>
 			</Link>
@@ -29,7 +29,7 @@ const Sidebar = () => {
 	);
 };
 
-function NavSidebar(props: TSidebar) {
+export function NavSidebar(props: TSidebar) {
 	const { path, icon, title, iconDown, iconUp, menu = [] } = props;
 	const [subnav, setSubnav] = useState<boolean>(false);
 	const showSidebar = () => setSubnav(!subnav);
@@ -71,4 +71,4 @@ function NavSidebar(props: TSidebar) {
 	);
 }
 
-export default Sidebar;
+export default SidebarAdmin;

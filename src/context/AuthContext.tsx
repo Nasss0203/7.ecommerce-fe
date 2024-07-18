@@ -1,4 +1,3 @@
-import { isAuthenticated } from '@/api/auth.api';
 import LayoutCustomer from '@/layouts/user/LayoutCustomer';
 import SignInPage from '@/pages/auth/SignInPage';
 import React, {
@@ -22,20 +21,17 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
 }) => {
 	const [currentAuth, setCurrentAuth] = useState<any>(null);
 
-	useEffect(() => {
-		const checkLoggedIn = async () => {
-			let cuser = await isAuthenticated();
-			if (!cuser) {
-				localStorage.setItem('user', '');
-				cuser = null;
-			}
-			setCurrentAuth(cuser);
-		};
+	// useEffect(() => {
+	// 	const checkLoggedIn = async () => {
+	// 		if (!cuser) {
+	// 			localStorage.setItem('user', '');
+	// 			cuser = null;
+	// 		}
+	// 		setCurrentAuth(cuser);
+	// 	};
 
-		checkLoggedIn();
-	}, []);
-
-	console.log('usercontext', currentAuth);
+	// 	checkLoggedIn();
+	// }, []);
 
 	return (
 		<AuthContext.Provider value={{ currentAuth, setCurrentAuth }}>

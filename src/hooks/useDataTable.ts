@@ -1,6 +1,7 @@
 import {
 	ColumnFiltersState,
 	OnChangeFn,
+	PaginationState,
 	RowSelectionState,
 	SortingState,
 	VisibilityState,
@@ -48,6 +49,7 @@ export const useDataTable = (props: IDataTableProps) => {
 		getFilteredRowModel: getFilteredRowModel(),
 		onColumnVisibilityChange: setColumnVisibility,
 		onRowSelectionChange: setRowSelection,
+
 		state: {
 			sorting,
 			columnFilters,

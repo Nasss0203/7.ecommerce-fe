@@ -3,12 +3,12 @@ import {
 	FormField,
 	FormItem,
 	FormLabel,
-} from '@/components/ui/form';
-import FormGrid from '../FormGrid';
-import { Input } from '@/components/ui/input';
-import { useFormContext } from 'react-hook-form';
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { useFormContext } from "react-hook-form";
+import FormGrid from "../FormGrid";
 
-const FormElectronic = () => {
+const FormPhone = () => {
 	const { control } = useFormContext();
 	return (
 		<>
@@ -23,7 +23,11 @@ const FormElectronic = () => {
 								<Input
 									type='number'
 									{...field}
-									onChange={(e) => field.onChange(parseFloat(e.target.value))}
+									onChange={(e) =>
+										field.onChange(
+											parseFloat(e.target.value),
+										)
+									}
 								/>
 							</FormControl>
 						</FormItem>
@@ -39,7 +43,11 @@ const FormElectronic = () => {
 								<Input
 									type='number'
 									{...field}
-									onChange={(e) => field.onChange(parseFloat(e.target.value))}
+									onChange={(e) =>
+										field.onChange(
+											parseFloat(e.target.value),
+										)
+									}
 								/>
 							</FormControl>
 						</FormItem>
@@ -57,7 +65,11 @@ const FormElectronic = () => {
 								<Input
 									type='number'
 									{...field}
-									onChange={(e) => field.onChange(parseFloat(e.target.value))}
+									onChange={(e) =>
+										field.onChange(
+											parseFloat(e.target.value),
+										)
+									}
 								/>
 							</FormControl>
 						</FormItem>
@@ -80,4 +92,4 @@ const FormElectronic = () => {
 	);
 };
 
-export default FormElectronic;
+export default FormPhone;

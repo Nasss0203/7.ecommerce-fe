@@ -2,7 +2,7 @@ import { ICategory } from '@/types/data';
 
 const categoryOptions: ICategory[] = [
 	{
-		name: 'Electronics',
+		name: 'Phones',
 	},
 	{
 		name: 'Laptops',
@@ -13,7 +13,7 @@ const categoryOptions: ICategory[] = [
 ];
 
 const categoryForm = {
-	ELECTTRONICS: 'Electronics',
+	PHONES: 'Phones',
 };
 
 export { categoryOptions, categoryForm };

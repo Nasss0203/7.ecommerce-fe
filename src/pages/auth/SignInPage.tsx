@@ -1,6 +1,5 @@
-import { signIn } from '@/api/auth.api';
-import { FormFooter } from '@/components/form';
-import { Button } from '@/components/ui/button';
+import { FormFooter } from "@/components/form";
+import { Button } from "@/components/ui/button";
 import {
 	Form,
 	FormControl,
@@ -8,56 +7,52 @@ import {
 	FormItem,
 	FormLabel,
 	FormMessage,
-} from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
-import { SignInBody, SignInBodyType } from '@/validator/auth.schema';
-import { zodResolver } from '@hookform/resolvers/zod';
-import React from 'react';
-import { useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { useAppDispatch } from "@/redux/hooks";
+import { authLogin } from "@/redux/slice/auth.slice";
+import { SignInBody, SignInBodyType } from "@/validator/auth.schema";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
+
+const ROLE = "ADMIN";
 
 const SignInPage = () => {
+	const dispatch = useAppDispatch();
+
 	const navigate = useNavigate();
 	const form = useForm<SignInBodyType>({
 		resolver: zodResolver(SignInBody),
 		defaultValues: {
-			email: '',
-			password: '',
+			email: "",
+			password: "",
 		},
 	});
 
 	async function onSubmit(values: SignInBodyType) {
-		console.log('values: ', values);
-		try {
-			const response = await signIn(values);
-			console.log('Sign in successful:', response);
-			if (response) {
-				navigate('/');
-			}
-		} catch (error) {
-			console.error('Error during sign up:', error);
-			toast.error('Login unsuccessful. Please try again.');
-		}
+		console.log(`values ~`, values);
+		dispatch(authLogin(values));
 	}
+
 	return (
-		<div className='flex items-center justify-center mt-10'>
-			<div className='p-5 bg-white border border-gray-100 rounded shadow-md w-[424px] '>
-				<h1 className='mb-5 text-2xl font-bold text-center'>Sign In</h1>
+		<div className="flex items-center justify-center mt-10">
+			<div className="p-5 bg-white border border-gray-100 rounded shadow-md w-[424px]">
+				<h1 className="mb-5 text-2xl font-bold text-center">Sign In</h1>
 				<Form {...form}>
-					<form onSubmit={form.handleSubmit(onSubmit)} className='space-y-8'>
-						<div className='space-y-2'>
+					<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+						<div className="space-y-2">
 							<FormField
 								control={form.control}
-								name='email'
+								name="email"
 								render={({ field }) => (
 									<FormItem>
 										<FormLabel>Email</FormLabel>
 										<FormControl>
 											<Input
-												placeholder='Enter your email'
+												placeholder="Enter your email"
 												{...field}
-												type='email'
+												type="email"
 											/>
 										</FormControl>
 										<FormMessage />
@@ -66,15 +61,15 @@ const SignInPage = () => {
 							/>
 							<FormField
 								control={form.control}
-								name='password'
+								name="password"
 								render={({ field }) => (
 									<FormItem>
 										<FormLabel>Password</FormLabel>
 										<FormControl>
 											<Input
-												placeholder='************'
+												placeholder="************"
 												{...field}
-												type='password'
+												type="password"
 											/>
 										</FormControl>
 										<FormMessage />
@@ -82,7 +77,7 @@ const SignInPage = () => {
 								)}
 							/>
 						</div>
-						<Button type='submit' className='w-full bg-primary-500'>
+						<Button type="submit" className="w-full bg-primary-500">
 							SIGN IN
 						</Button>
 					</form>

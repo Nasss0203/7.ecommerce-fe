@@ -66,11 +66,9 @@ export const productSlice = createSlice({
 	initialState,
 	reducers: {
 		resetFetchDraft(state) {
-			console.log('resetFetchDraft state: ', state);
 			state.isPublish = false;
 		},
 		resetFetchPublish(state) {
-			console.log('resetFetchPublish state: ', state);
 			state.isUnPublish = false;
 		},
 	},
