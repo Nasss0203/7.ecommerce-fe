@@ -1,14 +1,4 @@
-import { icon } from '@/constants/header';
-import { IoSearchOutline } from 'react-icons/io5';
-import { BsCart } from 'react-icons/bs';
-import { IoMdHeartEmpty } from 'react-icons/io';
-import { GoPerson } from 'react-icons/go';
-import { IoIosArrowDown } from 'react-icons/io';
-import { ModeToggle } from '@/components/ui/mode-toggle';
-import { Link } from 'react-router-dom';
-import { useContext } from 'react';
-import AuthContext from '@/context/AuthContext';
-import { useAppDispatch, useAppSelector } from '@/redux/hooks';
+import { searchProduct } from "@/api/product.api";
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -16,57 +6,134 @@ import {
 	DropdownMenuLabel,
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import { FaUserLock } from 'react-icons/fa6';
-import { logOut } from '@/redux/slice/auth.slice';
-import { isAuthenticated } from '@/utils';
+} from "@/components/ui/dropdown-menu";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { logOut } from "@/redux/slice/auth.slice";
+import { IProduct, IProductResponse } from "@/types/data";
+import { isAuthenticated } from "@/utils";
+import { X } from "lucide-react";
+import { useEffect, useState } from "react";
+import { BsCart } from "react-icons/bs";
+import { FaUserLock } from "react-icons/fa6";
+import { GoPerson } from "react-icons/go";
+import { IoMdHeartEmpty } from "react-icons/io";
+import { IoSearchOutline } from "react-icons/io5";
+import { Link, useLocation } from "react-router-dom";
 
 const HeaderCustomer = () => {
+	const [searchTerm, setSearchTerm] = useState("");
+	const [searchResults, setSearchResults] =
+		useState<IProductResponse<IProduct>>();
+	const location = useLocation();
+
 	const dispatch = useAppDispatch();
 	const isAuthentication = useAppSelector(
 		(state) => state.auth.isAuthenticated,
 	);
+
 	const auth = isAuthenticated();
 	const data = auth?.data;
+
+	const handleInputChange = (e: any) => {
+		setSearchTerm(e.target.value);
+	};
+
+	useEffect(() => {
+		const fetchData = async () => {
+			if (searchTerm) {
+				try {
+					const results = await searchProduct(searchTerm);
+					console.log("results ~", results);
+					setSearchResults(results);
+				} catch (error) {
+					console.error("Search failed", error);
+				}
+			} else {
+				setSearchResults(undefined);
+			}
+		};
+
+		fetchData();
+	}, [searchTerm, location]);
+
+	const dataProduct = searchResults?.metadata;
+	console.log("dataProduct~", dataProduct);
+
 	return (
-		<div className='flex flex-col'>
-			<header className='bg-secondary-700'>
+		<div className='flex flex-col '>
+			<header className='bg-secondary-700 '>
 				<div className='container'>
-					<div className='flex items-center justify-between py-3 border-b'>
-						<p className='text-sm font-normal leading-5 text-white'>
-							Welcome to Clicon online eCommerce store.
-						</p>
-						<div className='flex items-center gap-3'>
-							<span className='text-sm font-normal leading-5 text-white'>
-								Follow us:
-							</span>
-							<div className='flex items-center gap-3'>
-								{icon.map((item, index) => (
-									<span key={index} className='text-white'>
-										{item.icon}
-									</span>
-								))}
-							</div>
-						</div>
-					</div>
 					<div className='flex items-center justify-between py-5'>
-						<Link to={'/'} className='flex items-center gap-2'>
+						<Link to={"/"} className='flex items-center gap-2'>
 							<img srcSet='Icon.png 2x' alt='' />
 							<h1 className='leading-10 font-bold text-[32px] text-white'>
 								CLICON
 							</h1>
 						</Link>
-						<div className='py-[14px] px-5 bg-white rounded w-[606px] flex items-center gap-2'>
+						<div className='py-[14px] px-5 bg-white rounded w-[606px] flex items-center gap-2 relative'>
 							<input
 								type='text'
-								name=''
-								id=''
+								name='search'
+								id='search'
 								className='w-full text-sm leading-5 bg-transparent placeholder:text-gray-500'
 								placeholder='Search for anything...'
+								value={searchTerm}
+								onChange={handleInputChange}
 							/>
-							<span className='text-lg'>
-								<IoSearchOutline />
-							</span>
+							{dataProduct ? (
+								<X
+									className='w-5 h-5 cursor-pointer'
+									onClick={() => setSearchTerm("")}
+								></X>
+							) : (
+								<span className='text-lg cursor-pointer'>
+									<IoSearchOutline />
+								</span>
+							)}
+							<div
+								className={`absolute flex-col w-full gap-2 transform -translate-x-1/2  rounded bg-neutral-50 top-14 left-1/2  ${
+									dataProduct
+										? "flex h-auto"
+										: "hidden h-[250px]"
+								}`}
+							>
+								<div className='shadow-xl'>
+									{dataProduct
+										?.slice(0, 5)
+										.map((item, index) => (
+											<Link
+												to={`${item.product_slug}?id=${item._id}`}
+												className='flex items-center gap-2 p-2'
+												key={index}
+												onClick={() =>
+													setSearchTerm("")
+												}
+											>
+												<div className='w-10 h-10 border rounded border-neutral-200'>
+													<img
+														src={item.product_thumb}
+														alt=''
+														className='object-cover w-full h-full'
+													/>
+												</div>
+												<div className='flex flex-col gap-1'>
+													<p className='text-sm font-medium line-clamp-1'>
+														{item.product_name}
+													</p>
+													<span className='text-xs text-red-400'>
+														{item.product_price.toLocaleString(
+															"vi-VN",
+															{
+																style: "currency",
+																currency: "VND",
+															},
+														)}
+													</span>
+												</div>
+											</Link>
+										))}
+								</div>
+							</div>
 						</div>
 						<div className='flex items-center gap-6 text-2xl font-medium text-white'>
 							<span>
@@ -83,9 +150,13 @@ const HeaderCustomer = () => {
 										</div>
 									</DropdownMenuTrigger>
 									<DropdownMenuContent className='w-[200px] mr-9 mt-2.5'>
-										<DropdownMenuLabel>My Account</DropdownMenuLabel>
+										<DropdownMenuLabel>
+											My Account
+										</DropdownMenuLabel>
 										<DropdownMenuSeparator />
-										<DropdownMenuItem onClick={() => dispatch(logOut())}>
+										<DropdownMenuItem
+											onClick={() => dispatch(logOut())}
+										>
 											Logout
 										</DropdownMenuItem>
 									</DropdownMenuContent>
@@ -98,10 +169,12 @@ const HeaderCustomer = () => {
 										</div>
 									</DropdownMenuTrigger>
 									<DropdownMenuContent className='w-[200px] mr-9 mt-2.5'>
-										<DropdownMenuLabel>My Account</DropdownMenuLabel>
+										<DropdownMenuLabel>
+											My Account
+										</DropdownMenuLabel>
 										<DropdownMenuSeparator />
 										<DropdownMenuItem>
-											<Link to={'/sign-in'}>Login</Link>
+											<Link to={"/sign-in"}>Login</Link>
 										</DropdownMenuItem>
 									</DropdownMenuContent>
 								</DropdownMenu>
@@ -110,16 +183,6 @@ const HeaderCustomer = () => {
 					</div>
 				</div>
 			</header>
-			<div className='container py-4'>
-				<div className='px-6 py-[14px] bg-gray-50 rounded  inline-block'>
-					<div className='flex items-center gap-2 '>
-						<span className='font-medium leading-5 text-gray-900'>
-							All Category
-						</span>
-						<IoIosArrowDown />
-					</div>
-				</div>
-			</div>
 		</div>
 	);
 };

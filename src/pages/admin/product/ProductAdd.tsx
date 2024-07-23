@@ -1,6 +1,11 @@
 import { createNewProduct } from "@/api/product.api";
 import { uploadFile } from "@/api/upload.api";
-import { FormBackground, FormGrid, FormPhone } from "@/components/form";
+import {
+	FormBackground,
+	FormGrid,
+	FormLaptop,
+	FormPhone,
+} from "@/components/form";
 import { Header } from "@/components/header";
 import { QuillEditor } from "@/components/quill";
 import { Button } from "@/components/ui/button";
@@ -52,9 +57,12 @@ const ProductAdd = () => {
 			product_auth: _id,
 			product_attributes: {
 				brand: "",
-				data: 0,
-				ram: 0,
-				screen: 0,
+				storage_capacity: "",
+				ram: "",
+				screen: "",
+				pin: "",
+				cpu: "",
+				ssd: "",
 			},
 		},
 	});
@@ -66,6 +74,7 @@ const ProductAdd = () => {
 	};
 
 	async function onSubmit(values: CreateNewProductType) {
+		console.log("values~", values);
 		try {
 			const formData = new FormData();
 			if (fileUpload) {
@@ -83,6 +92,7 @@ const ProductAdd = () => {
 			}
 
 			const response = await createNewProduct(values);
+			console.log("response~", response);
 			if (response) {
 				form.reset();
 				setFileUpload(null);
@@ -268,8 +278,8 @@ function CategoryForm(props: { category: string }) {
 		<>
 			{category === categoryForm.PHONES ? (
 				<FormPhone></FormPhone>
-			) : category === "Laptops" ? (
-				<div>Laptops</div>
+			) : category === categoryForm.LAPTOPS ? (
+				<FormLaptop></FormLaptop>
 			) : category === "Tablets" ? (
 				<div>Tablets</div>
 			) : null}

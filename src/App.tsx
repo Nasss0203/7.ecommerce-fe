@@ -12,7 +12,8 @@ const ProductList = lazy(() => import("@/pages/admin/product/ProductList"));
 
 const LayoutCustomer = lazy(() => import("@/layouts/user/LayoutCustomer"));
 const HomePage = lazy(() => import("@/pages/user/HomePage"));
-const DetailProductHome = lazy(() => import("@/pages/user/DetailProductHome"));
+const DetailProductHome = lazy(() => import("@/pages/user/DetailProductPage"));
+const CategoryPage = lazy(() => import("@/pages/user/CategoryPage"));
 
 //Auth
 const SignUpPage = lazy(() => import("@/pages/auth/SignUpPage"));
@@ -56,7 +57,11 @@ function App() {
 					element: <HomePage />,
 				},
 				{
-					path: ":id",
+					path: ":category",
+					element: <CategoryPage />,
+				},
+				{
+					path: ":category/:id",
 					element: <DetailProductHome />,
 				},
 				{

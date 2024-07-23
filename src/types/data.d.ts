@@ -22,21 +22,28 @@ export interface IAuthResponse {
 	};
 }
 
-export interface IElectronics {
-	brand: string;
-	ram: number;
-	screen: number;
-	data: number;
+export interface IPhones {
+	brand?: string;
+	ram?: string;
+	screen?: string;
+	data?: string;
 	product_auth?: string | undefined;
 }
 
 export interface ILaptops {
-	brand: string;
-	ram: number;
-	screen: number;
-	data: number;
-	battery_life: string;
-	keyboard_layout: string;
+	brand?: string;
+	ram?: string;
+	screen?: string;
+	ssd?: string;
+	cpu?: string;
+	product_auth?: string | undefined;
+}
+
+export interface ITablet {
+	brand?: string;
+	ram?: string;
+	screen?: string;
+	pin?: string;
 	product_auth?: string | undefined;
 }
 
@@ -52,7 +59,7 @@ export interface IProduct {
 	product_discount?: number;
 	product_stock?: number;
 	product_category: string;
-	product_attributes: IElectronics;
+	product_attributes: IPhones | ILaptops | ITablet;
 }
 
 export interface IProductResponse<T> {
