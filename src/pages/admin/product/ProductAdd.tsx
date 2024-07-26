@@ -73,7 +73,7 @@ const ProductAdd = () => {
 		}
 	};
 
-	async function onSubmit(values: CreateNewProductType) {
+	async function onSubmit(values: any) {
 		console.log("values~", values);
 		try {
 			const formData = new FormData();
@@ -276,9 +276,9 @@ function CategoryForm(props: { category: string }) {
 	const { category } = props;
 	return (
 		<>
-			{category === categoryForm.PHONES ? (
+			{category === categoryForm.PHONE ? (
 				<FormPhone></FormPhone>
-			) : category === categoryForm.LAPTOPS ? (
+			) : category === categoryForm.LAPTOP ? (
 				<FormLaptop></FormLaptop>
 			) : category === "Tablets" ? (
 				<div>Tablets</div>

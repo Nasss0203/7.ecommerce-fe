@@ -7,11 +7,11 @@ import {
 	BreadcrumbList,
 	BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import { categoryForm } from "@/constants/category";
 import { getCategoryProduct } from "@/utils";
 import { useEffect, useState } from "react";
 import { IoMdArrowDropdown } from "react-icons/io";
 import { VscFilter } from "react-icons/vsc";
+import { useParams } from "react-router-dom";
 
 const filter = [
 	{
@@ -23,6 +23,8 @@ const filter = [
 ];
 
 const CategoryPage = () => {
+	const { category } = useParams();
+	const categoryName = category || "";
 	const [scrolled, setScrolled] = useState<boolean>(false);
 
 	useEffect(() => {
@@ -41,7 +43,7 @@ const CategoryPage = () => {
 		};
 	}, []);
 
-	const productPhone = getCategoryProduct(categoryForm.LAPTOP);
+	const productPhone = getCategoryProduct(categoryName);
 
 	return (
 		<>

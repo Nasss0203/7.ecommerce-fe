@@ -44,3 +44,14 @@ export const getCategoryProduct = (key: string) => {
 
 	return productData;
 };
+
+export const getCategoryDisplay = (category: string) => {
+	switch (category) {
+		case "Laptops":
+			return "laptop";
+		case "Phones":
+			return "dien-thoai";
+		default:
+			return "";
+	}
+};

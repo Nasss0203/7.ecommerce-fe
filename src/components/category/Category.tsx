@@ -2,13 +2,10 @@ import { IoIosArrowForward } from "react-icons/io";
 import { LuSmartphone } from "react-icons/lu";
 import { Link } from "react-router-dom";
 
-interface IProps {
-	className?: string;
-}
-
 const category = [
 	{
 		name: "Phone",
+		url: "Phones",
 		brand: [
 			{
 				name: "IPhone",
@@ -20,6 +17,7 @@ const category = [
 	},
 	{
 		name: "Laptop",
+		url: "Laptops",
 		brand: [
 			{
 				name: "Macbook",
@@ -34,11 +32,11 @@ const category = [
 const Category = () => {
 	return (
 		<div className='h-full w-[280px] bg-white rounded shadow-md border border-neutral-200'>
-			<div className='flex flex-col gap-1.5 relative group h-full'>
+			<div className='flex flex-col gap-1.5 relative  h-full'>
 				{category.map((item, index) => (
 					<Link
-						to={"/category"}
-						className='flex items-center justify-between px-3 py-[7px] hover:bg-slate-200 first:hover:rounded-t last:hover:rounded-b  transition-all'
+						to={`/${item.url}`}
+						className='flex items-center justify-between px-3 py-[7px] hover:bg-slate-200 first:hover:rounded-t last:hover:rounded-b  transition-all group'
 						key={index}
 					>
 						<div className='flex items-center gap-2'>

@@ -37,13 +37,15 @@ const HomePage = () => {
 			</div>
 			<div className='flex flex-col gap-6'>
 				<div className='flex items-center justify-between'>
-					<h3 className='text-2xl font-semibold leading-8'>Phone</h3>
+					<h3 className='text-2xl font-semibold leading-8'>
+						Điện thoại
+					</h3>
 					<Link
 						to={"/"}
 						className='flex items-center gap-2 text-secondary-500'
 					>
 						<span className='text-sm font-semibold leading-5'>
-							Browse All Product
+							Thêm sản phẩm
 						</span>
 						<span className='text-xl'>
 							<IoIosArrowRoundForward />
@@ -51,15 +53,9 @@ const HomePage = () => {
 					</Link>
 				</div>
 				<div className='grid grid-cols-2 gap-1.5 lg:grid-cols-5'>
-					{productPhone.map((item: any, index: any) => (
+					{productPhone.map((item: IProduct, index: any) => (
 						<Card
-							category={
-								item.product_category === "Laptops"
-									? "laptop"
-									: item.product_category === "Phones"
-									? "dien-thoai"
-									: ""
-							}
+							category={item.product_category}
 							slug={item.product_slug}
 							_id={item._id}
 							key={index}
@@ -78,7 +74,7 @@ const HomePage = () => {
 						className='flex items-center gap-2 text-secondary-500'
 					>
 						<span className='text-sm font-semibold leading-5'>
-							Browse All Product
+							Thêm sản phẩm
 						</span>
 						<span className='text-xl'>
 							<IoIosArrowRoundForward />
@@ -88,13 +84,7 @@ const HomePage = () => {
 				<div className='grid grid-cols-2 gap-1.5 md:gap-3 lg:grid-cols-5'>
 					{productLaptop.map((item: any, index: any) => (
 						<Card
-							category={
-								item.product_category === "Laptops"
-									? "laptop"
-									: item.product_category === "Phones"
-									? "dien-thoai"
-									: ""
-							}
+							category={item.product_category}
 							slug={item.product_slug}
 							_id={item._id}
 							key={index}

@@ -35,8 +35,9 @@ const DetailProductPage = () => {
 	};
 
 	const product = dataProduct?.metadata;
-	console.log("product: ", product);
+
 	if (!product) return null;
+	document.title = product.product_name;
 
 	return (
 		<div className='container space-y-5'>
@@ -44,7 +45,7 @@ const DetailProductPage = () => {
 				<div className='flex flex-col col-span-6 gap-10'>
 					<div className='bg-white border rounded-md border-neutral-200'>
 						<div className='flex items-center justify-center flex-1'>
-							<div className='w-[300px] h-[300px] py-5'>
+							<div className='w-[250px] h-[250px] py-5'>
 								<img
 									src={product.product_thumb}
 									alt={product.product_slug}

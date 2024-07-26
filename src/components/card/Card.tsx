@@ -1,3 +1,4 @@
+import { getCategoryDisplay } from "@/utils";
 import { FaCartShopping, FaRegHeart, FaStar } from "react-icons/fa6";
 import { Link } from "react-router-dom";
 
@@ -17,17 +18,19 @@ const Card = ({
 	slug,
 	category,
 }: ICard) => {
+	const displayCategory = getCategoryDisplay(category);
+
 	return (
 		<div className='w-full'>
 			<div className='flex flex-col gap-4 px-2 py-3 bg-white border rounded shadow-lg border-neutral-300'>
 				<Link
-					to={`/${category}/${slug}?id=${_id}`}
+					to={`/${displayCategory}/${slug}?id=${_id}`}
 					className='flex flex-col gap-5'
 				>
-					<div className='lg:h-[250px] h-[170px] '>
+					<div className='lg:h-[220px] h-[190px] '>
 						<img
 							srcSet={image}
-							alt=''
+							alt={slug}
 							className='object-cover w-full h-full '
 							loading='lazy'
 						/>

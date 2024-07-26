@@ -48,12 +48,12 @@ export interface ITablet {
 }
 
 export interface IProduct {
-	_id?: string | undefined;
+	_id: string;
 	product_auth?: string | undefined;
 	product_name: string;
 	product_thumb: string;
 	product_description?: string;
-	product_slug?: string;
+	product_slug: string;
 	product_price: number;
 	product_quantity: number;
 	product_discount?: number;
