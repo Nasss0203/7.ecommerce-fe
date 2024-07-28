@@ -11,15 +11,15 @@ import {
 import { Input } from "@/components/ui/input";
 import { useAppDispatch } from "@/redux/hooks";
 import { authLogin } from "@/redux/slice/auth.slice";
+import { isAuthenticated } from "@/utils";
 import { SignInBody, SignInBodyType } from "@/validator/auth.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 
-const ROLE = "ADMIN";
-
 const SignInPage = () => {
 	const dispatch = useAppDispatch();
+	const auth = isAuthenticated();
 
 	const navigate = useNavigate();
 	const form = useForm<SignInBodyType>({
@@ -32,27 +32,38 @@ const SignInPage = () => {
 
 	async function onSubmit(values: SignInBodyType) {
 		console.log(`values ~`, values);
-		dispatch(authLogin(values));
+		const resultAction = await dispatch(authLogin(values));
+		const user = resultAction.payload;
+
+		if (user?.data?.roles.includes("ADMIN")) {
+			navigate("/admin/dashboard");
+		} else {
+			navigate("/");
+		}
 	}
 
 	return (
-		<div className="flex items-center justify-center mt-10">
-			<div className="p-5 bg-white border border-gray-100 rounded shadow-md w-[424px]">
-				<h1 className="mb-5 text-2xl font-bold text-center">Sign In</h1>
+		<div className='flex items-center justify-center mt-10'>
+			<div className='p-5 bg-white border border-gray-100 rounded shadow-md w-[424px]'>
+				<h1 className='mb-5 text-2xl font-bold text-center'>Sign In</h1>
 				<Form {...form}>
-					<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-						<div className="space-y-2">
+					<form
+						onSubmit={form.handleSubmit(onSubmit)}
+						className='space-y-8'
+					>
+						<div className='space-y-2'>
 							<FormField
 								control={form.control}
-								name="email"
+								name='email'
 								render={({ field }) => (
 									<FormItem>
 										<FormLabel>Email</FormLabel>
 										<FormControl>
 											<Input
-												placeholder="Enter your email"
+												placeholder='Enter your email'
 												{...field}
-												type="email"
+												type='email'
+												disabled={auth ? true : false}
 											/>
 										</FormControl>
 										<FormMessage />
@@ -61,15 +72,16 @@ const SignInPage = () => {
 							/>
 							<FormField
 								control={form.control}
-								name="password"
+								name='password'
 								render={({ field }) => (
 									<FormItem>
 										<FormLabel>Password</FormLabel>
 										<FormControl>
 											<Input
-												placeholder="************"
+												placeholder='************'
 												{...field}
-												type="password"
+												type='password'
+												disabled={auth ? true : false}
 											/>
 										</FormControl>
 										<FormMessage />
@@ -77,7 +89,11 @@ const SignInPage = () => {
 								)}
 							/>
 						</div>
-						<Button type="submit" className="w-full bg-primary-500">
+						<Button
+							type='submit'
+							className='w-full bg-primary-500'
+							disabled={auth ? true : false}
+						>
 							SIGN IN
 						</Button>
 					</form>

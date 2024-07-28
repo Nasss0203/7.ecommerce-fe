@@ -16,31 +16,31 @@ export type TSidebar = {
 
 export const sidebar: TSidebar[] = [
 	{
-		title: "Dashboard",
+		title: "Trang chủ",
 		path: "/admin/dashboard",
 		icon: <TiHome />,
 	},
 	{
-		title: "Product",
+		title: "Sản phẩm",
 		path: "/admin/product",
 		iconDown: <IoMdArrowDropdown />,
 		iconUp: <IoMdArrowDropup />,
 		icon: <AiFillProduct />,
 		menu: [
 			{
-				title: "Create product",
+				title: "Thêm sản phẩm",
 				path: "/admin/product/product-add",
 				icon: <GoDotFill />,
 			},
 			{
-				title: "List product",
+				title: "Danh sách ",
 				path: "/admin/product/product-list",
 				icon: <GoDotFill />,
 			},
 		],
 	},
 	{
-		title: "Order",
+		title: "Đơn hàng",
 		path: "/admin/order",
 		icon: <RiListOrdered />,
 	},

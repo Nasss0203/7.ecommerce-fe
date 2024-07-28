@@ -1,7 +1,6 @@
-import React, { useContext, useEffect, useState } from 'react';
-import SidebarAdmin from './SidebarAdmin';
-import { Link, Outlet } from 'react-router-dom';
-import HeaderAdmin from './HeaderAdmin';
+import { Outlet } from "react-router-dom";
+import HeaderAdmin from "./HeaderAdmin";
+import SidebarAdmin from "./SidebarAdmin";
 
 const LayoutAdmin = () => {
 	return (

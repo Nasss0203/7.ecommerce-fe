@@ -2,6 +2,19 @@ import { findAllProducts } from "@/api/product.api";
 import { IProduct, IProductResponse } from "@/types/data";
 import { useEffect, useState } from "react";
 
+interface IAuth {
+	data: {
+		_id: string;
+		email: string;
+		name: string;
+		roles: string[];
+	};
+	tokens: {
+		accessToken: string;
+		refreshToken: string;
+	};
+}
+
 export const getUserIdAndToken = () => {
 	const authentication = isAuthenticated();
 	const refreshToken = authentication?.tokens?.refreshToken as string;
@@ -15,12 +28,18 @@ export const getUserIdAndToken = () => {
 	};
 };
 
-export const isAuthenticated = () => {
+export const isAuthenticated = (): IAuth | null => {
 	const auth = localStorage.getItem("auth");
 	if (!auth) {
 		return null;
 	}
-	return JSON.parse(auth);
+	try {
+		const parsedAuth: IAuth = JSON.parse(auth);
+		return parsedAuth;
+	} catch (error) {
+		console.error("Failed to parse auth data:", error);
+		return null;
+	}
 };
 
 export const getCategory = (product: any, key: string) => {

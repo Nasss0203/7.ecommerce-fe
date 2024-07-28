@@ -25,7 +25,7 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
-import { categoryForm, categoryOptions } from "@/constants/category";
+import { categoryOptions } from "@/constants/category";
 import { isAuthenticated } from "@/utils";
 import {
 	CreateNewProductBody,
@@ -37,12 +37,14 @@ import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
+type ProductType = "Phones" | "Laptops" | "Tablets";
+
 const ProductAdd = () => {
 	const user = isAuthenticated();
 	const _id = user?.data?._id;
 
 	const navigate = useNavigate();
-	const [selectedCategory, setSelectedCategory] = useState<string>("Phones");
+	const [selectedCategory, setSelectedCategory] = useState<any>("Phones");
 	const [fileUpload, setFileUpload] = useState<File | null>(null);
 
 	const form = useForm<CreateNewProductType>({
@@ -111,6 +113,7 @@ const ProductAdd = () => {
 				<form
 					onSubmit={form.handleSubmit(onSubmit)}
 					className='space-y-8'
+					autoComplete='off'
 				>
 					<FormGrid>
 						<FormBackground>
@@ -272,19 +275,16 @@ const ProductAdd = () => {
 	);
 };
 
-function CategoryForm(props: { category: string }) {
+const ProductAddView: Record<ProductType, JSX.Element> = {
+	Phones: <FormPhone></FormPhone>,
+	Laptops: <FormLaptop></FormLaptop>,
+	Tablets: <div>Tablets</div>,
+};
+
+function CategoryForm(props: { category: ProductType }) {
 	const { category } = props;
-	return (
-		<>
-			{category === categoryForm.PHONE ? (
-				<FormPhone></FormPhone>
-			) : category === categoryForm.LAPTOP ? (
-				<FormLaptop></FormLaptop>
-			) : category === "Tablets" ? (
-				<div>Tablets</div>
-			) : null}
-		</>
-	);
+
+	return ProductAddView[category];
 }
 
 export default ProductAdd;

@@ -9,6 +9,7 @@ const DashboardAdmin = lazy(() => import("@/pages/admin/DashboardAdmin"));
 const ProductAdmin = lazy(() => import("@/pages/admin/product/ProductAdmin"));
 const ProductAdd = lazy(() => import("@/pages/admin/product/ProductAdd"));
 const ProductList = lazy(() => import("@/pages/admin/product/ProductList"));
+const OrderAdmin = lazy(() => import("@/pages/admin/order/OrderAdmin"));
 
 const LayoutCustomer = lazy(() => import("@/layouts/user/LayoutCustomer"));
 const HomePage = lazy(() => import("@/pages/user/HomePage"));
@@ -33,6 +34,10 @@ function App() {
 				{
 					path: "dashboard",
 					element: <DashboardAdmin />,
+				},
+				{
+					path: "order",
+					element: <OrderAdmin />,
 				},
 				{
 					path: "product",

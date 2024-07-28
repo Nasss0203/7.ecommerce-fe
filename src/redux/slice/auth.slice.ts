@@ -17,7 +17,15 @@ export const authLogin = createAsyncThunk(
 	async (payload: IAuth, thunkAPI) => {
 		const response = await signIn({ ...payload });
 		const data = response?.metadata;
+		console.log("authLogin data~", data);
 		localStorage.setItem("auth", JSON.stringify(data));
+		const roles = data?.data.roles[0];
+		if (roles) {
+			if (roles.includes("ADMIN")) {
+				console.log("User has admin role");
+				// Perform actions for admin role
+			}
+		}
 		return data;
 	},
 );
@@ -38,6 +46,7 @@ const initialState = {
 		_id: "",
 		name: "",
 		email: "",
+		roles: [""],
 	},
 };
 
@@ -49,7 +58,7 @@ export const authSlice = createSlice({
 		logOut: (state) => {
 			localStorage.removeItem("auth");
 			state.isAuthenticated = false;
-			state.auth = { _id: "", name: "", email: "" };
+			state.auth = { _id: "", name: "", email: "", roles: [""] };
 		},
 	},
 	extraReducers: (builder) => {

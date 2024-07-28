@@ -1,4 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import { IProduct } from "@/types/data";
+import {
+	ColumnDef,
+	ColumnFiltersState,
+	SortingState,
+	VisibilityState,
+	flexRender,
+} from "@tanstack/react-table";
+import { useEffect, useState } from "react";
+import { Checkbox } from "../ui/checkbox";
 import {
 	Table,
 	TableBody,
@@ -6,27 +15,23 @@ import {
 	TableHead,
 	TableHeader,
 	TableRow,
-} from '../ui/table';
-import {
-	ColumnDef,
-	ColumnFiltersState,
-	SortingState,
-	VisibilityState,
-	flexRender,
-} from '@tanstack/react-table';
-import { IProduct, IProductResponse } from '@/types/data';
-import { Checkbox } from '../ui/checkbox';
+} from "../ui/table";
 
 import {
 	Pagination,
 	PaginationContent,
-	PaginationEllipsis,
 	PaginationItem,
-	PaginationLink,
-	PaginationNext,
-	PaginationPrevious,
-} from '@/components/ui/pagination';
+} from "@/components/ui/pagination";
 
+import { useDataTable } from "@/hooks/useDataTable";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import {
+	actionUnPublish,
+	findAllPublishProduct,
+	resetFetchPublish,
+} from "@/redux/slice/product.slice";
+import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
+import { DialogImage } from "../dialog";
 import {
 	AlertDialog,
 	AlertDialogAction,
@@ -37,23 +42,16 @@ import {
 	AlertDialogHeader,
 	AlertDialogTitle,
 	AlertDialogTrigger,
-} from '../ui/alert-dialog';
-import { Input } from '../ui/input';
-import { DialogImage } from '../dialog';
-import { useDataTable } from '@/hooks/useDataTable';
-import { useAppDispatch, useAppSelector } from '@/redux/hooks';
-import {
-	actionUnPublish,
-	findAllPublishProduct,
-	resetFetchPublish,
-} from '@/redux/slice/product.slice';
-import { Button } from '../ui/button';
-import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io';
+} from "../ui/alert-dialog";
+import { Button } from "../ui/button";
+import { Input } from "../ui/input";
 
 const TablePublish = () => {
 	const [sorting, setSorting] = useState<SortingState>([]);
 	const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
-	const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
+	const [columnVisibility, setColumnVisibility] = useState<VisibilityState>(
+		{},
+	);
 	const [rowSelection, setRowSelection] = useState({});
 	const [pagination, setPagination] = useState({
 		pageIndex: 0, //initial page index
@@ -76,14 +74,16 @@ const TablePublish = () => {
 
 	const columns: ColumnDef<IProduct>[] = [
 		{
-			id: 'select',
+			id: "select",
 			header: ({ table }) => (
 				<Checkbox
 					checked={
 						table.getIsAllPageRowsSelected() ||
-						(table.getIsSomePageRowsSelected() && 'indeterminate')
+						(table.getIsSomePageRowsSelected() && "indeterminate")
 					}
-					onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+					onCheckedChange={(value) =>
+						table.toggleAllPageRowsSelected(!!value)
+					}
 					aria-label='Select all'
 				/>
 			),
@@ -98,43 +98,47 @@ const TablePublish = () => {
 			enableHiding: false,
 		},
 		{
-			accessorKey: 'product_name',
-			header: 'Name',
+			accessorKey: "product_name",
+			header: "Name",
 			cell: ({ row }) => (
 				<span className='max-w-[180px] line-clamp-1'>
-					{row.getValue('product_name')}
+					{row.getValue("product_name")}
 				</span>
 			),
 		},
 		{
-			accessorKey: 'product_thumb',
-			header: 'Image',
+			accessorKey: "product_thumb",
+			header: "Image",
 			cell: ({ row }) => (
-				<DialogImage image={row.getValue('product_thumb')}></DialogImage>
+				<DialogImage
+					image={row.getValue("product_thumb")}
+				></DialogImage>
 			),
 		},
 		{
-			accessorKey: 'product_category',
-			header: 'Category',
+			accessorKey: "product_category",
+			header: "Category",
 			cell: ({ row }) => (
-				<div className='capitalize'>{row.getValue('product_category')}</div>
+				<div className='capitalize'>
+					{row.getValue("product_category")}
+				</div>
 			),
 		},
 		{
-			accessorKey: 'product_price',
-			header: 'Amount',
+			accessorKey: "product_price",
+			header: "Amount",
 			cell: ({ row }) => {
-				const amount = parseFloat(row.getValue('product_price'));
-				const formatted = new Intl.NumberFormat('vn-VN', {
-					style: 'currency',
-					currency: 'VND',
+				const amount = parseFloat(row.getValue("product_price"));
+				const formatted = new Intl.NumberFormat("vn-VN", {
+					style: "currency",
+					currency: "VND",
 				}).format(amount);
 				return <div className='font-medium'>{formatted}</div>;
 			},
 		},
 		{
-			accessorKey: '_id',
-			header: 'Action',
+			accessorKey: "_id",
+			header: "Action",
 			cell: ({ row }) => (
 				<>
 					<AlertDialog>
@@ -143,18 +147,26 @@ const TablePublish = () => {
 						</AlertDialogTrigger>
 						<AlertDialogContent>
 							<AlertDialogHeader>
-								<AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+								<AlertDialogTitle>
+									Are you absolutely sure?
+								</AlertDialogTitle>
 								<AlertDialogDescription>
-									This action cannot be undone. This will permanently delete
-									your account and remove your data from our servers.
+									This action cannot be undone. This will
+									permanently delete your account and remove
+									your data from our servers.
 								</AlertDialogDescription>
 							</AlertDialogHeader>
 							<AlertDialogFooter>
 								<AlertDialogCancel>Cancel</AlertDialogCancel>
 								<AlertDialogAction
 									onClick={() =>
-										dispatch(actionUnPublish(row.getValue('_id')))
-									}>
+										dispatch(
+											actionUnPublish(
+												row.getValue("_id"),
+											),
+										)
+									}
+								>
 									Continue
 								</AlertDialogAction>
 							</AlertDialogFooter>
@@ -185,16 +197,20 @@ const TablePublish = () => {
 				<Input
 					placeholder='Filter product...'
 					value={
-						(table.getColumn('product_name')?.getFilterValue() as string) ?? ''
+						(table
+							.getColumn("product_name")
+							?.getFilterValue() as string) ?? ""
 					}
 					onChange={(event) =>
-						table.getColumn('product_name')?.setFilterValue(event.target.value)
+						table
+							.getColumn("product_name")
+							?.setFilterValue(event.target.value)
 					}
 					className='max-w-sm'
 				/>
 			</div>
 			<div className='h-full overflow-y-auto border rounded-md'>
-				<Table className=''>
+				<Table>
 					<TableHeader>
 						{table.getHeaderGroups().map((headerGroup) => (
 							<TableRow key={headerGroup.id}>
@@ -204,7 +220,8 @@ const TablePublish = () => {
 											{header.isPlaceholder
 												? null
 												: flexRender(
-														header.column.columnDef.header,
+														header.column.columnDef
+															.header,
 														header.getContext(),
 												  )}
 										</TableHead>
@@ -218,7 +235,10 @@ const TablePublish = () => {
 							table.getRowModel()?.rows.map((row) => (
 								<TableRow
 									key={row.id}
-									data-state={row.getIsSelected() && 'selected'}>
+									data-state={
+										row.getIsSelected() && "selected"
+									}
+								>
 									{row.getVisibleCells().map((cell) => (
 										<TableCell key={cell.id}>
 											{flexRender(
@@ -233,7 +253,8 @@ const TablePublish = () => {
 							<TableRow>
 								<TableCell
 									colSpan={columns.length}
-									className='h-24 text-center'>
+									className='h-24 text-center'
+								>
 									No results.
 								</TableCell>
 							</TableRow>
@@ -254,7 +275,8 @@ const TablePublish = () => {
 									variant='outline'
 									size='sm'
 									onClick={() => table.previousPage()}
-									disabled={!table.getCanPreviousPage()}>
+									disabled={!table.getCanPreviousPage()}
+								>
 									<IoIosArrowBack />
 								</Button>
 							</PaginationItem>
@@ -263,7 +285,8 @@ const TablePublish = () => {
 									variant='outline'
 									size='sm'
 									onClick={() => table.nextPage()}
-									disabled={!table.getCanNextPage()}>
+									disabled={!table.getCanNextPage()}
+								>
 									<IoIosArrowForward />
 								</Button>
 							</PaginationItem>

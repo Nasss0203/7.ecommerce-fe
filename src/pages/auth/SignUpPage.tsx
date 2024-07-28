@@ -47,36 +47,25 @@ const SignUpPage = () => {
 		}
 	}
 	return (
-		<div className="flex items-center justify-center mt-10">
-			<div className="p-5 bg-white border border-gray-100 rounded shadow-md w-[424px] ">
-				<h1 className="mb-5 text-2xl font-bold text-center">Sign Up</h1>
+		<div className='flex items-center justify-center mt-10'>
+			<div className='p-5 bg-white border border-gray-100 rounded shadow-md w-[424px] '>
+				<h1 className='mb-5 text-2xl font-bold text-center'>Sign Up</h1>
 				<Form {...form}>
-					<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-						<div className="space-y-2">
+					<form
+						onSubmit={form.handleSubmit(onSubmit)}
+						className='space-y-8'
+					>
+						<div className='space-y-2'>
 							<FormField
 								control={form.control}
-								name="name"
+								name='name'
 								render={({ field }) => (
 									<FormItem>
 										<FormLabel>Username</FormLabel>
 										<FormControl>
-											<Input placeholder="Enter your username" {...field} />
-										</FormControl>
-										<FormMessage />
-									</FormItem>
-								)}
-							/>
-							<FormField
-								control={form.control}
-								name="email"
-								render={({ field }) => (
-									<FormItem>
-										<FormLabel>Email</FormLabel>
-										<FormControl>
 											<Input
-												placeholder="Enter your email"
+												placeholder='Enter your username'
 												{...field}
-												type="email"
 											/>
 										</FormControl>
 										<FormMessage />
@@ -85,15 +74,32 @@ const SignUpPage = () => {
 							/>
 							<FormField
 								control={form.control}
-								name="password"
+								name='email'
+								render={({ field }) => (
+									<FormItem>
+										<FormLabel>Email</FormLabel>
+										<FormControl>
+											<Input
+												placeholder='Enter your email'
+												{...field}
+												type='email'
+											/>
+										</FormControl>
+										<FormMessage />
+									</FormItem>
+								)}
+							/>
+							<FormField
+								control={form.control}
+								name='password'
 								render={({ field }) => (
 									<FormItem>
 										<FormLabel>Password</FormLabel>
 										<FormControl>
 											<Input
-												placeholder="************"
+												placeholder='************'
 												{...field}
-												type="password"
+												type='password'
 											/>
 										</FormControl>
 										<FormMessage />
@@ -101,7 +107,7 @@ const SignUpPage = () => {
 								)}
 							/>
 						</div>
-						<Button type="submit" className="w-full bg-primary-500">
+						<Button type='submit' className='w-full bg-primary-500'>
 							SIGN IN
 						</Button>
 					</form>

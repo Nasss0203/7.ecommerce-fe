@@ -32,7 +32,7 @@ const HeaderCustomer = () => {
 	);
 
 	const auth = isAuthenticated();
-	const data = auth?.data;
+	const dataAuth = auth?.data;
 
 	const handleInputChange = (e: any) => {
 		setSearchTerm(e.target.value);
@@ -142,7 +142,7 @@ const HeaderCustomer = () => {
 							<span>
 								<IoMdHeartEmpty />
 							</span>
-							{isAuthentication === true && data ? (
+							{isAuthentication === true && dataAuth ? (
 								<DropdownMenu>
 									<DropdownMenuTrigger>
 										<div className='text-white outline-none bg-secondary-700 '>
@@ -173,9 +173,11 @@ const HeaderCustomer = () => {
 											My Account
 										</DropdownMenuLabel>
 										<DropdownMenuSeparator />
-										<DropdownMenuItem>
-											<Link to={"/sign-in"}>Login</Link>
-										</DropdownMenuItem>
+										<Link to={"/sign-in"}>
+											<DropdownMenuItem>
+												Login
+											</DropdownMenuItem>
+										</Link>
 									</DropdownMenuContent>
 								</DropdownMenu>
 							)}
