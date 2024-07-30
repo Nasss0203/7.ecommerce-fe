@@ -47,7 +47,7 @@ export const findAllProducts = async () => {
 	}
 };
 
-export const findProductById = async (id: string) => {
+export const findProductById = async (id: string | null) => {
 	try {
 		const response = await axios.get(`/product/${id}`);
 		const data = response?.data;
@@ -134,6 +134,33 @@ export const unActionPublishProduct = async (id: string) => {
 		return data;
 	} catch (error) {
 		console.error("Error action unpublish product", error);
+		throw error;
+	}
+};
+
+export const updatedProduct = async (
+	productId: string,
+	productController: IProduct,
+) => {
+	console.log("ProductController~", productController);
+	try {
+		const { refreshToken, userId } = getUserIdAndToken();
+		const response = await axios.patch(
+			`/product/${productId}`,
+			{
+				...productController,
+				product_auth: userId,
+			},
+			{
+				headers: {
+					"x-client-id": userId,
+					"x-rtoken-id": refreshToken,
+				},
+			},
+		);
+		return response.data;
+	} catch (error) {
+		console.error("Error updated product", error);
 		throw error;
 	}
 };

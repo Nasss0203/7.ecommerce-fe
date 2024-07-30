@@ -13,17 +13,40 @@ import {
 	SelectValue,
 } from "@/components/ui/select";
 import { attributesPhone } from "@/constants/attributes";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useFormContext } from "react-hook-form";
-import FormGrid from "../FormGrid";
+import FormGrid from "../../FormGrid";
 
-const FormPhone = () => {
-	const { control } = useFormContext();
-	const [selectedRam, setSelectedRam] = useState<string>("");
-	const [selectedBrand, setSelectedBrand] = useState<string>("");
-	const [selectedScreen, setSelectedScreen] = useState<string>("");
+const FormPhoneEdit = ({ defaultValues = {} }: any) => {
+	console.log("defaultValues~", defaultValues);
+	const { control, setValue } = useFormContext();
+	const [selectedRam, setSelectedRam] = useState<string>(
+		defaultValues?.ram || "",
+	);
+	const [selectedBrand, setSelectedBrand] = useState<string>(
+		defaultValues?.brand || "",
+	);
+	const [selectedScreen, setSelectedScreen] = useState<string>(
+		defaultValues?.screen || "",
+	);
 	const [selectedStorageCapacity, setSelectedStorageCapacity] =
-		useState<string>("");
+		useState<string>(defaultValues?.storage_capacity || "");
+
+	useEffect(() => {
+		setValue("product_attributes.ram", selectedRam);
+		setValue("product_attributes.screen", selectedScreen);
+		setValue(
+			"product_attributes.storage_capacity",
+			selectedStorageCapacity,
+		);
+		setValue("product_attributes.brand", selectedBrand);
+	}, [
+		selectedRam,
+		selectedScreen,
+		selectedStorageCapacity,
+		selectedBrand,
+		setValue,
+	]);
 
 	return (
 		<>
@@ -31,6 +54,7 @@ const FormPhone = () => {
 				<FormField
 					control={control}
 					name='product_attributes.ram'
+					defaultValue={selectedRam}
 					render={({ field }) => (
 						<FormItem>
 							<FormLabel>Ram</FormLabel>
@@ -40,7 +64,7 @@ const FormPhone = () => {
 										field.onChange(value);
 										setSelectedRam(value);
 									}}
-									value={field.value}
+									value={field.value || selectedRam}
 								>
 									<SelectTrigger className='flex-1'>
 										<SelectValue placeholder='Select Ram' />
@@ -67,6 +91,7 @@ const FormPhone = () => {
 				<FormField
 					control={control}
 					name='product_attributes.screen'
+					defaultValue={selectedScreen}
 					render={({ field }) => (
 						<FormItem>
 							<FormLabel>Screen</FormLabel>
@@ -76,7 +101,7 @@ const FormPhone = () => {
 										field.onChange(value);
 										setSelectedScreen(value);
 									}}
-									value={field.value}
+									value={field.value || selectedScreen}
 								>
 									<SelectTrigger className='flex-1'>
 										<SelectValue placeholder='Select Screen' />
@@ -105,6 +130,7 @@ const FormPhone = () => {
 				<FormField
 					control={control}
 					name='product_attributes.storage_capacity'
+					defaultValue={selectedStorageCapacity}
 					render={({ field }) => (
 						<FormItem>
 							<FormLabel>Storage Capacity</FormLabel>
@@ -114,7 +140,9 @@ const FormPhone = () => {
 										field.onChange(value);
 										setSelectedStorageCapacity(value);
 									}}
-									value={field.value}
+									value={
+										field.value || selectedStorageCapacity
+									}
 								>
 									<SelectTrigger className='flex-1'>
 										<SelectValue placeholder='Select Storage Capacity' />
@@ -141,6 +169,7 @@ const FormPhone = () => {
 				<FormField
 					control={control}
 					name='product_attributes.brand'
+					defaultValue={selectedBrand}
 					render={({ field }) => (
 						<FormItem>
 							<FormLabel>Brand</FormLabel>
@@ -150,7 +179,7 @@ const FormPhone = () => {
 										field.onChange(value);
 										setSelectedBrand(value);
 									}}
-									value={field.value}
+									value={field.value || selectedBrand}
 								>
 									<SelectTrigger className='flex-1'>
 										<SelectValue placeholder='Select Brand' />
@@ -179,4 +208,4 @@ const FormPhone = () => {
 	);
 };
 
-export default FormPhone;
+export default FormPhoneEdit;

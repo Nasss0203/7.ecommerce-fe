@@ -1,10 +1,9 @@
-import { createNewProduct } from "@/api/product.api";
-import { uploadFile } from "@/api/upload.api";
+import { findProductById, updatedProduct } from "@/api/product.api";
 import {
 	FormBackground,
 	FormGrid,
-	FormLaptopAdd,
-	FormPhoneAdd,
+	FormLaptopEdit,
+	FormPhoneEdit,
 } from "@/components/form";
 import { Header } from "@/components/header";
 import { QuillEditor } from "@/components/quill";
@@ -26,26 +25,67 @@ import {
 	SelectValue,
 } from "@/components/ui/select";
 import { categoryOptions } from "@/constants/category";
+import { IProduct } from "@/types/data";
 import { isAuthenticated } from "@/utils";
 import {
 	CreateNewProductBody,
 	CreateNewProductType,
 } from "@/validator/product.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { FormProvider, useForm } from "react-hook-form";
+import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 type ProductType = "Phones" | "Laptops" | "Tablets";
+interface IMeta<T> {
+	message: string;
+	metadata: T;
+	status: number;
+}
 
-const ProductAdd = () => {
+const ProductEdit = () => {
 	const user = isAuthenticated();
 	const _id = user?.data?._id;
-
 	const navigate = useNavigate();
+
 	const [selectedCategory, setSelectedCategory] = useState<any>("Phones");
 	const [fileUpload, setFileUpload] = useState<File | null>(null);
+	const [dataProduct, setDataProduct] = useState<IMeta<IProduct>>();
+
+	const location = useLocation();
+	const searchParams = new URLSearchParams(location.search);
+	const _idProduct = searchParams.get("id");
+
+	useEffect(() => {
+		if (_id) {
+			getProductById(_idProduct);
+		}
+	}, [_id]);
+
+	const getProductById = async (id: string | null) => {
+		if (!id) return;
+		try {
+			const response = await findProductById(id);
+			console.log("response~", response);
+			setDataProduct(response);
+
+			// Update form with the fetched data
+			form.reset({
+				...response.metadata,
+				product_attributes: {
+					...response.metadata.product_attributes,
+				},
+			});
+			setSelectedCategory(
+				response.metadata.product_category as ProductType,
+			);
+		} catch (error) {
+			console.error("Error fetching product by ID", error);
+		}
+	};
+
+	const data = dataProduct?.metadata;
 
 	const form = useForm<CreateNewProductType>({
 		resolver: zodResolver(CreateNewProductBody),
@@ -58,7 +98,7 @@ const ProductAdd = () => {
 			product_category: "Phones",
 			product_auth: _id,
 			product_attributes: {
-				brand: "",
+				brand: data?.product_attributes.brand,
 				storage_capacity: "",
 				ram: "",
 				screen: "",
@@ -78,28 +118,28 @@ const ProductAdd = () => {
 	async function onSubmit(values: any) {
 		console.log("values~", values);
 		try {
-			const formData = new FormData();
-			if (fileUpload) {
-				formData.append("file", fileUpload);
-			}
+			// const formData = new FormData();
+			// if (fileUpload) {
+			// 	formData.append("file", fileUpload);
+			// }
 
-			if (fileUpload) {
-				const uploadResponse = await uploadFile(formData);
-				console.log(
-					"uploadResponse: ",
-					uploadResponse?.metadata?.thumb_url,
-				);
+			// if (fileUpload) {
+			// 	const uploadResponse = await uploadFile(formData);
+			// 	console.log(
+			// 		"uploadResponse: ",
+			// 		uploadResponse?.metadata?.thumb_url,
+			// 	);
 
-				values.product_thumb = uploadResponse?.metadata?.thumb_url;
-			}
+			// 	values.product_thumb = uploadResponse?.metadata?.thumb_url;
+			// }
 
-			const response = await createNewProduct(values);
+			const response = await updatedProduct(_idProduct as string, values);
 			console.log("response~", response);
 			if (response) {
 				form.reset();
-				setFileUpload(null);
 			}
-			toast.success("Product created successfully");
+			navigate("/admin/product/product-list");
+			toast.success("Updated successfully");
 		} catch (error) {
 			console.error("Error during product creation:", error);
 			toast.error("Create new product unsuccessful. Please try again.");
@@ -108,7 +148,7 @@ const ProductAdd = () => {
 
 	return (
 		<div className='flex flex-col gap-5'>
-			<Header>Create New Product</Header>
+			<Header>Chỉnh Sửa Sản Phẩm</Header>
 			<Form {...form}>
 				<form
 					onSubmit={form.handleSubmit(onSubmit)}
@@ -194,7 +234,7 @@ const ProductAdd = () => {
 													field.onChange(value);
 													setSelectedCategory(value);
 												}}
-												value={field.value}
+												value={selectedCategory}
 											>
 												<SelectTrigger className='flex-1'>
 													<SelectValue placeholder='Theme' />
@@ -219,7 +259,7 @@ const ProductAdd = () => {
 									</FormItem>
 								)}
 							/>
-							<FormField
+							{/* <FormField
 								control={form.control}
 								name='product_thumb'
 								render={({ field }) => (
@@ -235,10 +275,11 @@ const ProductAdd = () => {
 										<FormMessage />
 									</FormItem>
 								)}
-							/>
-							<CategoryForm
+							/> */}
+							{/* <CategoryForm
+								methods={form}
 								category={selectedCategory}
-							></CategoryForm>
+							></CategoryForm> */}
 						</FormBackground>
 						<FormBackground>
 							<FormField
@@ -251,7 +292,9 @@ const ProductAdd = () => {
 										</FormLabel>
 										<FormControl>
 											<QuillEditor
-												value={field.value}
+												value={
+													data?.product_description
+												}
 												onChange={field.onChange}
 											></QuillEditor>
 										</FormControl>
@@ -272,16 +315,17 @@ const ProductAdd = () => {
 	);
 };
 
-const ProductAddView: Record<ProductType, JSX.Element> = {
-	Phones: <FormPhoneAdd></FormPhoneAdd>,
-	Laptops: <FormLaptopAdd></FormLaptopAdd>,
+const ProductEditView: Record<ProductType, JSX.Element> = {
+	Phones: <FormPhoneEdit></FormPhoneEdit>,
+	Laptops: <FormLaptopEdit></FormLaptopEdit>,
 	Tablets: <div>Tablets</div>,
 };
 
-function CategoryForm(props: { category: ProductType }) {
-	const { category } = props;
+function CategoryForm(props: { category: ProductType; methods: any }) {
+	const { category, methods } = props;
 
-	return ProductAddView[category];
+	return (
+		<FormProvider {...methods}>{ProductEditView[category]}</FormProvider>
+	);
 }
-
-export default ProductAdd;
+export default ProductEdit;

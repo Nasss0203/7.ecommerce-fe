@@ -33,10 +33,15 @@ export const sidebar: TSidebar[] = [
 				icon: <GoDotFill />,
 			},
 			{
-				title: "Danh sách ",
+				title: "Danh sách",
 				path: "/admin/product/product-list",
 				icon: <GoDotFill />,
 			},
+			// {
+			// 	title: "Chỉnh sửa",
+			// 	path: "/admin/product/product-edit/:editID",
+			// 	icon: <GoDotFill />,
+			// },
 		],
 	},
 	{

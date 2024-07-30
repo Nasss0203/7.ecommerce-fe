@@ -24,15 +24,15 @@ const chartConfig = {
 } satisfies ChartConfig;
 const DashboardAdmin = () => {
 	return (
-		<div className='flex w-full gap-5'>
-			<div className='flex flex-col w-[80%] gap-5 '>
+		<div className='flex flex-col w-full gap-5 lg:flex-row'>
+			<div className='flex flex-col lg:w-[80%] gap-5 '>
 				<div className='bg-white rounded-md dark:bg-[#313d4a]'>
 					<h1 className='px-5 py-3 text-lg font-semibold uppercase dark:text-white'>
 						Kết quả kinh doanh trong ngày
 					</h1>
 					<div className='border-b border-neutral-400'></div>
-					<div className='grid grid-cols-4 px-5 dark:text-white'>
-						<div className='flex items-center gap-2 p-5'>
+					<div className='grid grid-cols-2 px-5 lg:grid-cols-4 dark:text-white'>
+						<div className='flex items-center gap-2 py-4 lg:p-5'>
 							<div className='flex items-center justify-center w-10 h-10 text-white bg-blue-500 rounded-full'>
 								<FaMoneyBill />
 							</div>
@@ -45,7 +45,7 @@ const DashboardAdmin = () => {
 								</span>
 							</div>
 						</div>
-						<div className='flex items-center gap-2 p-5'>
+						<div className='flex items-center gap-2 py-4 lg:p-5'>
 							<div className='flex items-center justify-center w-10 h-10 text-white bg-green-500 rounded-full'>
 								<FaBoxOpen />
 							</div>
@@ -58,7 +58,7 @@ const DashboardAdmin = () => {
 								</span>
 							</div>
 						</div>
-						<div className='flex items-center gap-2 p-5'>
+						<div className='flex items-center gap-2 py-4 lg:p-5'>
 							<div className='flex items-center justify-center w-10 h-10 text-white bg-yellow-500 rounded-full'>
 								<FaBox />
 							</div>
@@ -69,7 +69,7 @@ const DashboardAdmin = () => {
 								</span>
 							</div>
 						</div>
-						<div className='flex items-center gap-2 p-5'>
+						<div className='flex items-center gap-2 py-4 lg:p-5'>
 							<div className='flex items-center justify-center w-10 h-10 text-white bg-red-500 rounded-full'>
 								<MdCancel />
 							</div>
@@ -84,10 +84,10 @@ const DashboardAdmin = () => {
 						</div>
 					</div>
 				</div>
-				<div className='p-5 bg-white rounded-md dark:bg-[#313d4a]'>
+				<div className='p-5 bg-white rounded-md overflow-y-auto dark:bg-[#313d4a]'>
 					<ChartContainer
 						config={chartConfig}
-						className='w-full h-[400px]'
+						className='lg:w-full h-[400px] w-[750px]'
 					>
 						<BarChart accessibilityLayer data={chartData}>
 							<Bar
@@ -105,11 +105,9 @@ const DashboardAdmin = () => {
 						</BarChart>
 					</ChartContainer>
 				</div>
-				<div className='h-[250px] bg-white w-full rounded-md dark:bg-[#313d4a]'>
-					d
-				</div>
+				<div className='h-[250px] bg-white w-full rounded-md dark:bg-[#313d4a]'></div>
 			</div>
-			<div className='flex flex-col w-[20%] gap-5'>
+			<div className='flex flex-col lg:w-[20%] gap-5'>
 				<div className='p-5 bg-white rounded-md dark:bg-[#313d4a]'></div>
 				<div className='p-5 bg-white rounded-md dark:bg-[#313d4a]'></div>
 			</div>

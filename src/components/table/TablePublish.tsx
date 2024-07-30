@@ -30,7 +30,13 @@ import {
 	findAllPublishProduct,
 	resetFetchPublish,
 } from "@/redux/slice/product.slice";
+import { BsThreeDots } from "react-icons/bs";
+import { FaRegTrashAlt } from "react-icons/fa";
+import { FaEye } from "react-icons/fa6";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
+import { IoSettingsSharp } from "react-icons/io5";
+import { MdModeEdit } from "react-icons/md";
+import { Link } from "react-router-dom";
 import { DialogImage } from "../dialog";
 import {
 	AlertDialog,
@@ -45,6 +51,7 @@ import {
 } from "../ui/alert-dialog";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 
 const TablePublish = () => {
 	const [sorting, setSorting] = useState<SortingState>([]);
@@ -140,39 +147,64 @@ const TablePublish = () => {
 			accessorKey: "_id",
 			header: "Action",
 			cell: ({ row }) => (
-				<>
-					<AlertDialog>
-						<AlertDialogTrigger className='px-3 py-2 text-white bg-red-500 rounded-md'>
-							unPublish
-						</AlertDialogTrigger>
-						<AlertDialogContent>
-							<AlertDialogHeader>
-								<AlertDialogTitle>
-									Are you absolutely sure?
-								</AlertDialogTitle>
-								<AlertDialogDescription>
-									This action cannot be undone. This will
-									permanently delete your account and remove
-									your data from our servers.
-								</AlertDialogDescription>
-							</AlertDialogHeader>
-							<AlertDialogFooter>
-								<AlertDialogCancel>Cancel</AlertDialogCancel>
-								<AlertDialogAction
-									onClick={() =>
-										dispatch(
-											actionUnPublish(
-												row.getValue("_id"),
-											),
-										)
-									}
-								>
-									Continue
-								</AlertDialogAction>
-							</AlertDialogFooter>
-						</AlertDialogContent>
-					</AlertDialog>
-				</>
+				<Popover>
+					<PopoverTrigger className='ml-5'>
+						<BsThreeDots />
+					</PopoverTrigger>
+					<PopoverContent className='space-y-2 w-44'>
+						<div className='flex items-center gap-5 cursor-pointer'>
+							<FaEye />
+							View
+						</div>
+						<Link
+							to={`/admin/product/product-edit/edit?id=${row.getValue(
+								"_id",
+							)}`}
+							className='flex items-center gap-5 cursor-pointer'
+						>
+							<MdModeEdit />
+							Edit
+						</Link>
+						<AlertDialog>
+							<AlertDialogTrigger className='flex items-center gap-5'>
+								<IoSettingsSharp />
+								Daft
+							</AlertDialogTrigger>
+							<AlertDialogContent>
+								<AlertDialogHeader>
+									<AlertDialogTitle>
+										Are you absolutely sure?
+									</AlertDialogTitle>
+									<AlertDialogDescription>
+										This action cannot be undone. This will
+										permanently delete your account and
+										remove your data from our servers.
+									</AlertDialogDescription>
+								</AlertDialogHeader>
+								<AlertDialogFooter>
+									<AlertDialogCancel>
+										Cancel
+									</AlertDialogCancel>
+									<AlertDialogAction
+										onClick={() =>
+											dispatch(
+												actionUnPublish(
+													row.getValue("_id"),
+												),
+											)
+										}
+									>
+										Continue
+									</AlertDialogAction>
+								</AlertDialogFooter>
+							</AlertDialogContent>
+						</AlertDialog>
+						<div className='flex items-center gap-5 cursor-pointer'>
+							<FaRegTrashAlt />
+							Delete
+						</div>
+					</PopoverContent>
+				</Popover>
 			),
 		},
 	];

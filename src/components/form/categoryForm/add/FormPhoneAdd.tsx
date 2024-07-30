@@ -12,18 +12,18 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
-import { attributesLaptop } from "@/constants/attributes";
+import { attributesPhone } from "@/constants/attributes";
 import { useState } from "react";
 import { useFormContext } from "react-hook-form";
-import FormGrid from "../FormGrid";
+import FormGrid from "../../FormGrid";
 
-const FormLaptop = () => {
+const FormPhoneAdd = () => {
 	const { control } = useFormContext();
 	const [selectedRam, setSelectedRam] = useState<string>("");
 	const [selectedBrand, setSelectedBrand] = useState<string>("");
 	const [selectedScreen, setSelectedScreen] = useState<string>("");
-	const [selectedSSD, setSelectedSSD] = useState<string>("");
-	const [selectedCPU, setSelectedCPU] = useState<string>("");
+	const [selectedStorageCapacity, setSelectedStorageCapacity] =
+		useState<string>("");
 
 	return (
 		<>
@@ -47,7 +47,7 @@ const FormLaptop = () => {
 									</SelectTrigger>
 									<SelectContent>
 										<ScrollArea className='w-full h-[120px] rounded-md'>
-											{attributesLaptop?.ram.map(
+											{attributesPhone?.ram.map(
 												(item, index) => (
 													<SelectItem
 														value={item.name}
@@ -83,7 +83,7 @@ const FormLaptop = () => {
 									</SelectTrigger>
 									<SelectContent>
 										<ScrollArea className='w-full h-[120px] rounded-md'>
-											{attributesLaptop?.screen.map(
+											{attributesPhone?.screen.map(
 												(item, index) => (
 													<SelectItem
 														value={item.name}
@@ -104,38 +104,36 @@ const FormLaptop = () => {
 			<FormGrid>
 				<FormField
 					control={control}
-					name='product_attributes.ssd'
+					name='product_attributes.storage_capacity'
 					render={({ field }) => (
 						<FormItem>
-							<FormLabel>SSD</FormLabel>
+							<FormLabel>Storage Capacity</FormLabel>
 							<FormControl>
-								<FormControl>
-									<Select
-										onValueChange={(value) => {
-											field.onChange(value);
-											setSelectedSSD(value);
-										}}
-										value={field.value}
-									>
-										<SelectTrigger className='flex-1'>
-											<SelectValue placeholder='Select SSD' />
-										</SelectTrigger>
-										<SelectContent>
-											<ScrollArea className='w-full h-[120px] rounded-md'>
-												{attributesLaptop?.ssd.map(
-													(item, index) => (
-														<SelectItem
-															value={item.name}
-															key={index}
-														>
-															{item.name}
-														</SelectItem>
-													),
-												)}
-											</ScrollArea>
-										</SelectContent>
-									</Select>
-								</FormControl>
+								<Select
+									onValueChange={(value) => {
+										field.onChange(value);
+										setSelectedStorageCapacity(value);
+									}}
+									value={field.value}
+								>
+									<SelectTrigger className='flex-1'>
+										<SelectValue placeholder='Select Storage Capacity' />
+									</SelectTrigger>
+									<SelectContent>
+										<ScrollArea className='w-full h-[120px] rounded-md'>
+											{attributesPhone?.storage_capacity.map(
+												(item, index) => (
+													<SelectItem
+														value={item.name}
+														key={index}
+													>
+														{item.name}
+													</SelectItem>
+												),
+											)}
+										</ScrollArea>
+									</SelectContent>
+								</Select>
 							</FormControl>
 						</FormItem>
 					)}
@@ -159,45 +157,7 @@ const FormLaptop = () => {
 									</SelectTrigger>
 									<SelectContent>
 										<ScrollArea className='w-full h-[120px] rounded-md'>
-											{attributesLaptop?.brand.map(
-												(item, index) => (
-													<SelectItem
-														value={item.name}
-														key={index}
-													>
-														{item.name}
-													</SelectItem>
-												),
-											)}
-										</ScrollArea>
-									</SelectContent>
-								</Select>
-							</FormControl>
-						</FormItem>
-					)}
-				/>
-			</FormGrid>
-			<FormGrid>
-				<FormField
-					control={control}
-					name='product_attributes.cpu'
-					render={({ field }) => (
-						<FormItem>
-							<FormLabel>CPU</FormLabel>
-							<FormControl>
-								<Select
-									onValueChange={(value) => {
-										field.onChange(value);
-										setSelectedCPU(value);
-									}}
-									value={field.value}
-								>
-									<SelectTrigger className='flex-1'>
-										<SelectValue placeholder='Select CPU' />
-									</SelectTrigger>
-									<SelectContent>
-										<ScrollArea className='w-full h-[120px] rounded-md'>
-											{attributesLaptop?.cpu.map(
+											{attributesPhone?.brand.map(
 												(item, index) => (
 													<SelectItem
 														value={item.name}
@@ -219,4 +179,4 @@ const FormLaptop = () => {
 	);
 };
 
-export default FormLaptop;
+export default FormPhoneAdd;

@@ -3,12 +3,12 @@ import {
 	findAllDraftsForShop,
 	findAllPublishForShop,
 	unActionPublishProduct,
-} from '@/api/product.api';
-import { IProduct } from '@/types/data';
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+} from "@/api/product.api";
+import { IProduct } from "@/types/data";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 export const fetchAllDraftProduct = createAsyncThunk<IProduct[]>(
-	'fetchAllDraftProduct',
+	"fetchAllDraftProduct",
 	async () => {
 		const response = await findAllDraftsForShop();
 		const data = response?.metadata || [];
@@ -17,7 +17,7 @@ export const fetchAllDraftProduct = createAsyncThunk<IProduct[]>(
 );
 
 export const actionPublish = createAsyncThunk(
-	'actionPublish',
+	"actionPublish",
 	async (id: string, thunkAPI) => {
 		const response = await actionPublishProduct(id);
 		const data = response?.metadata || [];
@@ -29,7 +29,7 @@ export const actionPublish = createAsyncThunk(
 );
 
 export const findAllPublishProduct = createAsyncThunk<IProduct[]>(
-	'findAllPublishProduct',
+	"findAllPublishProduct",
 	async () => {
 		const response = await findAllPublishForShop();
 		const data = response?.metadata || [];
@@ -38,7 +38,7 @@ export const findAllPublishProduct = createAsyncThunk<IProduct[]>(
 );
 
 export const actionUnPublish = createAsyncThunk(
-	'actionUnPublish',
+	"actionUnPublish",
 	async (payload: string, thunkAPI) => {
 		const response = await unActionPublishProduct(payload);
 		const data = response?.metadata || [];
@@ -62,7 +62,7 @@ const initialState: {
 };
 
 export const productSlice = createSlice({
-	name: 'product',
+	name: "product",
 	initialState,
 	reducers: {
 		resetFetchDraft(state) {
@@ -81,11 +81,11 @@ export const productSlice = createSlice({
 				state.listProduct = action.payload;
 			})
 			.addCase(actionPublish.fulfilled, (state, action) => {
-				console.log('actionPublish state: ', state);
+				console.log("actionPublish state: ", state);
 				state.isPublish = true;
 			})
 			.addCase(actionUnPublish.fulfilled, (state, action) => {
-				console.log('actionUnPublish state: ', state);
+				console.log("actionUnPublish state: ", state);
 				state.isUnPublish = true;
 			});
 	},

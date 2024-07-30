@@ -9,8 +9,12 @@ const DashboardAdmin = lazy(() => import("@/pages/admin/DashboardAdmin"));
 const ProductAdmin = lazy(() => import("@/pages/admin/product/ProductAdmin"));
 const ProductAdd = lazy(() => import("@/pages/admin/product/ProductAdd"));
 const ProductList = lazy(() => import("@/pages/admin/product/ProductList"));
+const ProductEdit = lazy(() => import("@/pages/admin/product/ProductEdit"));
+
+//Order
 const OrderAdmin = lazy(() => import("@/pages/admin/order/OrderAdmin"));
 
+//LandingPage
 const LayoutCustomer = lazy(() => import("@/layouts/user/LayoutCustomer"));
 const HomePage = lazy(() => import("@/pages/user/HomePage"));
 const DetailProductHome = lazy(() => import("@/pages/user/DetailProductPage"));
@@ -50,6 +54,10 @@ function App() {
 				{
 					path: "product/product-list",
 					element: <ProductList />,
+				},
+				{
+					path: "product/product-edit/:editID",
+					element: <ProductEdit />,
 				},
 			],
 		},
