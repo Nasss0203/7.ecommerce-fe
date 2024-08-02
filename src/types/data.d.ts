@@ -67,3 +67,35 @@ export interface IProductResponse<T> {
 	metadata: T[];
 	status: number;
 }
+
+export interface ICart {
+	userId: string;
+	product: {
+		productId?: string;
+		shopId?: string;
+		quantity: number;
+		name?: string;
+		price?: number;
+		image?: string;
+		slug?: string;
+		category?: string;
+	};
+}
+
+export interface IUpdateCart {
+	userId: number;
+	shop_order_ids: [
+		{
+			shopId: string;
+			item_products: [
+				{
+					quantity: number;
+					price: number;
+					shopId: string;
+					old_quantity: number;
+					productId: string;
+				},
+			];
+		},
+	];
+}

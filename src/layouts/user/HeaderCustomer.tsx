@@ -7,8 +7,14 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+	HoverCard,
+	HoverCardContent,
+	HoverCardTrigger,
+} from "@/components/ui/hover-card";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { logOut } from "@/redux/slice/auth.slice";
+import { fetchListCart } from "@/redux/slice/cart.slice";
 import { IProduct, IProductResponse } from "@/types/data";
 import { isAuthenticated } from "@/utils";
 import { X } from "lucide-react";
@@ -30,9 +36,16 @@ const HeaderCustomer = () => {
 	const isAuthentication = useAppSelector(
 		(state) => state.auth.isAuthenticated,
 	);
+	const listCart = useAppSelector((state) => state.cart.listCart);
+	const dataCart = listCart?.cart_products;
+	console.log("dataCart~", dataCart);
 
 	const auth = isAuthenticated();
 	const dataAuth = auth?.data;
+
+	useEffect(() => {
+		dispatch(fetchListCart({ userId: 1001 }));
+	}, []);
 
 	const handleInputChange = (e: any) => {
 		setSearchTerm(e.target.value);
@@ -57,7 +70,6 @@ const HeaderCustomer = () => {
 	}, [searchTerm, location]);
 
 	const dataProduct = searchResults?.metadata;
-	console.log("dataProduct~", dataProduct);
 
 	return (
 		<div className='flex flex-col '>
@@ -136,9 +148,52 @@ const HeaderCustomer = () => {
 							</div>
 						</div>
 						<div className='flex items-center gap-6 text-2xl font-medium text-white'>
-							<span>
-								<BsCart />
-							</span>
+							<HoverCard>
+								<HoverCardTrigger>
+									<Link to={"/cart"}>
+										<BsCart />
+									</Link>
+								</HoverCardTrigger>
+								<HoverCardContent className='mt-5 mr-16 p-3 space-y-2'>
+									<div className='space-y-4'>
+										<div>
+											{dataCart?.map(
+												(item: any, index: any) => (
+													<div
+														className='flex items-center gap-2'
+														key={index}
+													>
+														<div className='w-10 h-10 '>
+															<img
+																src={item.image}
+																alt=''
+																className='w-full h-full object-cover'
+															/>
+														</div>
+														<div className='flex flex-col gap-2'>
+															<p className='text-xs'>
+																{item.name}
+															</p>
+															<span className='text-xs text-gray-600'>
+																SL:{" "}
+																{item.quantity}
+															</span>
+														</div>
+													</div>
+												),
+											)}
+										</div>
+										<div className='flex justify-end'>
+											<Link
+												className='px-5 py-2 bg-blue-500 text-white rounded-md text-sm'
+												to={"/cart"}
+											>
+												Cart
+											</Link>
+										</div>
+									</div>
+								</HoverCardContent>
+							</HoverCard>
 							<span>
 								<IoMdHeartEmpty />
 							</span>

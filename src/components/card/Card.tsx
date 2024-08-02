@@ -10,6 +10,13 @@ interface ICard {
 	slug: string;
 	category: string;
 }
+
+interface IMeta<T> {
+	message: string;
+	metadata: T;
+	status: number;
+}
+
 const Card = ({
 	image = "",
 	name = "",

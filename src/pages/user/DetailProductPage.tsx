@@ -1,6 +1,14 @@
 import { findProductById } from "@/api/product.api";
 import { Button } from "@/components/ui/button";
+import { useToast } from "@/components/ui/use-toast";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import {
+	addToCart,
+	fetchListCart,
+	resetFetchListCart,
+} from "@/redux/slice/cart.slice";
 import { IProduct } from "@/types/data";
+import { getUserIdAndToken } from "@/utils";
 import { useEffect, useState } from "react";
 import { BsCart3 } from "react-icons/bs";
 import { LuPlus } from "react-icons/lu";
@@ -14,10 +22,23 @@ interface IMeta<T> {
 }
 
 const DetailProductPage = () => {
+	const { toast } = useToast();
+
 	const [dataProduct, setDataProduct] = useState<IMeta<IProduct>>();
 	const location = useLocation();
 	const searchParams = new URLSearchParams(location.search);
 	const _id = searchParams.get("id");
+	const { userId } = getUserIdAndToken();
+
+	const dispatch = useAppDispatch();
+	const isAddCart = useAppSelector((state) => state.cart.isAddCart);
+
+	useEffect(() => {
+		if (isAddCart === true) {
+			dispatch(fetchListCart({ userId: 1001 }));
+			dispatch(resetFetchListCart());
+		}
+	}, [isAddCart, dispatch]);
 
 	useEffect(() => {
 		if (_id) {
@@ -35,6 +56,35 @@ const DetailProductPage = () => {
 	};
 
 	const product = dataProduct?.metadata;
+
+	const handleAddCart = () => {
+		try {
+			dispatch(
+				addToCart({
+					userId: "1001",
+					product: {
+						name: product?.product_name,
+						price: product?.product_price,
+						image: product?.product_thumb,
+						productId: product?._id,
+						quantity: 1,
+						shopId: userId,
+						category: product?.product_category,
+						slug: product?.product_slug,
+					},
+				}),
+			);
+			toast({
+				description: (
+					<div className='text-green-500 font-medium '>
+						Thêm sản phẩm thành công
+					</div>
+				),
+			});
+		} catch (error) {
+			throw error;
+		}
+	};
 
 	if (!product) return null;
 	document.title = product.product_name;
@@ -119,7 +169,10 @@ const DetailProductPage = () => {
 								<LuPlus />
 							</button>
 						</div>
-						<Button className='flex items-center gap-3 font-medium uppercase w-[300px]'>
+						<Button
+							className='flex items-center gap-3 font-medium uppercase w-[300px]'
+							onClick={() => handleAddCart()}
+						>
 							Add to cart
 							<BsCart3 />
 						</Button>
