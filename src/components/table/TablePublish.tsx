@@ -31,7 +31,6 @@ import {
 	resetFetchPublish,
 } from "@/redux/slice/product.slice";
 import { BsThreeDots } from "react-icons/bs";
-import { FaRegTrashAlt } from "react-icons/fa";
 import { FaEye } from "react-icons/fa6";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import { IoSettingsSharp } from "react-icons/io5";
@@ -199,10 +198,6 @@ const TablePublish = () => {
 								</AlertDialogFooter>
 							</AlertDialogContent>
 						</AlertDialog>
-						<div className='flex items-center gap-5 cursor-pointer'>
-							<FaRegTrashAlt />
-							Delete
-						</div>
 					</PopoverContent>
 				</Popover>
 			),

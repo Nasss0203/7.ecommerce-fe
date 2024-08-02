@@ -19,6 +19,7 @@ const LayoutCustomer = lazy(() => import("@/layouts/user/LayoutCustomer"));
 const HomePage = lazy(() => import("@/pages/user/HomePage"));
 const DetailProductHome = lazy(() => import("@/pages/user/DetailProductPage"));
 const CategoryPage = lazy(() => import("@/pages/user/CategoryPage"));
+const CartPage = lazy(() => import("@/pages/user/CartPage"));
 
 //Auth
 const SignUpPage = lazy(() => import("@/pages/auth/SignUpPage"));
@@ -76,6 +77,10 @@ function App() {
 				{
 					path: ":category/:id",
 					element: <DetailProductHome />,
+				},
+				{
+					path: "cart",
+					element: <CartPage />,
 				},
 				{
 					path: "sign-up",
