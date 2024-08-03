@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { AiFillProduct } from "react-icons/ai";
 import { GoDotFill } from "react-icons/go";
+import { HiOutlineReceiptPercent } from "react-icons/hi2";
 import { IoMdArrowDropdown, IoMdArrowDropup } from "react-icons/io";
 import { RiListOrdered } from "react-icons/ri";
 import { TiHome } from "react-icons/ti";
@@ -37,16 +38,16 @@ export const sidebar: TSidebar[] = [
 				path: "/admin/product/product-list",
 				icon: <GoDotFill />,
 			},
-			// {
-			// 	title: "Chỉnh sửa",
-			// 	path: "/admin/product/product-edit/:editID",
-			// 	icon: <GoDotFill />,
-			// },
 		],
 	},
 	{
 		title: "Đơn hàng",
 		path: "/admin/order",
 		icon: <RiListOrdered />,
+	},
+	{
+		title: "Mã giảm giá",
+		path: "/admin/discount",
+		icon: <HiOutlineReceiptPercent />,
 	},
 ];

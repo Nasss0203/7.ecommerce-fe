@@ -1,5 +1,5 @@
 import { findAllProducts } from "@/api/product.api";
-import { IProduct, IProductResponse } from "@/types/data";
+import { IBackEnd, IProduct } from "@/types/data";
 import { useEffect, useState } from "react";
 
 interface IAuth {
@@ -47,7 +47,7 @@ export const getCategory = (product: any, key: string) => {
 };
 
 export const getCategoryProduct = (key: string) => {
-	const [data, setData] = useState<IProductResponse<IProduct>>();
+	const [data, setData] = useState<IBackEnd<IProduct>>();
 
 	useEffect(() => {
 		getAllProducts();
@@ -73,4 +73,11 @@ export const getCategoryDisplay = (category: string) => {
 		default:
 			return "";
 	}
+};
+
+export const formatCurrency = (amount: any) => {
+	return new Intl.NumberFormat("vi-VN", {
+		style: "currency",
+		currency: "VND",
+	}).format(amount);
 };

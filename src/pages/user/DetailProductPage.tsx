@@ -23,6 +23,7 @@ interface IMeta<T> {
 
 const DetailProductPage = () => {
 	const { toast } = useToast();
+	const [quantity, setQuantity] = useState<number>(1);
 
 	const [dataProduct, setDataProduct] = useState<IMeta<IProduct>>();
 	const location = useLocation();
@@ -58,32 +59,21 @@ const DetailProductPage = () => {
 	const product = dataProduct?.metadata;
 
 	const handleAddCart = () => {
-		try {
-			dispatch(
-				addToCart({
-					userId: "1001",
-					product: {
-						name: product?.product_name,
-						price: product?.product_price,
-						image: product?.product_thumb,
-						productId: product?._id,
-						quantity: 1,
-						shopId: userId,
-						category: product?.product_category,
-						slug: product?.product_slug,
-					},
-				}),
-			);
-			toast({
-				description: (
-					<div className='text-green-500 font-medium '>
-						Thêm sản phẩm thành công
-					</div>
-				),
-			});
-		} catch (error) {
-			throw error;
-		}
+		dispatch(
+			addToCart({
+				userId: "1001",
+				product: {
+					name: product?.product_name,
+					price: product?.product_price,
+					image: product?.product_thumb,
+					productId: product?._id,
+					quantity: quantity,
+					shopId: userId,
+					category: product?.product_category,
+					slug: product?.product_slug,
+				},
+			}),
+		);
 	};
 
 	if (!product) return null;
@@ -161,11 +151,20 @@ const DetailProductPage = () => {
 					</div>
 					<div className='flex items-center gap-5 '>
 						<div className='inline-flex items-center border-[2px] rounded border-neutral-300 '>
-							<button className='px-3 py-1.5'>
+							<button
+								className={`px-3 py-1.5 ${
+									quantity <= 1 ? "cursor-not-allowed" : ""
+								}`}
+								onClick={() => setQuantity(quantity - 1)}
+								disabled={quantity <= 1 ? true : false}
+							>
 								<RiSubtractFill />
 							</button>
-							<span className='px-3 py-1.5'>1</span>
-							<button className='px-3 py-1.5'>
+							<span className='px-3 py-1.5'>{quantity}</span>
+							<button
+								className='px-3 py-1.5 cursor-pointer'
+								onClick={() => setQuantity(quantity + 1)}
+							>
 								<LuPlus />
 							</button>
 						</div>

@@ -1,11 +1,11 @@
 import { Header } from "@/components/header";
 
-const OrderAdmin = () => {
+const DiscountPage = () => {
 	return (
 		<div className='flex flex-col gap-5'>
-			<Header>Đơn hàng</Header>
+			<Header>Mã Giảm Giá</Header>
 		</div>
 	);
 };
 
-export default OrderAdmin;
+export default DiscountPage;

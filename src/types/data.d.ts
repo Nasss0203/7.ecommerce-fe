@@ -5,6 +5,12 @@ export interface IAuth {
 	password: string;
 }
 
+export interface IBackEnd<T> {
+	message: string;
+	metadata: T[];
+	status: number;
+}
+
 export interface IToken {
 	accessToken: string;
 	refreshToken: string;
@@ -62,12 +68,6 @@ export interface IProduct {
 	product_attributes: IPhones | ILaptops | ITablet;
 }
 
-export interface IProductResponse<T> {
-	message: string;
-	metadata: T[];
-	status: number;
-}
-
 export interface ICart {
 	userId: string;
 	product: {
@@ -98,4 +98,42 @@ export interface IUpdateCart {
 			];
 		},
 	];
+}
+
+//  "_id": "66addc5803d7cd621a209255",
+//             "discount_name": "name percentage shop2",
+//             "discount_description": "description",
+//             "discount_type": "percentage",
+//             "discount_value": 10,
+//             "discount_code": "SHOP-1144",
+//             "discount_start_date": "2024-09-03T04:00:00.000Z",
+//             "discount_end_date": "2024-09-04T02:00:00.000Z",
+//             "discount_max_uses": 100,
+//             "discount_uses_count": 0,
+//             "discount_users_used": [],
+//             "discount_max_uses_per_user": 1,
+//             "discount_min_order_value": 200000,
+//             "discount_is_active": true,
+//             "discount_apply_to": "specific",
+//             "discount_product_ids": [
+//                 "66ac2c491c5b9ce3ea5afb9a"
+//             ],
+
+export interface IDiscount {
+	_id?: string;
+	discount_name?: string;
+	discount_description?: string;
+	discount_type?: string;
+	discount_value?: number;
+	discount_code?: string;
+	discount_start_date?: Date;
+	discount_end_date?: Date;
+	discount_max_uses?: number;
+	discount_uses_count: number;
+	discount_users_used?: [];
+	discount_max_uses_per_user?: number;
+	discount_min_order_value?: number;
+	discount_is_active?: boolean;
+	discount_apply_to?: string;
+	discount_product_ids?: string[];
 }

@@ -15,7 +15,7 @@ import {
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { logOut } from "@/redux/slice/auth.slice";
 import { fetchListCart } from "@/redux/slice/cart.slice";
-import { IProduct, IProductResponse } from "@/types/data";
+import { IBackEnd, IProduct } from "@/types/data";
 import { isAuthenticated } from "@/utils";
 import { X } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -28,14 +28,14 @@ import { Link, useLocation } from "react-router-dom";
 
 const HeaderCustomer = () => {
 	const [searchTerm, setSearchTerm] = useState("");
-	const [searchResults, setSearchResults] =
-		useState<IProductResponse<IProduct>>();
+	const [searchResults, setSearchResults] = useState<IBackEnd<IProduct>>();
 	const location = useLocation();
 
 	const dispatch = useAppDispatch();
 	const isAuthentication = useAppSelector(
 		(state) => state.auth.isAuthenticated,
 	);
+
 	const listCart = useAppSelector((state) => state.cart.listCart);
 	const dataCart = listCart?.cart_products;
 	console.log("dataCart~", dataCart);

@@ -3,15 +3,14 @@ import { Banner } from "@/components/banner";
 import { Card } from "@/components/card";
 import { Category } from "@/components/category";
 import { categoryForm } from "@/constants/category";
-import { IProduct, IProductResponse } from "@/types/data";
+import { IBackEnd, IProduct } from "@/types/data";
 import { getCategory } from "@/utils";
 import { useEffect, useState } from "react";
 import { IoIosArrowRoundForward } from "react-icons/io";
 import { Link } from "react-router-dom";
 
 const HomePage = () => {
-	const [dataProduct, setDataProduct] =
-		useState<IProductResponse<IProduct>>();
+	const [dataProduct, setDataProduct] = useState<IBackEnd<IProduct>>();
 
 	useEffect(() => {
 		getAllProducts();

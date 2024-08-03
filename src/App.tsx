@@ -14,6 +14,9 @@ const ProductEdit = lazy(() => import("@/pages/admin/product/ProductEdit"));
 //Order
 const OrderAdmin = lazy(() => import("@/pages/admin/order/OrderAdmin"));
 
+//Discount
+const DiscountPage = lazy(() => import("@/pages/admin/discount/DiscountPage"));
+
 //LandingPage
 const LayoutCustomer = lazy(() => import("@/layouts/user/LayoutCustomer"));
 const HomePage = lazy(() => import("@/pages/user/HomePage"));
@@ -59,6 +62,10 @@ function App() {
 				{
 					path: "product/product-edit/:editID",
 					element: <ProductEdit />,
+				},
+				{
+					path: "discount",
+					element: <DiscountPage />,
 				},
 			],
 		},
