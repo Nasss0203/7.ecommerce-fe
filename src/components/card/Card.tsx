@@ -29,12 +29,12 @@ const Card = ({
 
 	return (
 		<div className='w-full'>
-			<div className='flex flex-col gap-4 px-2 py-3 bg-white border rounded shadow-lg border-neutral-300'>
+			<div className='flex flex-col lg:gap-4 gap-2 px-2 py-3 bg-white border rounded shadow-lg border-neutral-300'>
 				<Link
 					to={`/${displayCategory}/${slug}?id=${_id}`}
 					className='flex flex-col gap-5'
 				>
-					<div className='lg:h-[220px] h-[190px] '>
+					<div className='lg:h-[220px] h-[160px] '>
 						<img
 							srcSet={image}
 							alt={slug}
@@ -43,20 +43,20 @@ const Card = ({
 						/>
 					</div>
 					<div className='flex flex-col gap-2'>
-						<div className='space-y-[6px]'>
+						<div className='lg:space-y-[6px] space-y-1'>
 							<div className='flex items-center gap-2'>
-								<div className='flex items-center gap-1 text-xs text-yellow-400'>
+								<div className='flex items-center gap-1 lg:text-xs text-[10px] text-yellow-400'>
 									{Array(5)
 										.fill(0)
 										.map((item, index) => (
 											<FaStar key={index} />
 										))}
 								</div>
-								<span className='text-xs font-normal leading-5 text-gray-500'>
+								<span className='text-xs text-[10px] font-normal leading-5 text-gray-500'>
 									(52,677)
 								</span>
 							</div>
-							<p className='h-10 text-base font-normal leading-5 text-gray-900 line-clamp-2'>
+							<p className='lg:h-10 h-8 lg:text-base text-sm font-normal leading-5 text-gray-900 line-clamp-2'>
 								{name}
 							</p>
 						</div>
@@ -64,7 +64,7 @@ const Card = ({
 							{/* <span className='text-base font-normal leading-5 text-gray-300 line-through'>
 						$865.99
 					</span> */}
-							<span className='text-lg font-semibold leading-5 text-secondary-500'>
+							<span className='lg:text-lg text-base font-semibold leading-5 text-secondary-500'>
 								{price.toLocaleString("vi-VN", {
 									style: "currency",
 									currency: "VND",

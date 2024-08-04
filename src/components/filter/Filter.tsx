@@ -8,6 +8,12 @@ const filter = [
 	{
 		name: "Giá",
 	},
+	{
+		name: "RAM",
+	},
+	{
+		name: "Màn hình",
+	},
 ];
 const Filter = () => {
 	return (
@@ -20,13 +26,13 @@ const Filter = () => {
 					Bộ lọc
 				</span>
 				{filter.map((item, index) => (
-					<span
+					<div
 						className='flex items-center justify-between gap-0.5 px-2 py-1.5 border rounded border-neutral-300 bg-white'
 						key={index}
 					>
 						{item.name}
 						<IoMdArrowDropdown />
-					</span>
+					</div>
 				))}
 			</div>
 		</div>

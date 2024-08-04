@@ -31,7 +31,7 @@ const category = [
 
 const Category = () => {
 	return (
-		<div className='h-full w-[280px] bg-white rounded shadow-md border border-neutral-200'>
+		<div className='h-full w-[280px] bg-white rounded shadow-md border border-neutral-200 hidden lg:block'>
 			<div className='flex flex-col gap-1.5 relative  h-full'>
 				{category.map((item, index) => (
 					<Link

@@ -1,6 +1,6 @@
 const Banner = () => {
 	return (
-		<div className='flex flex-1'>
+		<div className='lg:flex flex-1 hidden'>
 			<div className='grid grid-cols-9 gap-4'>
 				<div className='h-full col-span-6'>
 					<div className='grid grid-rows-3 gap-4'>

@@ -20,6 +20,15 @@ const filter = [
 	{
 		name: "Giá",
 	},
+	{
+		name: "RAM",
+	},
+	{
+		name: "Màn hình",
+	},
+	{
+		name: "Dung lượng lưu trữ",
+	},
 ];
 
 const CategoryPage = () => {
@@ -48,7 +57,7 @@ const CategoryPage = () => {
 	return (
 		<>
 			{scrolled ? <Filter></Filter> : <></>}
-			<div className='container space-y-5'>
+			<div className='container px-3 space-y-5 lg:px-0'>
 				<Breadcrumb>
 					<BreadcrumbList>
 						<BreadcrumbItem>
@@ -67,20 +76,22 @@ const CategoryPage = () => {
 						<span className='text-lg font-semibold'>
 							Chọn theo tiêu chí
 						</span>
-						<div className={`flex items-center gap-2 y-1 `}>
-							<span className='flex items-center gap-2 px-3 py-1.5 border rounded border-neutral-300 bg-white'>
-								<VscFilter />
-								Bộ lọc
-							</span>
-							{filter.map((item, index) => (
-								<span
-									className='flex items-center justify-between gap-0.5 px-2 py-1.5 border rounded border-neutral-300 bg-white'
-									key={index}
-								>
-									{item.name}
-									<IoMdArrowDropdown />
-								</span>
-							))}
+						<div className='overflow-x-auto'>
+							<div className={`flex items-center gap-2 py-1`}>
+								<div className='inline-flex items-center gap-2 px-3 py-1.5 border rounded border-neutral-300 bg-white min-w-fit'>
+									<VscFilter />
+									Bộ lọc
+								</div>
+								{filter.map((item, index) => (
+									<div
+										className='inline-flex items-center justify-between gap-0.5 px-2 py-1.5 border rounded border-neutral-300 bg-white  min-w-fit'
+										key={index}
+									>
+										{item.name}
+										<IoMdArrowDropdown />
+									</div>
+								))}
+							</div>
 						</div>
 					</div>
 					<div className='grid grid-cols-2 gap-1.5 lg:grid-cols-5'>

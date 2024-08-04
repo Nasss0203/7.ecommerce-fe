@@ -1,5 +1,6 @@
 import { checkoutCart } from "@/api/checkout.api";
 import { getListDiscountByShop } from "@/api/discount.api";
+import { CartMobile } from "@/components/cart";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import {
 	deteleProductCart,
@@ -9,7 +10,7 @@ import {
 } from "@/redux/slice/cart.slice";
 import { IBackEnd, IDiscount } from "@/types/data";
 import { formatCurrency, getUserIdAndToken } from "@/utils";
-import { Fragment, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { FaRegTrashAlt } from "react-icons/fa";
 import { LuPlus } from "react-icons/lu";
 import { RiSubtractFill } from "react-icons/ri";
@@ -178,12 +179,12 @@ const CartPage = () => {
 	};
 
 	return (
-		<Fragment>
-			<div className='container flex flex-col gap-4'>
-				<div className='w-full pt-5 border border-neutral-400 rounded flex flex-col gap-3'>
+		<div className='container flex flex-col gap-4 px-3 lg:px-0'>
+			<div className='space-y-4 '>
+				<div className='flex-col hidden w-full gap-3 pt-5 border rounded lg:flex border-neutral-400 '>
 					<h3 className='px-5 text-xl font-medium'>Cart</h3>
 					<div className='flex flex-col text-left'>
-						<div className='flex items-center  text-xs font-semibold uppercase bg-neutral-300 text-center'>
+						<div className='flex items-center text-xs font-semibold text-center uppercase bg-neutral-300'>
 							<div className='w-[5%] py-2 justify-center flex'>
 								<input
 									type='checkbox'
@@ -263,6 +264,7 @@ const CartPage = () => {
 											</button>
 										</div>
 									</div>
+
 									<div className='w-[15%] justify-center flex py-2'>
 										{formatCurrency(
 											item.quantity * item.price,
@@ -284,9 +286,33 @@ const CartPage = () => {
 						</div>
 					</div>
 				</div>
+				{dataCart?.map((item: any, index: any) => (
+					<CartMobile
+						decreaseButton={() =>
+							handleDecreaseCart(item.productId)
+						}
+						increaseButton={() =>
+							handleIncreaseCart(item.productId)
+						}
+						image={item.image}
+						name={item.name}
+						price={item.price}
+						quantity={item.quantity}
+						totalPrice={totalAmount}
+						key={index}
+						checked={selectedItems.includes(item.productId)}
+						onChange={() => handleSelectItem(item.productId)}
+						deleteItem={() =>
+							handleDeleteCart({
+								productId: item.productId,
+								userId: 1001,
+							})
+						}
+					></CartMobile>
+				))}
 				<div className='flex items-center justify-between'>
-					<div className='flex items-center gap-3 ml-5'>
-						<div className='py-4 justify-center flex'>
+					<div className='items-center hidden gap-3 ml-5 lg:flex'>
+						<div className='flex justify-center py-4'>
 							<input
 								type='checkbox'
 								checked={selectAll}
@@ -298,15 +324,20 @@ const CartPage = () => {
 							Chọn Tất Cả ({selectedItems.length})
 						</label>
 					</div>
-					<div className='flex items-center gap-5'>
-						<div className='flex items-center gap-3 '>
-							<span className='text-lg'>Tổng thanh toán:</span>
-							<span className='text-xl text-blue-500'>
+					<div className='flex flex-col items-center flex-1 gap-5 lg:flex-row lg:flex-none'>
+						<div className='flex items-center justify-between w-full gap-3 lg:w-auto'>
+							<span className='hidden text-lg lg:block'>
+								Tổng thanh toán:
+							</span>
+							<span className='text-sm lg:hidden'>
+								Tổng ({selectedItems.length} sản phẩm)
+							</span>
+							<span className='text-lg text-right text-blue-500 lg:text-xl'>
 								{formatCurrency(totalAmount)}
 							</span>
 						</div>
 						<button
-							className='bg-blue-500 rounded-md px-5 py-2 text-white'
+							className='w-full px-5 py-2 text-white bg-blue-500 rounded-md lg:w-auto'
 							onClick={() => console.log(checkoutReview())}
 						>
 							Thanh Toán
@@ -314,7 +345,7 @@ const CartPage = () => {
 					</div>
 				</div>
 			</div>
-		</Fragment>
+		</div>
 	);
 };
 

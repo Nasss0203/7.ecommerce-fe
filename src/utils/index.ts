@@ -75,7 +75,7 @@ export const getCategoryDisplay = (category: string) => {
 	}
 };
 
-export const formatCurrency = (amount: any) => {
+export const formatCurrency = (amount: number) => {
 	return new Intl.NumberFormat("vi-VN", {
 		style: "currency",
 		currency: "VND",

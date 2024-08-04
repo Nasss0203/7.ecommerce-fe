@@ -80,9 +80,9 @@ const DetailProductPage = () => {
 	document.title = product.product_name;
 
 	return (
-		<div className='container space-y-5'>
-			<div className='grid grid-cols-12 gap-10'>
-				<div className='flex flex-col col-span-6 gap-10'>
+		<div className='container px-3 space-y-5 lg:px-0'>
+			<div className='gap-10 lg:grid lg:grid-cols-12'>
+				<div className='flex flex-col gap-10 lg:col-span-6'>
 					<div className='bg-white border rounded-md border-neutral-200'>
 						<div className='flex items-center justify-center flex-1'>
 							<div className='w-[250px] h-[250px] py-5'>
@@ -93,14 +93,13 @@ const DetailProductPage = () => {
 								/>
 							</div>
 						</div>
-						<div></div>
 					</div>
 				</div>
-				<div className='flex flex-col justify-start col-span-6 gap-6'>
-					<div className='flex flex-col gap-4'>
+				<div className='flex flex-col justify-start gap-3 lg:gap-6 lg:col-span-6'>
+					<div className='flex flex-col gap-2 lg:gap-4'>
 						<div className='space-y-2'>
 							<div></div>
-							<p className='text-xl font-medium leading-7 text-gray-900'>
+							<p className='text-lg font-medium leading-7 text-gray-900 lg:text-xl'>
 								{product.product_name}
 							</p>
 						</div>
@@ -128,7 +127,7 @@ const DetailProductPage = () => {
 					<div className='w-full border-t border-neutral-300'></div>
 					<div className='flex items-center gap-3'>
 						<div className='flex items-center gap-3'>
-							<span className='font-serif text-2xl leading-8 text-secondary-600'>
+							<span className='font-serif text-lg leading-8 lg:text-2xl text-secondary-600'>
 								{product?.product_price.toLocaleString(
 									"vi-VN",
 									{
@@ -137,7 +136,7 @@ const DetailProductPage = () => {
 									},
 								)}
 							</span>
-							<span className='font-serif text-lg leading-6 text-gray-500 line-through'>
+							<span className='font-serif text-base leading-6 text-gray-500 line-through lg:text-lg'>
 								{product?.product_price.toLocaleString(
 									"vi-VN",
 									{

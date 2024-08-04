@@ -22,7 +22,6 @@ import { useEffect, useState } from "react";
 import { BsCart } from "react-icons/bs";
 import { FaUserLock } from "react-icons/fa6";
 import { GoPerson } from "react-icons/go";
-import { IoMdHeartEmpty } from "react-icons/io";
 import { IoSearchOutline } from "react-icons/io5";
 import { Link, useLocation } from "react-router-dom";
 
@@ -73,16 +72,20 @@ const HeaderCustomer = () => {
 
 	return (
 		<div className='flex flex-col '>
-			<header className='bg-secondary-700 '>
-				<div className='container'>
-					<div className='flex items-center justify-between py-5'>
+			<header className='py-3 bg-secondary-700 lg:py-0 '>
+				<div className='container px-3 space-y-3 lg:px-0 lg:space-y-0'>
+					<div className='flex items-center justify-between lg:py-5'>
 						<Link to={"/"} className='flex items-center gap-2'>
-							<img srcSet='Icon.png 2x' alt='' />
-							<h1 className='leading-10 font-bold text-[32px] text-white'>
+							<img
+								srcSet='Icon.png 2x'
+								alt=''
+								className='object-cover lg:w-auto lg:h-auto h-7 w-7'
+							/>
+							<h1 className='leading-10 font-bold text-[32px] text-white hidden lg:block'>
 								CLICON
 							</h1>
 						</Link>
-						<div className='py-[14px] px-5 bg-white rounded w-[606px] flex items-center gap-2 relative'>
+						<div className='py-[14px] px-5 bg-white rounded lg:w-[606px] md:w-[450px] w-[130px] md:flex items-center gap-2 relative hidden'>
 							<input
 								type='text'
 								name='search'
@@ -91,6 +94,7 @@ const HeaderCustomer = () => {
 								placeholder='Search for anything...'
 								value={searchTerm}
 								onChange={handleInputChange}
+								autoComplete='off'
 							/>
 							{dataProduct ? (
 								<X
@@ -154,7 +158,7 @@ const HeaderCustomer = () => {
 										<BsCart />
 									</Link>
 								</HoverCardTrigger>
-								<HoverCardContent className='mt-5 mr-16 p-3 space-y-2'>
+								<HoverCardContent className='hidden p-3 mt-5 mr-16 space-y-2 lg:block'>
 									<div className='space-y-4'>
 										<div>
 											{dataCart?.map(
@@ -167,7 +171,7 @@ const HeaderCustomer = () => {
 															<img
 																src={item.image}
 																alt=''
-																className='w-full h-full object-cover'
+																className='object-cover w-full h-full'
 															/>
 														</div>
 														<div className='flex flex-col gap-2'>
@@ -185,7 +189,7 @@ const HeaderCustomer = () => {
 										</div>
 										<div className='flex justify-end'>
 											<Link
-												className='px-5 py-2 bg-blue-500 text-white rounded-md text-sm'
+												className='px-5 py-2 text-sm text-white bg-blue-500 rounded-md'
 												to={"/cart"}
 											>
 												Cart
@@ -194,9 +198,6 @@ const HeaderCustomer = () => {
 									</div>
 								</HoverCardContent>
 							</HoverCard>
-							<span>
-								<IoMdHeartEmpty />
-							</span>
 							{isAuthentication === true && dataAuth ? (
 								<DropdownMenu>
 									<DropdownMenuTrigger>
@@ -236,6 +237,66 @@ const HeaderCustomer = () => {
 									</DropdownMenuContent>
 								</DropdownMenu>
 							)}
+						</div>
+					</div>
+					<div className='py-[14px] px-5 bg-white rounded  w-full flex items-center gap-2 relative md:hidden'>
+						<input
+							type='text'
+							name='search'
+							id='search'
+							className='w-full text-sm leading-5 bg-transparent placeholder:text-gray-500'
+							placeholder='Search for anything...'
+							value={searchTerm}
+							onChange={handleInputChange}
+							autoComplete='off'
+						/>
+						{dataProduct ? (
+							<X
+								className='w-5 h-5 cursor-pointer'
+								onClick={() => setSearchTerm("")}
+							></X>
+						) : (
+							<span className='text-lg cursor-pointer'>
+								<IoSearchOutline />
+							</span>
+						)}
+						<div
+							className={`absolute flex-col w-full gap-2 transform -translate-x-1/2  rounded bg-neutral-50 top-14 left-1/2  ${
+								dataProduct ? "flex h-auto" : "hidden h-[250px]"
+							}`}
+						>
+							<div className='shadow-xl'>
+								{dataProduct?.slice(0, 5).map((item, index) => (
+									<Link
+										to={`${item.product_slug}?id=${item._id}`}
+										className='flex items-center gap-2 p-2'
+										key={index}
+										onClick={() => setSearchTerm("")}
+									>
+										<div className='w-10 h-10 border rounded border-neutral-200'>
+											<img
+												src={item.product_thumb}
+												alt=''
+												className='object-cover w-full h-full'
+											/>
+										</div>
+										<div className='flex flex-col gap-1'>
+											<p className='text-sm font-medium line-clamp-1'>
+												{item.product_name}
+											</p>
+											<span className='text-xs text-red-400'>
+												{item.product_price.toLocaleString(
+													"vi-VN",
+													{
+														style: "currency",
+														currency: "VND",
+													},
+												)}
+											</span>
+										</div>
+									</Link>
+								))}
+							</div>
 						</div>
 					</div>
 				</div>

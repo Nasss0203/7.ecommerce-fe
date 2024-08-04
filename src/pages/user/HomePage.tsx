@@ -29,8 +29,8 @@ const HomePage = () => {
 	if (!product) return null;
 
 	return (
-		<div className='container space-y-5'>
-			<div className='flex w-full h-[435px] gap-4'>
+		<div className='container space-y-5 px-3 lg:px-0'>
+			<div className='flex w-full lg:h-[435px] gap-4'>
 				<Category></Category>
 				<Banner></Banner>
 			</div>
@@ -51,7 +51,7 @@ const HomePage = () => {
 						</span>
 					</Link>
 				</div>
-				<div className='grid grid-cols-2 gap-1.5 lg:grid-cols-5'>
+				<div className='grid grid-cols-2 gap-1.5 lg:grid-cols-5 md:grid-cols-4'>
 					{productPhone.map((item: IProduct, index: any) => (
 						<Card
 							category={item.product_category}
