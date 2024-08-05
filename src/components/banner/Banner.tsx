@@ -1,4 +1,5 @@
 import { useState } from "react";
+import SwiperCore from "swiper";
 import "swiper/css";
 import "swiper/css/free-mode";
 import "swiper/css/navigation";
@@ -25,7 +26,7 @@ const banner = [
 ];
 
 const Banner = () => {
-	const [thumbsSwiper, setThumbsSwiper] = useState(null);
+	const [thumbsSwiper, setThumbsSwiper] = useState<SwiperCore | null>(null);
 	console.log("thumbsSwiper~", thumbsSwiper);
 	return (
 		<div className='lg:flex flex-col gap-2.5 w-[80%] h-full  hidden'>
