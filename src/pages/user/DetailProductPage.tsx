@@ -100,7 +100,7 @@ const DetailProductPage = () => {
 
 	return (
 		<div className='container px-3 space-y-5 lg:px-0'>
-			<Breadcrumb>
+			<Breadcrumb className='mt-5'>
 				<BreadcrumbList>
 					<BreadcrumbItem>
 						<BreadcrumbLink>
@@ -134,52 +134,6 @@ const DetailProductPage = () => {
 							</div>
 						</div>
 					</div>
-					<Tabs defaultValue='description' className='w-full '>
-						<TabsList>
-							<TabsTrigger value='description'>
-								Description
-							</TabsTrigger>
-							<TabsTrigger value='password'>Password</TabsTrigger>
-						</TabsList>
-						<TabsContent value='description'>
-							<div className='flex flex-col items-center gap-3'>
-								<div className=' lg:line-clamp-[8] line-clamp-4'>
-									<div
-										dangerouslySetInnerHTML={{
-											__html: product?.product_description,
-										}}
-									></div>
-								</div>
-								<Dialog>
-									<DialogTrigger>
-										<div className='py-3 w-[300px] text-base font-medium text-blue-500 border border-blue-500 rounded-md flex items-center gap-2 justify-center'>
-											Xem thêm
-											<span className='text-2xl'>
-												<IoMdArrowDropright />
-											</span>
-										</div>
-									</DialogTrigger>
-									<DialogContent className='lg:max-w-[76rem] top-0 translate-y-0 h-[calc(100%-1%)]'>
-										<AlertDialogHeader>
-											<DialogTitle></DialogTitle>
-											<ScrollArea className='w-full lg:px-[150px] max-h-[calc(100vh-5rem)] mb-[100px] rounded-md'>
-												<DialogDescription>
-													<div
-														dangerouslySetInnerHTML={{
-															__html: product?.product_description,
-														}}
-													></div>
-												</DialogDescription>
-											</ScrollArea>
-										</AlertDialogHeader>
-									</DialogContent>
-								</Dialog>
-							</div>
-						</TabsContent>
-						<TabsContent value='password'>
-							Change your password here.
-						</TabsContent>
-					</Tabs>
 				</div>
 				<div className='flex flex-col justify-start gap-3 lg:gap-6 lg:col-span-6'>
 					<div className='flex flex-col gap-2 lg:gap-4'>
@@ -260,6 +214,64 @@ const DetailProductPage = () => {
 							<BsCart3 />
 						</Button>
 					</div>
+				</div>
+			</div>
+			<div className='gap-10 pt-5 lg:pt-0 lg:grid lg:grid-cols-12'>
+				<div className='flex flex-col gap-10 lg:col-span-6'>
+					<Tabs defaultValue='description' className='w-full '>
+						<TabsList className='dark:data-[state=active]:bg-blue-500'>
+							<TabsTrigger
+								value='description'
+								className='dark:data-[state=active]:bg-blue-500'
+							>
+								Description
+							</TabsTrigger>
+							<TabsTrigger
+								value='password'
+								className='dark:data-[state=active]:bg-blue-500'
+							>
+								Password
+							</TabsTrigger>
+						</TabsList>
+						<TabsContent value='description'>
+							<div className='flex flex-col items-center gap-3'>
+								<div className=' lg:line-clamp-[8] line-clamp-4'>
+									<div
+										dangerouslySetInnerHTML={{
+											__html: product?.product_description,
+										}}
+									></div>
+								</div>
+								<Dialog>
+									<DialogTrigger>
+										<div className='py-3 w-[300px] text-base font-medium text-blue-500 border border-blue-500 rounded-md flex items-center gap-2 justify-center'>
+											Xem thêm
+											<span className='text-2xl'>
+												<IoMdArrowDropright />
+											</span>
+										</div>
+									</DialogTrigger>
+									<DialogContent className='lg:max-w-[76rem] top-0 translate-y-0 h-[calc(100%-1%)]'>
+										<AlertDialogHeader>
+											<DialogTitle></DialogTitle>
+											<ScrollArea className='w-full lg:px-[150px] max-h-[calc(100vh-5rem)] mb-[100px] rounded-md'>
+												<DialogDescription>
+													<div
+														dangerouslySetInnerHTML={{
+															__html: product?.product_description,
+														}}
+													></div>
+												</DialogDescription>
+											</ScrollArea>
+										</AlertDialogHeader>
+									</DialogContent>
+								</Dialog>
+							</div>
+						</TabsContent>
+						<TabsContent value='password'>
+							Change your password here.
+						</TabsContent>
+					</Tabs>
 				</div>
 			</div>
 		</div>
