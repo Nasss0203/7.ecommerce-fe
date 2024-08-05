@@ -1,6 +1,6 @@
 import axios from "./axios";
 
-export const uploadFile = async (formData: any) => {
+export const uploadFile = async (formData: any, onProgress?: any) => {
 	try {
 		const uploadResponse = await axios.post("/upload/thumb", formData, {
 			headers: {
@@ -16,6 +16,7 @@ export const uploadFile = async (formData: any) => {
 						(progressEvent.loaded * 100) / progressEvent.total,
 					);
 					console.log(`Upload progress: ${percentCompleted}%`);
+					onProgress(percentCompleted);
 				}
 			},
 		});

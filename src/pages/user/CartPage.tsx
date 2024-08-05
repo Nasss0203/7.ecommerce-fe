@@ -1,6 +1,6 @@
 import { checkoutCart } from "@/api/checkout.api";
 import { getListDiscountByShop } from "@/api/discount.api";
-import { CartMobile } from "@/components/cart";
+import { CartDesktop, CartMobile } from "@/components/cart";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import {
 	deteleProductCart,
@@ -11,9 +11,6 @@ import {
 import { IBackEnd, IDiscount } from "@/types/data";
 import { formatCurrency, getUserIdAndToken } from "@/utils";
 import { useEffect, useState } from "react";
-import { FaRegTrashAlt } from "react-icons/fa";
-import { LuPlus } from "react-icons/lu";
-import { RiSubtractFill } from "react-icons/ri";
 
 const CartPage = () => {
 	const { userId } = getUserIdAndToken();
@@ -202,86 +199,32 @@ const CartPage = () => {
 						</div>
 						<div className='h-[280px] overflow-x-auto'>
 							{dataCart?.map((item: any, index: any) => (
-								<div
-									className='flex items-center text-xs border-b'
+								<CartDesktop
+									decreaseButton={() =>
+										handleDecreaseCart(item.productId)
+									}
+									increaseButton={() =>
+										handleIncreaseCart(item.productId)
+									}
+									image={item.image}
+									name={item.name}
+									price={item.price}
+									quantity={item.quantity}
+									totalPrice={totalAmount}
 									key={index}
-								>
-									<div className='w-[5%] py-2 justify-center flex'>
-										<input
-											type='checkbox'
-											checked={selectedItems.includes(
-												item.productId,
-											)}
-											onChange={() =>
-												handleSelectItem(item.productId)
-											}
-										/>
-									</div>
-									<div className='w-[35%] py-2 '>
-										<div className='flex items-center gap-2 w-[400px]'>
-											<div className='w-12 h-12'>
-												<img
-													src={item.image}
-													alt=''
-													className='object-cover w-full h-full'
-												/>
-											</div>
-											<p className='flex-1 text-sm line-clamp-2'>
-												{item.name}
-											</p>
-										</div>
-									</div>
-									<div className='flex items-center gap-1 w-[15%] justify-center py-2'>
-										<span className='text-sm text-gray-400 line-through'></span>
-										<span className='text-sm '>
-											{formatCurrency(item.price)}
-										</span>
-									</div>
-									<div className='w-[15%] justify-center flex py-2'>
-										<div className='inline-flex items-center border-[2px] rounded border-neutral-300 '>
-											<button
-												className='px-3 py-1.5'
-												onClick={() =>
-													handleDecreaseCart(
-														item.productId,
-													)
-												}
-											>
-												<RiSubtractFill />
-											</button>
-											<span className='px-3 py-1.5'>
-												{item.quantity}
-											</span>
-											<button
-												className='px-3 py-1.5'
-												onClick={() =>
-													handleIncreaseCart(
-														item.productId,
-													)
-												}
-											>
-												<LuPlus />
-											</button>
-										</div>
-									</div>
-
-									<div className='w-[15%] justify-center flex py-2'>
-										{formatCurrency(
-											item.quantity * item.price,
-										)}
-									</div>
-									<div
-										className='text-red-500 cursor-pointer w-[15%] justify-center flex py-2'
-										onClick={() =>
-											handleDeleteCart({
-												productId: item.productId,
-												userId: 1001,
-											})
-										}
-									>
-										<FaRegTrashAlt />
-									</div>
-								</div>
+									checked={selectedItems.includes(
+										item.productId,
+									)}
+									onChange={() =>
+										handleSelectItem(item.productId)
+									}
+									deleteItem={() =>
+										handleDeleteCart({
+											productId: item.productId,
+											userId: 1001,
+										})
+									}
+								></CartDesktop>
 							))}
 						</div>
 					</div>

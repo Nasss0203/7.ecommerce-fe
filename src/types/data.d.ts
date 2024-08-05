@@ -7,7 +7,7 @@ export interface IAuth {
 
 export interface IBackEnd<T> {
 	message: string;
-	metadata: T[];
+	metadata: T;
 	status: number;
 }
 
@@ -58,7 +58,7 @@ export interface IProduct {
 	product_auth?: string | undefined;
 	product_name: string;
 	product_thumb: string;
-	product_description?: string;
+	product_description: string;
 	product_slug: string;
 	product_price: number;
 	product_quantity: number;

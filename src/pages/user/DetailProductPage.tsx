@@ -1,5 +1,23 @@
 import { findProductById } from "@/api/product.api";
+import { AlertDialogHeader } from "@/components/ui/alert-dialog";
+import {
+	Breadcrumb,
+	BreadcrumbItem,
+	BreadcrumbLink,
+	BreadcrumbList,
+	BreadcrumbPage,
+	BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
 import { Button } from "@/components/ui/button";
+import {
+	Dialog,
+	DialogContent,
+	DialogDescription,
+	DialogTitle,
+	DialogTrigger,
+} from "@/components/ui/dialog";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/components/ui/use-toast";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import {
@@ -11,9 +29,10 @@ import { IProduct } from "@/types/data";
 import { getUserIdAndToken } from "@/utils";
 import { useEffect, useState } from "react";
 import { BsCart3 } from "react-icons/bs";
+import { IoMdArrowDropright } from "react-icons/io";
 import { LuPlus } from "react-icons/lu";
 import { RiSubtractFill } from "react-icons/ri";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 interface IMeta<T> {
 	message: string;
@@ -81,6 +100,27 @@ const DetailProductPage = () => {
 
 	return (
 		<div className='container px-3 space-y-5 lg:px-0'>
+			<Breadcrumb>
+				<BreadcrumbList>
+					<BreadcrumbItem>
+						<BreadcrumbLink>
+							<Link to='/'>Home</Link>
+						</BreadcrumbLink>
+					</BreadcrumbItem>
+					<BreadcrumbSeparator />
+					<BreadcrumbItem>
+						<BreadcrumbLink>
+							<Link to='/components'>
+								{product?.product_category}
+							</Link>
+						</BreadcrumbLink>
+					</BreadcrumbItem>
+					<BreadcrumbSeparator />
+					<BreadcrumbItem>
+						<BreadcrumbPage>{product?.product_name}</BreadcrumbPage>
+					</BreadcrumbItem>
+				</BreadcrumbList>
+			</Breadcrumb>
 			<div className='gap-10 lg:grid lg:grid-cols-12'>
 				<div className='flex flex-col gap-10 lg:col-span-6'>
 					<div className='bg-white border rounded-md border-neutral-200'>
@@ -94,6 +134,52 @@ const DetailProductPage = () => {
 							</div>
 						</div>
 					</div>
+					<Tabs defaultValue='description' className='w-full '>
+						<TabsList>
+							<TabsTrigger value='description'>
+								Description
+							</TabsTrigger>
+							<TabsTrigger value='password'>Password</TabsTrigger>
+						</TabsList>
+						<TabsContent value='description'>
+							<div className='flex flex-col items-center gap-3'>
+								<div className=' lg:line-clamp-[8] line-clamp-4'>
+									<div
+										dangerouslySetInnerHTML={{
+											__html: product?.product_description,
+										}}
+									></div>
+								</div>
+								<Dialog>
+									<DialogTrigger>
+										<div className='py-3 w-[300px] text-base font-medium text-blue-500 border border-blue-500 rounded-md flex items-center gap-2 justify-center'>
+											Xem thêm
+											<span className='text-2xl'>
+												<IoMdArrowDropright />
+											</span>
+										</div>
+									</DialogTrigger>
+									<DialogContent className='lg:max-w-[76rem] top-0 translate-y-0 h-[calc(100%-1%)]'>
+										<AlertDialogHeader>
+											<DialogTitle></DialogTitle>
+											<ScrollArea className='w-full lg:px-[150px] max-h-[calc(100vh-5rem)] mb-[100px] rounded-md'>
+												<DialogDescription>
+													<div
+														dangerouslySetInnerHTML={{
+															__html: product?.product_description,
+														}}
+													></div>
+												</DialogDescription>
+											</ScrollArea>
+										</AlertDialogHeader>
+									</DialogContent>
+								</Dialog>
+							</div>
+						</TabsContent>
+						<TabsContent value='password'>
+							Change your password here.
+						</TabsContent>
+					</Tabs>
 				</div>
 				<div className='flex flex-col justify-start gap-3 lg:gap-6 lg:col-span-6'>
 					<div className='flex flex-col gap-2 lg:gap-4'>
@@ -146,7 +232,6 @@ const DetailProductPage = () => {
 								)}
 							</span>
 						</div>
-						<div></div>
 					</div>
 					<div className='flex items-center gap-5 '>
 						<div className='inline-flex items-center border-[2px] rounded border-neutral-300 '>

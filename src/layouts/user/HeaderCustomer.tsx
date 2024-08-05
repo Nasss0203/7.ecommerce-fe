@@ -27,7 +27,7 @@ import { Link, useLocation } from "react-router-dom";
 
 const HeaderCustomer = () => {
 	const [searchTerm, setSearchTerm] = useState("");
-	const [searchResults, setSearchResults] = useState<IBackEnd<IProduct>>();
+	const [searchResults, setSearchResults] = useState<IBackEnd<IProduct[]>>();
 	const location = useLocation();
 
 	const dispatch = useAppDispatch();
@@ -71,7 +71,7 @@ const HeaderCustomer = () => {
 	const dataProduct = searchResults?.metadata;
 
 	return (
-		<div className='flex flex-col '>
+		<div className='fixed z-50 flex flex-col w-full'>
 			<header className='py-3 bg-secondary-700 lg:py-0 '>
 				<div className='container px-3 space-y-3 lg:px-0 lg:space-y-0'>
 					<div className='flex items-center justify-between lg:py-5'>
@@ -154,13 +154,18 @@ const HeaderCustomer = () => {
 						<div className='flex items-center gap-6 text-2xl font-medium text-white'>
 							<HoverCard>
 								<HoverCardTrigger>
-									<Link to={"/cart"}>
-										<BsCart />
-									</Link>
+									<div className='relative'>
+										<Link to={"/cart"}>
+											<BsCart />
+										</Link>
+										<div className='absolute left-0 flex items-center justify-center w-4 h-4 text-[9px] font-medium text-blue-500 translate-x-3 -translate-y-4 bg-white rounded-full top-1/2'>
+											{listCart?.cart_products.length}
+										</div>
+									</div>
 								</HoverCardTrigger>
-								<HoverCardContent className='hidden p-3 mt-5 mr-16 space-y-2 lg:block'>
+								<HoverCardContent className='hidden p-3 mt-5 mr-16 space-y-4 lg:block'>
 									<div className='space-y-4'>
-										<div>
+										<div className='space-y-2'>
 											{dataCart?.map(
 												(item: any, index: any) => (
 													<div

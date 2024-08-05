@@ -10,7 +10,7 @@ import { IoIosArrowRoundForward } from "react-icons/io";
 import { Link } from "react-router-dom";
 
 const HomePage = () => {
-	const [dataProduct, setDataProduct] = useState<IBackEnd<IProduct>>();
+	const [dataProduct, setDataProduct] = useState<IBackEnd<IProduct[]>>();
 
 	useEffect(() => {
 		getAllProducts();
@@ -29,8 +29,8 @@ const HomePage = () => {
 	if (!product) return null;
 
 	return (
-		<div className='container space-y-5 px-3 lg:px-0'>
-			<div className='flex w-full lg:h-[435px] gap-4'>
+		<div className='container px-3 space-y-5 lg:px-0'>
+			<div className='flex w-full lg:h-[435px] gap-2.5'>
 				<Category></Category>
 				<Banner></Banner>
 			</div>
@@ -51,7 +51,7 @@ const HomePage = () => {
 						</span>
 					</Link>
 				</div>
-				<div className='grid grid-cols-2 gap-1.5 lg:grid-cols-5 md:grid-cols-4'>
+				<div className='grid grid-cols-2 gap-1.5 lg:grid-cols-6 md:grid-cols-4'>
 					{productPhone.map((item: IProduct, index: any) => (
 						<Card
 							category={item.product_category}

@@ -1,50 +1,82 @@
+import { useState } from "react";
+import "swiper/css";
+import "swiper/css/free-mode";
+import "swiper/css/navigation";
+import "swiper/css/thumbs";
+import { Autoplay, FreeMode, Navigation, Thumbs } from "swiper/modules";
+import { Swiper, SwiperSlide } from "swiper/react";
+
+const banner = [
+	{
+		image: "https://lh3.googleusercontent.com/ppb9f6i0VvBnQtMJiKkgBTSdKqwcAksvwBeCBGdoXN1bGntCcvldCrRfqKccyKG4YHc6uui9R9WGFWYc1Pg8qVe9-FctxMvn=rw-w1920",
+	},
+	{
+		image: "https://lh3.googleusercontent.com/Fok2LReZV-yl7N68WsYqOqYe3Fl5jf8JRLTzTR2P-GwJJ7PnWa_erB-l9HQxVRH3PhsOpt3XbbliWId71f3tSNPYoTDwSwm4=w1920-rw",
+	},
+	{
+		image: "https://lh3.googleusercontent.com/ourQbUh5x_qOtLqkqURngvERqVSP9BdSf84gDkdvomg11oZ0QZKBh_uwPeBEOwRkwzxoB9CcH-AwLoN6HZammrdXii52xXxFow=w1920-rw",
+	},
+	{
+		image: "https://lh3.googleusercontent.com/mq0g4swS2LXcX5Gv-li7EN-wh-jL4FbvZ8kINXskgaH50pgs4ZUzEv3HyYUY4WJKGVMsg12mRZlR-ojA0JTv0yejLeOkFBJo=w1920-rw",
+	},
+	{
+		image: "https://lh3.googleusercontent.com/OGZOKYCbdYSmpbeBPcr_DMpWjA31STZoCumjPk8m4fIpW0bSrIFixwyQa11gkGEmOWjkp3vS-WoT3f9RAQE5IuRyIi7NHN7s=w1920-rw",
+	},
+];
+
 const Banner = () => {
+	const [thumbsSwiper, setThumbsSwiper] = useState(null);
+	console.log("thumbsSwiper~", thumbsSwiper);
 	return (
-		<div className='lg:flex flex-1 hidden'>
-			<div className='grid grid-cols-9 gap-4'>
-				<div className='h-full col-span-6'>
-					<div className='grid grid-rows-3 gap-4'>
-						<div className='row-span-2 rounded-md shadow-md'>
-							<img
-								srcSet='slider3.png.png 2x'
-								alt=''
-								className='object-cover w-full h-full rounded-md '
-							/>
-						</div>
-						<div className='grid grid-cols-2 row-span-1 gap-4'>
-							<div className='rounded-md shadow-md'>
+		<div className='lg:flex flex-col gap-2.5 w-[80%] h-full  hidden'>
+			<div className='w-full '>
+				<Swiper
+					autoplay={{
+						delay: 2500,
+						disableOnInteraction: false,
+					}}
+					loop={true}
+					spaceBetween={10}
+					navigation={true}
+					thumbs={{ swiper: thumbsSwiper }}
+					modules={[FreeMode, Navigation, Thumbs, Autoplay]}
+					className='mySwiper2'
+				>
+					{banner.map((item, index) => (
+						<SwiperSlide key={index}>
+							<div className='rounded-md shadow-md h-[350px]'>
 								<img
-									srcSet='slider4.png 2x'
+									srcSet={item.image}
 									alt=''
-									className='object-cover w-full h-full rounded-md '
+									className='flex-shrink-0 object-cover w-full h-full rounded-md'
 								/>
 							</div>
-							<div className='rounded-md shadow-md'>
+						</SwiperSlide>
+					))}
+				</Swiper>
+			</div>
+			<div className='w-full '>
+				<Swiper
+					onSwiper={setThumbsSwiper}
+					loop={true}
+					spaceBetween={10}
+					slidesPerView={3}
+					freeMode={true}
+					watchSlidesProgress={true}
+					modules={[FreeMode, Navigation, Thumbs]}
+					className='mySwiper'
+				>
+					{banner.map((item, index) => (
+						<SwiperSlide key={index}>
+							<div className={`h-[75px] w-full `}>
 								<img
-									srcSet='slider5.png 2x'
-									alt=''
-									className='object-cover w-full h-full rounded-md'
+									src={item.image}
+									className='flex-shrink-0 object-cover w-full h-full rounded-md'
 								/>
 							</div>
-						</div>
-					</div>
-				</div>
-				<div className='grid col-span-3 grid-rows-2 gap-4 rounded'>
-					<div className='rounded-md shadow-md'>
-						<img
-							srcSet='slider6.png 2x'
-							alt=''
-							className='object-cover w-full h-full rounded-md'
-						/>
-					</div>
-					<div className='rounded-md shadow-md'>
-						<img
-							srcSet='slider7.png 2x'
-							alt=''
-							className='object-cover w-full h-full rounded-md'
-						/>
-					</div>
-				</div>
+						</SwiperSlide>
+					))}
+				</Swiper>
 			</div>
 		</div>
 	);

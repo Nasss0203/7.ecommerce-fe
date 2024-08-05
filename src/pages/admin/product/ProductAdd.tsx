@@ -44,6 +44,8 @@ const ProductAdd = () => {
 	const _id = user?.data?._id;
 
 	const navigate = useNavigate();
+	const [uploadProgress, setUploadProgress] = useState(0);
+	console.log("uploadProgress~", uploadProgress);
 	const [selectedCategory, setSelectedCategory] = useState<any>("Phones");
 	const [fileUpload, setFileUpload] = useState<File | null>(null);
 
@@ -84,11 +86,15 @@ const ProductAdd = () => {
 			}
 
 			if (fileUpload) {
-				const uploadResponse = await uploadFile(formData);
+				const uploadResponse = await uploadFile(
+					formData,
+					setUploadProgress,
+				);
 				console.log(
 					"uploadResponse: ",
 					uploadResponse?.metadata?.thumb_url,
 				);
+				console.log("uploadResponse~", uploadResponse);
 
 				values.product_thumb = uploadResponse?.metadata?.thumb_url;
 			}
@@ -224,13 +230,19 @@ const ProductAdd = () => {
 								name='product_thumb'
 								render={({ field }) => (
 									<FormItem>
-										<FormLabel>Product Thumb</FormLabel>
+										<FormLabel>Image</FormLabel>
 										<FormControl>
-											<Input
-												type='file'
-												placeholder='Enter product name'
-												onChange={handleFileChange}
-											/>
+											<>
+												<Input
+													type='file'
+													placeholder='Enter product name'
+													onChange={handleFileChange}
+												/>
+												{/* <Progress
+													value={uploadProgress}
+													className='bg-white'
+												/> */}
+											</>
 										</FormControl>
 										<FormMessage />
 									</FormItem>
