@@ -1,3 +1,4 @@
+import { IOrder } from "@/types/order";
 import axios from "./axios";
 
 interface ICreateOrder {
