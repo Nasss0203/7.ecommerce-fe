@@ -23,7 +23,7 @@ interface Cart {
 
 export const fetchListCart = createAsyncThunk(
 	"cart/fetchListCart",
-	async (payload: { userId: number }, thunkAPI) => {
+	async (payload: { userId: string }, thunkAPI) => {
 		const { userId } = payload;
 		const response = await listCart({ userId });
 		const data = response?.metadata;
@@ -44,7 +44,9 @@ export const addToCart = createAsyncThunk(
 		});
 		const data = response?.metadata;
 		if (data) {
-			thunkAPI.dispatch(fetchListCart({ userId: 1001 }));
+			thunkAPI.dispatch(
+				fetchListCart({ userId: "66859264b627f62df4daf95d" }),
+			);
 		}
 		return data;
 	},
@@ -60,7 +62,7 @@ export const updateProductCart = createAsyncThunk(
 		});
 		const data = response?.metadata;
 		if (data) {
-			thunkAPI.dispatch(fetchListCart({ userId: 1001 }));
+			thunkAPI.dispatch(fetchListCart({ userId: userId }));
 		}
 		return data;
 	},
@@ -68,7 +70,7 @@ export const updateProductCart = createAsyncThunk(
 
 export const deteleProductCart = createAsyncThunk(
 	"cart/deteleProductCart",
-	async (payload: { userId: number; productId: any }, thunkAPI) => {
+	async (payload: { userId: string; productId: any }, thunkAPI) => {
 		const { userId, productId } = payload;
 		const response = await deleteCart({
 			userId,
@@ -77,7 +79,7 @@ export const deteleProductCart = createAsyncThunk(
 		const data = response?.metadata;
 		console.log("data~", data);
 		if (data) {
-			thunkAPI.dispatch(fetchListCart({ userId: 1001 }));
+			thunkAPI.dispatch(fetchListCart({ userId: userId }));
 		}
 		return data;
 	},
@@ -106,7 +108,7 @@ const initialState: {
 	},
 	isAddCart: false,
 	updateCart: {
-		userId: 0,
+		userId: "",
 		shop_order_ids: [
 			{
 				shopId: "",

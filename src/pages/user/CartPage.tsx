@@ -1,4 +1,3 @@
-import { checkoutCart } from "@/api/checkout.api";
 import { getListDiscountByShop } from "@/api/discount.api";
 import { CartDesktop, CartMobile } from "@/components/cart";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
@@ -8,16 +7,23 @@ import {
 	resetFetchListCart,
 	updateProductCart,
 } from "@/redux/slice/cart.slice";
+import {
+	checkcoutReview,
+	resetCheckoutCart,
+} from "@/redux/slice/checkout.slice";
 import { IBackEnd, IDiscount } from "@/types/data";
 import { formatCurrency, getUserIdAndToken } from "@/utils";
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const CartPage = () => {
 	const { userId } = getUserIdAndToken();
+	const navigate = useNavigate();
 
 	const dispatch = useAppDispatch();
 	const isAddCart = useAppSelector((state) => state.cart.isAddCart);
 	const listCart = useAppSelector((state) => state.cart.listCart);
+	const isCheckout = useAppSelector((state) => state.checkout.isCheckout);
 	const dataCart = listCart?.cart_products;
 
 	const [listDisount, setLisDiscount] = useState<IBackEnd<IDiscount>>();
@@ -25,62 +31,56 @@ const CartPage = () => {
 	const [selectedItems, setSelectedItems] = useState<string[]>([]);
 	const [totalAmount, setTotalAmount] = useState(0);
 
-	useEffect(() => {
+	useLayoutEffect(() => {
 		if (isAddCart === true) {
-			dispatch(fetchListCart({ userId: 1001 }));
+			dispatch(fetchListCart({ userId: userId }));
 			dispatch(resetFetchListCart());
 		}
+		document.title = "Giỏ hàng";
 	}, [isAddCart, dispatch]);
 
 	useEffect(() => {
-		dispatch(fetchListCart({ userId: 1001 }));
-	}, []);
-
-	const handleIncreaseCart = async (productId: string) => {
-		const item = dataCart.find((item) => item.productId === productId);
-		if (item) {
-			dispatch(
-				updateProductCart({
-					userId: 1001,
-					shop_order_ids: [
-						{
-							shopId: userId,
-							item_products: [
-								{
-									shopId: userId,
-									price: item?.price,
-									quantity: item.quantity + 1,
-									old_quantity: item.quantity,
-									productId: item.productId,
-								},
-							],
-						},
-					],
-				}),
-			);
+		if (isCheckout === true) {
+			navigate("/checkout");
+			dispatch(resetCheckoutCart());
 		}
-	};
+	}, [isCheckout]);
 
-	const handleDecreaseCart = async (productId: string) => {
-		const item = dataCart.find((item) => item.productId === productId);
+	const handleIncreaseAndDecrease = ({
+		data,
+		productId,
+		action,
+	}: {
+		data: any[];
+		productId: any;
+		action: "increase" | "decrease";
+	}) => {
+		const item = data.find((item) => {
+			return item.productId === productId;
+		});
+
+		const newQuantity =
+			action === "increase" ? item.quantity + 1 : item.quantity - 1;
+		const amountChange = action === "increase" ? item.price : -item.price;
+
 		if (item) {
-			if (item.quantity === 1) {
+			if (newQuantity === 0) {
 				handleDeleteCart({
 					productId: item.productId,
-					userId: 1001,
+					userId,
 				});
-			} else if (item.quantity > 1) {
+			} else {
 				dispatch(
 					updateProductCart({
-						userId: 1001,
+						userId: userId,
 						shop_order_ids: [
 							{
 								shopId: userId,
 								item_products: [
 									{
 										shopId: userId,
-										price: item.price,
-										quantity: item.quantity - 1,
+										price: item?.price,
+										quantity: newQuantity,
 										old_quantity: item.quantity,
 										productId: item.productId,
 									},
@@ -88,7 +88,11 @@ const CartPage = () => {
 							},
 						],
 					}),
-				);
+				).then(() => {
+					if (selectedItems.includes(productId)) {
+						setTotalAmount(totalAmount + amountChange);
+					}
+				});
 			}
 		}
 	};
@@ -98,7 +102,7 @@ const CartPage = () => {
 		userId,
 	}: {
 		productId: string;
-		userId: number;
+		userId: string;
 	}) => {
 		const item = dataCart.find((item) => item.productId === productId);
 		dispatch(deteleProductCart({ productId: item?.productId, userId }));
@@ -116,11 +120,16 @@ const CartPage = () => {
 			setTotalAmount(
 				totalAmount - selectedItem.price * selectedItem.quantity,
 			);
+			setSelectAll(false); // Bỏ chọn tất cả nếu có sản phẩm bị bỏ chọn
 		} else {
 			setSelectedItems([...selectedItems, productId]);
 			setTotalAmount(
 				totalAmount + selectedItem.price * selectedItem.quantity,
 			);
+			// Kiểm tra xem đã chọn hết sản phẩm chưa
+			if (selectedItems.length + 1 === dataCart.length) {
+				setSelectAll(true); // Chọn tất cả nếu đã chọn hết sản phẩm
+			}
 		}
 	};
 
@@ -150,29 +159,42 @@ const CartPage = () => {
 	};
 
 	const checkoutReview = async () => {
-		const itemProducts = listCart.cart_products.map((item) => ({
+		const selectedProducts = listCart.cart_products.filter((item) =>
+			selectedItems.includes(item.productId),
+		);
+
+		const itemProducts = selectedProducts.map((item) => ({
 			productId: item.productId,
 			price: item.price,
 			quantity: item.quantity,
 		}));
-		const response = await checkoutCart({
-			cartId: listCart._id,
-			userId: 1001,
-			shop_order_ids: [
-				{
-					authId: userId,
-					shop_discounts: [
-						{
-							codeId: "SHOP-1144",
-							discoutId: "66addc5803d7cd621a209255",
-							shop_id: userId,
-						},
-					],
-					item_products: itemProducts,
-				},
-			],
-		});
-		console.log("response~", response?.metadata);
+
+		const selectedTotalAmount = selectedProducts.reduce(
+			(acc, item) => acc + item.price * item.quantity,
+			0,
+		);
+
+		await dispatch(
+			checkcoutReview({
+				cartId: listCart._id,
+				userId: userId,
+				shop_order_ids: [
+					{
+						authId: userId,
+						item_products: itemProducts,
+						shop_discounts: [
+							{
+								codeId: "SHOP-1144",
+								discountId: "66addc5803d7cd621a209255",
+								shop_id: "66859264b627f62df4daf95d",
+							},
+						],
+					},
+				],
+			}),
+		);
+
+		setTotalAmount(totalAmount - selectedTotalAmount);
 	};
 
 	return (
@@ -201,10 +223,18 @@ const CartPage = () => {
 							{dataCart?.map((item: any, index: any) => (
 								<CartDesktop
 									decreaseButton={() =>
-										handleDecreaseCart(item.productId)
+										handleIncreaseAndDecrease({
+											data: dataCart,
+											action: "decrease",
+											productId: item.productId,
+										})
 									}
 									increaseButton={() =>
-										handleIncreaseCart(item.productId)
+										handleIncreaseAndDecrease({
+											data: dataCart,
+											action: "increase",
+											productId: item.productId,
+										})
 									}
 									image={item.image}
 									name={item.name}
@@ -221,7 +251,7 @@ const CartPage = () => {
 									deleteItem={() =>
 										handleDeleteCart({
 											productId: item.productId,
-											userId: 1001,
+											userId: "66859264b627f62df4daf95d",
 										})
 									}
 								></CartDesktop>
@@ -232,10 +262,18 @@ const CartPage = () => {
 				{dataCart?.map((item: any, index: any) => (
 					<CartMobile
 						decreaseButton={() =>
-							handleDecreaseCart(item.productId)
+							handleIncreaseAndDecrease({
+								data: dataCart,
+								action: "decrease",
+								productId: item.productId,
+							})
 						}
 						increaseButton={() =>
-							handleIncreaseCart(item.productId)
+							handleIncreaseAndDecrease({
+								data: dataCart,
+								action: "increase",
+								productId: item.productId,
+							})
 						}
 						image={item.image}
 						name={item.name}
@@ -248,7 +286,7 @@ const CartPage = () => {
 						deleteItem={() =>
 							handleDeleteCart({
 								productId: item.productId,
-								userId: 1001,
+								userId: userId,
 							})
 						}
 					></CartMobile>
@@ -279,12 +317,12 @@ const CartPage = () => {
 								{formatCurrency(totalAmount)}
 							</span>
 						</div>
-						<button
-							className='w-full px-5 py-2 text-white bg-blue-500 rounded-md lg:w-auto'
-							onClick={() => console.log(checkoutReview())}
+						<div
+							className='w-full px-5 py-2 text-white bg-blue-500 rounded-md cursor-pointer lg:w-auto'
+							onClick={() => checkoutReview()}
 						>
 							Thanh Toán
-						</button>
+						</div>
 					</div>
 				</div>
 			</div>

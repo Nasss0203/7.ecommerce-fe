@@ -7,16 +7,11 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import {
-	HoverCard,
-	HoverCardContent,
-	HoverCardTrigger,
-} from "@/components/ui/hover-card";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { logOut } from "@/redux/slice/auth.slice";
 import { fetchListCart } from "@/redux/slice/cart.slice";
 import { IBackEnd, IProduct } from "@/types/data";
-import { isAuthenticated } from "@/utils";
+import { getUserIdAndToken, isAuthenticate } from "@/utils";
 import { X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { BsCart } from "react-icons/bs";
@@ -26,6 +21,7 @@ import { IoSearchOutline } from "react-icons/io5";
 import { Link, useLocation } from "react-router-dom";
 
 const HeaderCustomer = () => {
+	const { userId } = getUserIdAndToken();
 	const [searchTerm, setSearchTerm] = useState("");
 	const [searchResults, setSearchResults] = useState<IBackEnd<IProduct[]>>();
 	const location = useLocation();
@@ -37,14 +33,13 @@ const HeaderCustomer = () => {
 
 	const listCart = useAppSelector((state) => state.cart.listCart);
 	const dataCart = listCart?.cart_products;
-	console.log("dataCart~", dataCart);
 
-	const auth = isAuthenticated();
+	const auth = isAuthenticate();
 	const dataAuth = auth?.data;
 
 	useEffect(() => {
-		dispatch(fetchListCart({ userId: 1001 }));
-	}, []);
+		dispatch(fetchListCart({ userId: userId }));
+	}, [userId]);
 
 	const handleInputChange = (e: any) => {
 		setSearchTerm(e.target.value);
@@ -55,7 +50,6 @@ const HeaderCustomer = () => {
 			if (searchTerm) {
 				try {
 					const results = await searchProduct(searchTerm);
-					console.log("results ~", results);
 					setSearchResults(results);
 				} catch (error) {
 					console.error("Search failed", error);
@@ -152,57 +146,14 @@ const HeaderCustomer = () => {
 							</div>
 						</div>
 						<div className='flex items-center gap-6 text-2xl font-medium text-white'>
-							<HoverCard>
-								<HoverCardTrigger>
-									<div className='relative'>
-										<Link to={"/cart"}>
-											<BsCart />
-										</Link>
-										<div className='absolute left-0 flex items-center justify-center w-4 h-4 text-[9px] font-medium text-blue-500 translate-x-3 -translate-y-4 bg-white rounded-full top-1/2'>
-											{listCart?.cart_products.length}
-										</div>
-									</div>
-								</HoverCardTrigger>
-								<HoverCardContent className='hidden p-3 mt-5 mr-16 space-y-4 lg:block'>
-									<div className='space-y-4'>
-										<div className='space-y-2'>
-											{dataCart?.map(
-												(item: any, index: any) => (
-													<div
-														className='flex items-center gap-2'
-														key={index}
-													>
-														<div className='w-10 h-10 '>
-															<img
-																src={item.image}
-																alt=''
-																className='object-cover w-full h-full'
-															/>
-														</div>
-														<div className='flex flex-col gap-2'>
-															<p className='text-xs'>
-																{item.name}
-															</p>
-															<span className='text-xs text-gray-600'>
-																SL:{" "}
-																{item.quantity}
-															</span>
-														</div>
-													</div>
-												),
-											)}
-										</div>
-										<div className='flex justify-end'>
-											<Link
-												className='px-5 py-2 text-sm text-white bg-blue-500 rounded-md'
-												to={"/cart"}
-											>
-												Cart
-											</Link>
-										</div>
-									</div>
-								</HoverCardContent>
-							</HoverCard>
+							<Link to={"/cart"} className='relative block'>
+								<BsCart />
+								<div className='absolute left-0 flex items-center justify-center w-4 h-4 text-[9px] font-medium text-blue-500 translate-x-3 -translate-y-4 bg-white rounded-full top-1/2'>
+									{listCart?.cart_products.length
+										? listCart?.cart_products.length
+										: 0}
+								</div>
+							</Link>
 							{isAuthentication === true && dataAuth ? (
 								<DropdownMenu>
 									<DropdownMenuTrigger>

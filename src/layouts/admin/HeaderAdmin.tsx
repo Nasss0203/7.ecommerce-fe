@@ -10,7 +10,7 @@ import {
 import { ModeToggle } from "@/components/ui/mode-toggle";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { logOut } from "@/redux/slice/auth.slice";
-import { isAuthenticated } from "@/utils";
+import { isAuthenticate } from "@/utils";
 import { FaRegBell, FaUserLock } from "react-icons/fa6";
 import { IoSearchOutline } from "react-icons/io5";
 import { Link } from "react-router-dom";
@@ -22,7 +22,7 @@ const HeaderAdmin = () => {
 		(state) => state.auth.isAuthenticated,
 	);
 
-	const auth = isAuthenticated();
+	const auth = isAuthenticate();
 	const data = auth?.data;
 
 	const logoutAuth = () => {

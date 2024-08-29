@@ -23,7 +23,7 @@ import {
 	PaginationItem,
 } from "@/components/ui/pagination";
 
-import { useDataTable } from "@/hooks/useDataTable";
+import { DataTable } from "@/constants/data-table";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import {
 	actionUnPublish,
@@ -204,7 +204,7 @@ const TablePublish = () => {
 		},
 	];
 
-	const table = useDataTable({
+	const table = DataTable({
 		data: product,
 		columns,
 		setSorting,

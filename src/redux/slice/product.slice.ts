@@ -81,11 +81,9 @@ export const productSlice = createSlice({
 				state.listProduct = action.payload;
 			})
 			.addCase(actionPublish.fulfilled, (state, action) => {
-				console.log("actionPublish state: ", state);
 				state.isPublish = true;
 			})
 			.addCase(actionUnPublish.fulfilled, (state, action) => {
-				console.log("actionUnPublish state: ", state);
 				state.isUnPublish = true;
 			});
 	},

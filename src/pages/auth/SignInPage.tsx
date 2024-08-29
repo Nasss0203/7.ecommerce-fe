@@ -11,7 +11,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { useAppDispatch } from "@/redux/hooks";
 import { authLogin } from "@/redux/slice/auth.slice";
-import { isAuthenticated } from "@/utils";
+import { isAuthenticate } from "@/utils";
 import { SignInBody, SignInBodyType } from "@/validator/auth.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -19,7 +19,7 @@ import { useNavigate } from "react-router-dom";
 
 const SignInPage = () => {
 	const dispatch = useAppDispatch();
-	const auth = isAuthenticated();
+	const auth = isAuthenticate();
 
 	const navigate = useNavigate();
 	const form = useForm<SignInBodyType>({

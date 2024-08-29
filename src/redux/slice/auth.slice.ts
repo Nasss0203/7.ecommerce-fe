@@ -1,6 +1,6 @@
 import { logout, register, signIn } from "@/api/auth.api";
 import { IAuth } from "@/types/data";
-import { isAuthenticated } from "@/utils";
+import { isAuthenticate } from "@/utils";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 export const authRegister = createAsyncThunk(
@@ -40,9 +40,9 @@ export const authLogout = createAsyncThunk("auth/logout", async () => {
 });
 
 const initialState = {
-	isAuthenticated: isAuthenticated() !== null,
+	isAuthenticated: isAuthenticate() !== null,
 	isLoading: false,
-	auth: isAuthenticated() || {
+	auth: isAuthenticate() || {
 		_id: "",
 		name: "",
 		email: "",

@@ -1,7 +1,7 @@
 import { getCategoryDisplay } from "@/utils";
+import { memo } from "react";
 import { FaStar } from "react-icons/fa6";
 import { Link } from "react-router-dom";
-
 interface ICard {
 	_id: string;
 	image: string;
@@ -68,4 +68,4 @@ const Card = ({
 	);
 };
 
-export default Card;
+export default memo(Card);

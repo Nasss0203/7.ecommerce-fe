@@ -26,7 +26,7 @@ import {
 	SelectValue,
 } from "@/components/ui/select";
 import { categoryOptions } from "@/constants/category";
-import { isAuthenticated } from "@/utils";
+import { isAuthenticate } from "@/utils";
 import {
 	CreateNewProductBody,
 	CreateNewProductType,
@@ -40,7 +40,7 @@ import { toast } from "react-toastify";
 type ProductType = "Phones" | "Laptops" | "Tablets";
 
 const ProductAdd = () => {
-	const user = isAuthenticated();
+	const user = isAuthenticate();
 	const _id = user?.data?._id;
 
 	const navigate = useNavigate();

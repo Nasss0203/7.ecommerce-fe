@@ -28,7 +28,6 @@ export const addCart = async ({
 				category,
 			},
 		});
-		console.log("response~", response.data);
 
 		return response.data;
 	} catch (error) {
@@ -37,7 +36,7 @@ export const addCart = async ({
 	}
 };
 
-export const listCart = async ({ userId }: { userId: number }) => {
+export const listCart = async ({ userId }: { userId: string }) => {
 	try {
 		const response = await axios.get("/cart", {
 			params: {
@@ -58,7 +57,6 @@ export const updateCart = async ({ userId, shop_order_ids }: IUpdateCart) => {
 			userId,
 			shop_order_ids,
 		});
-		console.log("response~", response);
 		return response.data;
 	} catch (error) {
 		console.error("Error updateCart:", error);
@@ -70,7 +68,7 @@ export const deleteCart = async ({
 	userId,
 	productId,
 }: {
-	userId: number;
+	userId: string;
 	productId: string;
 }) => {
 	try {

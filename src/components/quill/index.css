@@ -1,11 +1,12 @@
 .ql-container {
-	@apply h-[500px] bg-white rounded-md;
+	@apply h-[500px] bg-white rounded-md dark:bg-neutral-400;
 }
 
 .ql-toolbar.ql-snow {
-	@apply bg-white rounded-md;
+	@apply bg-white rounded-md dark:bg-neutral-400;
 }
 
 .ql-toolbar.ql-snow + .ql-container.ql-snow {
 	border-top: 1px solid #ccc;
+	/* @apply border-none; */
 }

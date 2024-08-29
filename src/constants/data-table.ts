@@ -1,7 +1,6 @@
 import {
 	ColumnFiltersState,
 	OnChangeFn,
-	PaginationState,
 	RowSelectionState,
 	SortingState,
 	VisibilityState,
@@ -10,7 +9,7 @@ import {
 	getPaginationRowModel,
 	getSortedRowModel,
 	useReactTable,
-} from '@tanstack/react-table';
+} from "@tanstack/react-table";
 
 interface IDataTableProps {
 	data: unknown[];
@@ -24,7 +23,7 @@ interface IDataTableProps {
 	columnVisibility?: VisibilityState | undefined;
 	rowSelection?: RowSelectionState | undefined;
 }
-export const useDataTable = (props: IDataTableProps) => {
+export const DataTable = (props: IDataTableProps) => {
 	const {
 		data,
 		columns,

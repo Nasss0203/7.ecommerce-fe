@@ -15,20 +15,7 @@ interface IAuth {
 	};
 }
 
-export const getUserIdAndToken = () => {
-	const authentication = isAuthenticated();
-	const refreshToken = authentication?.tokens?.refreshToken as string;
-	const accessToken = authentication?.tokens?.accessToken as string;
-	const userId = authentication?.data?._id as string;
-
-	return {
-		userId,
-		refreshToken,
-		accessToken,
-	};
-};
-
-export const isAuthenticated = (): IAuth | null => {
+export const isAuthenticate = (): IAuth | null => {
 	const auth = localStorage.getItem("auth");
 	if (!auth) {
 		return null;
@@ -40,6 +27,19 @@ export const isAuthenticated = (): IAuth | null => {
 		console.error("Failed to parse auth data:", error);
 		return null;
 	}
+};
+
+export const getUserIdAndToken = () => {
+	const authentication = isAuthenticate();
+	const refreshToken = authentication?.tokens?.refreshToken as string;
+	const accessToken = authentication?.tokens?.accessToken as string;
+	const userId = authentication?.data?._id as string;
+
+	return {
+		userId,
+		refreshToken,
+		accessToken,
+	};
 };
 
 export const getCategory = (product: any, key: string) => {

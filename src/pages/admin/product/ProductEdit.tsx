@@ -26,7 +26,7 @@ import {
 } from "@/components/ui/select";
 import { categoryOptions } from "@/constants/category";
 import { IProduct } from "@/types/data";
-import { isAuthenticated } from "@/utils";
+import { isAuthenticate } from "@/utils";
 import {
 	CreateNewProductBody,
 	CreateNewProductType,
@@ -45,7 +45,7 @@ interface IMeta<T> {
 }
 
 const ProductEdit = () => {
-	const user = isAuthenticated();
+	const user = isAuthenticate();
 	const _id = user?.data?._id;
 	const navigate = useNavigate();
 

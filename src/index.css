@@ -7,7 +7,7 @@
 		font-family: "Roboto", sans-serif;
 		/* @apply bg-neutral-100;
 		 */
-		@apply bg-white;
+		@apply bg-neutral-100;
 	}
 
 	input,

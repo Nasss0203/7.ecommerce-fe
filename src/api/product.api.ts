@@ -5,7 +5,6 @@ import axios from "./axios";
 export const searchProduct = async (keySearch: string) => {
 	try {
 		const response = await axios.get(`/product/search/${keySearch}`);
-		console.log("response~", response.data);
 		return response.data;
 	} catch (error) {
 		console.error("Error search product", error);

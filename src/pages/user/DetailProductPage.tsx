@@ -18,14 +18,13 @@ import {
 } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useToast } from "@/components/ui/use-toast";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import {
 	addToCart,
 	fetchListCart,
 	resetFetchListCart,
 } from "@/redux/slice/cart.slice";
-import { IProduct } from "@/types/data";
+import { IBackEnd, IProduct } from "@/types/data";
 import { getUserIdAndToken } from "@/utils";
 import { useEffect, useState } from "react";
 import { BsCart3 } from "react-icons/bs";
@@ -34,17 +33,10 @@ import { LuPlus } from "react-icons/lu";
 import { RiSubtractFill } from "react-icons/ri";
 import { Link, useLocation } from "react-router-dom";
 
-interface IMeta<T> {
-	message: string;
-	metadata: T;
-	status: number;
-}
-
 const DetailProductPage = () => {
-	const { toast } = useToast();
 	const [quantity, setQuantity] = useState<number>(1);
+	const [dataProduct, setDataProduct] = useState<IBackEnd<IProduct>>();
 
-	const [dataProduct, setDataProduct] = useState<IMeta<IProduct>>();
 	const location = useLocation();
 	const searchParams = new URLSearchParams(location.search);
 	const _id = searchParams.get("id");
@@ -55,7 +47,7 @@ const DetailProductPage = () => {
 
 	useEffect(() => {
 		if (isAddCart === true) {
-			dispatch(fetchListCart({ userId: 1001 }));
+			dispatch(fetchListCart({ userId: userId }));
 			dispatch(resetFetchListCart());
 		}
 	}, [isAddCart, dispatch]);
@@ -80,7 +72,7 @@ const DetailProductPage = () => {
 	const handleAddCart = () => {
 		dispatch(
 			addToCart({
-				userId: "1001",
+				userId: userId,
 				product: {
 					name: product?.product_name,
 					price: product?.product_price,

@@ -13,16 +13,25 @@ const ProductEdit = lazy(() => import("@/pages/admin/product/ProductEdit"));
 
 //Order
 const OrderAdmin = lazy(() => import("@/pages/admin/order/OrderAdmin"));
+const OrderDetailsAdmin = lazy(
+	() => import("@/pages/admin/order/OrderDetailsAdmin"),
+);
 
 //Discount
 const DiscountPage = lazy(() => import("@/pages/admin/discount/DiscountPage"));
 
+//User
 //LandingPage
 const LayoutCustomer = lazy(() => import("@/layouts/user/LayoutCustomer"));
 const HomePage = lazy(() => import("@/pages/user/HomePage"));
 const DetailProductHome = lazy(() => import("@/pages/user/DetailProductPage"));
 const CategoryPage = lazy(() => import("@/pages/user/CategoryPage"));
+const CheckoutPage = lazy(() => import("@/pages/user/CheckoutPage"));
 const CartPage = lazy(() => import("@/pages/user/CartPage"));
+const OrderPage = lazy(() => import("@/pages/user/OrderPage"));
+const PageNotFound = lazy(() => import("@/pages/user/PageNotFound"));
+
+const OrderSuccess = lazy(() => import("@/pages/user/order/OrderSuccess"));
 
 //Auth
 const SignUpPage = lazy(() => import("@/pages/auth/SignUpPage"));
@@ -36,6 +45,10 @@ function App() {
 	);
 	const router = createBrowserRouter([
 		{
+			path: "*",
+			element: <PageNotFound></PageNotFound>,
+		},
+		{
 			path: "admin",
 			element: <LayoutAdmin />,
 			children: [
@@ -46,6 +59,10 @@ function App() {
 				{
 					path: "order",
 					element: <OrderAdmin />,
+				},
+				{
+					path: "order-details/:orderId",
+					element: <OrderDetailsAdmin />,
 				},
 				{
 					path: "product",
@@ -77,6 +94,7 @@ function App() {
 					path: "",
 					element: <HomePage />,
 				},
+
 				{
 					path: ":category",
 					element: <CategoryPage />,
@@ -88,6 +106,18 @@ function App() {
 				{
 					path: "cart",
 					element: <CartPage />,
+				},
+				{
+					path: "checkout",
+					element: <CheckoutPage />,
+				},
+				{
+					path: "order",
+					element: <OrderPage />,
+				},
+				{
+					path: "order-success",
+					element: <OrderSuccess />,
 				},
 				{
 					path: "sign-up",

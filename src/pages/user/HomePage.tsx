@@ -3,17 +3,19 @@ import { Banner } from "@/components/banner";
 import { Card } from "@/components/card";
 import { Category } from "@/components/category";
 import { categoryForm } from "@/constants/category";
-import { IBackEnd, IProduct } from "@/types/data";
+import { IBackEnd, IProduct, IResponse } from "@/types/data";
 import { getCategory } from "@/utils";
 import { useEffect, useState } from "react";
 import { IoIosArrowRoundForward } from "react-icons/io";
 import { Link } from "react-router-dom";
 
 const HomePage = () => {
-	const [dataProduct, setDataProduct] = useState<IBackEnd<IProduct[]>>();
+	const [dataProduct, setDataProduct] =
+		useState<IBackEnd<IResponse<IProduct[]>>>();
 
 	useEffect(() => {
 		getAllProducts();
+		document.title = "Trang chủ";
 	}, []);
 
 	const getAllProducts = async () => {
@@ -21,7 +23,8 @@ const HomePage = () => {
 		setDataProduct(response);
 	};
 
-	const product = dataProduct?.metadata;
+	const product = dataProduct?.metadata.data;
+	console.log("product~", product);
 
 	const productPhone = getCategory(product, categoryForm.PHONE);
 	const productLaptop = getCategory(product, categoryForm.LAPTOP);
