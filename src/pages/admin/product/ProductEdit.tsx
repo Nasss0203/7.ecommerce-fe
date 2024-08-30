@@ -134,7 +134,6 @@ const ProductEdit = () => {
 			// }
 
 			const response = await updatedProduct(_idProduct as string, values);
-			console.log("response~", response);
 			if (response) {
 				form.reset();
 			}

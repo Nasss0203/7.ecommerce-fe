@@ -1,6 +1,5 @@
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
-import { fetchCheckcoutId } from "@/redux/slice/checkout.slice";
-import { createCheckout } from "@/redux/slice/order.slice";
+import { createCheckout, fetchCheckcoutId } from "@/redux/slice/checkout.slice";
 import { findAllPublishProduct } from "@/redux/slice/product.slice";
 import { formatCurrency } from "@/utils";
 import { useEffect } from "react";

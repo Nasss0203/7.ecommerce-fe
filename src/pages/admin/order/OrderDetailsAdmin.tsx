@@ -17,11 +17,9 @@ import { useLocation, useParams } from "react-router-dom";
 
 const OrderDetailsAdmin = () => {
 	const [data, setData] = useState<IBackEnd<IOrder>>();
-	console.log("data~", data);
 
 	const dispatch = useAppDispatch();
 	const listProduct = useAppSelector((state) => state.product.listProduct);
-	console.log("listProduct~", listProduct);
 
 	const { orderId } = useParams();
 	const location = useLocation();

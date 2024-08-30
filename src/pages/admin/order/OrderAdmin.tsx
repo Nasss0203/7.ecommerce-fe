@@ -1,16 +1,6 @@
-import { getAllOrderAdmin, getOrder } from "@/api/order.api";
-import { Header } from "@/components/header";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { Checkbox } from "@/components/ui/checkbox";
-import {
-	Dialog,
-	DialogContent,
-	DialogDescription,
-	DialogHeader,
-	DialogTitle,
-	DialogTrigger,
-} from "@/components/ui/dialog";
 import {
 	Popover,
 	PopoverContent,
@@ -32,19 +22,19 @@ import {
 	TableRow,
 } from "@/components/ui/table";
 import { cn } from "@/lib/utils";
-import { IBackEnd, IResponse } from "@/types/data";
-import { IOrder } from "@/types/order";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { listOrder } from "@/redux/slice/order.slice";
 import { formatCurrency } from "@/utils";
 import { format } from "date-fns";
 import { Calendar as CalendarIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { CiCircleCheck } from "react-icons/ci";
 import { FaBoxes, FaTrashAlt } from "react-icons/fa";
-import { FaPen } from "react-icons/fa6";
 import { GiReturnArrow } from "react-icons/gi";
 import { IoEyeSharp, IoSearchOutline } from "react-icons/io5";
 import { MdOutlineCancel, MdOutlineLocalShipping } from "react-icons/md";
 import { Link } from "react-router-dom";
+import OrderEdit from "./OrderEdit";
 
 const order = [
 	{
@@ -73,23 +63,20 @@ const OrderAdmin = () => {
 	const [date, setDate] = useState<Date>();
 	const [selectedIndex, setSelectedIndex] = useState<number | null>(0);
 
-	const [data, setData] = useState<IBackEnd<IResponse<IOrder[]>>>();
+	const dispatch = useAppDispatch();
+	const orderData = useAppSelector((state) => state.order.listOrder);
 
 	useEffect(() => {
-		getAllOrder();
+		dispatch(listOrder());
 	}, []);
 
-	const getAllOrder = async () => {
-		const response = await getAllOrderAdmin();
-		setData(response);
-	};
+	const data = orderData.data;
 
 	return (
 		<div className='flex flex-col gap-5'>
-			<Header>Đơn hàng</Header>
 			<div className='py-5 space-y-4 bg-white rounded-md'>
 				<div className='flex items-center justify-between px-5'>
-					<h2 className='text-lg'>Order</h2>
+					<h2 className='text-2xl font-bold'>Đơn hàng</h2>
 					<div className=''>
 						<div className='px-3 py-2 text-xs text-white rounded bg-cyan-600'>
 							Import
@@ -223,7 +210,7 @@ const OrderAdmin = () => {
 							</TableRow>
 						</TableHeader>
 						<TableBody>
-							{data?.metadata.data.map((item, index) => (
+							{data?.map((item, index) => (
 								<TableRow key={index}>
 									<TableCell className='w-10 '>
 										<Checkbox />
@@ -231,32 +218,43 @@ const OrderAdmin = () => {
 									<TableCell className=''>
 										{item._id}
 									</TableCell>
-									<TableCell className='line-clamp-1 '>
+									<TableCell className='line-clamp-1'>
 										{item.order_userId}
 									</TableCell>
 									<TableCell className='w-[210px]'>
-										{item.createdOn}
+										{new Date(
+											item.createdOn,
+										).toLocaleDateString("vi-VN", {
+											year: "numeric", // Năm
+											month: "long", // Tháng
+											day: "numeric", // Ngày
+										})}
 									</TableCell>
 									<TableCell className='text-center'>
 										{item.order_products.length}
 									</TableCell>
 									<TableCell className=''>
-										{formatCurrency(200000)}
+										{formatCurrency(
+											item.order_checkout.grandTotal,
+										)}
 									</TableCell>
-									<TableCell className=''>tiền mặt</TableCell>
-									<TableCell className='uppercase '>
-										pending
+									<TableCell className=''>COD</TableCell>
+									<TableCell className='uppercase'>
+										<DeliveryColor>
+											{item.order_status}
+										</DeliveryColor>
 									</TableCell>
 									<TableCell className='flex items-center gap-2 '>
 										<Link
-											to={`/admin/order-details/${item._id}?userId=${item.order_userId}`}
+											to={`/admin/order/order-details/${item._id}?userId=${item.order_userId}`}
 											className='block text-base'
 										>
 											<IoEyeSharp />
 										</Link>
-										<span className='text-base'>
-											<FaPen />
-										</span>
+										<OrderEdit
+											orderId={item._id}
+											userId={item.order_userId}
+										></OrderEdit>
 										<span className='text-red-500'>
 											<FaTrashAlt />
 										</span>
@@ -271,42 +269,29 @@ const OrderAdmin = () => {
 	);
 };
 
-function ModalOrderDetails({
-	orderId,
-	userId,
-}: {
-	orderId: string;
-	userId: string;
-}) {
-	const [data, setData] = useState<IBackEnd<IResponse<IOrder>>>();
-	console.log("data~", data);
-
-	const getOrderItem = async () => {
-		const response = await getOrder({ orderId, userId });
-		setData(response);
+function DeliveryColor({ children }: { children: React.ReactNode }) {
+	const colorMap: Record<string, string> = {
+		pending: "text-[#f0ad4e] bg-[#f0ad4e]",
+		cancelled: "text-red-500 bg-red-500",
+		confirmed: "text-green-500 bg-green-500",
+		shipped: "text-blue-500 bg-blue-500",
+		delivered: "text-teal-500 bg-teal-500",
 	};
 
+	const colorClass = colorMap[children as string] || ""; // Xử lý trường hợp không tìm thấy
+
 	return (
-		<>
-			<Dialog>
-				<DialogTrigger onClick={() => getOrderItem()}>
-					<span className='text-base'>
-						<IoEyeSharp />
-					</span>
-				</DialogTrigger>
-				<DialogContent className='lg:max-w-[40rem] h-[calc(100%-50%)]'>
-					<DialogHeader>
-						<DialogTitle>Are you absolutely sure?</DialogTitle>
-						<DialogDescription>
-							This action cannot be undone. This will permanently
-							delete your account and remove your data from our
-							servers.
-						</DialogDescription>
-					</DialogHeader>
-				</DialogContent>
-			</Dialog>
-		</>
+		<span
+			className={`px-3 py-2 font-semibold rounded-md bg-opacity-20 ${colorClass}`}
+		>
+			{children}
+		</span>
 	);
 }
 
+// "pending",
+// "confirmed",
+// "shipped",
+// "cancelled",
+// "delivered",
 export default OrderAdmin;

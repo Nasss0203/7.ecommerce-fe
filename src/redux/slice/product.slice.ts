@@ -43,8 +43,6 @@ export const actionUnPublish = createAsyncThunk(
 		const response = await unActionPublishProduct(payload);
 		const data = response?.metadata || [];
 		if (data === 1) {
-			//create success
-			//fetch lại dữ liệu khi được thêm mới
 			thunkAPI.dispatch(findAllPublishProduct());
 		}
 		return data;

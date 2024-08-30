@@ -41,8 +41,8 @@ const CartPage = () => {
 
 	useEffect(() => {
 		if (isCheckout === true) {
-			navigate("/checkout");
 			dispatch(resetCheckoutCart());
+			navigate("/checkout");
 		}
 	}, [isCheckout]);
 

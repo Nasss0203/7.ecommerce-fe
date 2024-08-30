@@ -61,7 +61,7 @@ function App() {
 					element: <OrderAdmin />,
 				},
 				{
-					path: "order-details/:orderId",
+					path: "order/order-details/:orderId",
 					element: <OrderDetailsAdmin />,
 				},
 				{
