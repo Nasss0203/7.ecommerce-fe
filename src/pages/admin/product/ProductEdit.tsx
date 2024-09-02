@@ -95,7 +95,7 @@ const ProductEdit = () => {
 			product_thumb: "",
 			product_price: 0,
 			product_quantity: 0,
-			product_category: "Phones",
+			product_category: "phone",
 			product_auth: _id,
 			product_attributes: {
 				brand: data?.product_attributes.brand,
@@ -118,21 +118,6 @@ const ProductEdit = () => {
 	async function onSubmit(values: any) {
 		console.log("values~", values);
 		try {
-			// const formData = new FormData();
-			// if (fileUpload) {
-			// 	formData.append("file", fileUpload);
-			// }
-
-			// if (fileUpload) {
-			// 	const uploadResponse = await uploadFile(formData);
-			// 	console.log(
-			// 		"uploadResponse: ",
-			// 		uploadResponse?.metadata?.thumb_url,
-			// 	);
-
-			// 	values.product_thumb = uploadResponse?.metadata?.thumb_url;
-			// }
-
 			const response = await updatedProduct(_idProduct as string, values);
 			if (response) {
 				form.reset();

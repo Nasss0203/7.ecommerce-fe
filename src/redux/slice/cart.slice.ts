@@ -77,7 +77,6 @@ export const deteleProductCart = createAsyncThunk(
 			productId,
 		});
 		const data = response?.metadata;
-		console.log("data~", data);
 		if (data) {
 			thunkAPI.dispatch(fetchListCart({ userId: userId }));
 		}
@@ -93,16 +92,7 @@ const initialState: {
 	listCart: {
 		_id: "",
 		cart_count_product: 0,
-		cart_products: [
-			{
-				productId: "",
-				name: "",
-				quantity: 0,
-				image: "",
-				price: 0,
-				shopId: "",
-			},
-		],
+		cart_products: [],
 		cart_state: "",
 		cart_userId: 0,
 	},

@@ -160,7 +160,7 @@ const initialState: {
 	checkoutId: Checkout;
 	order: Order;
 } = {
-	isCheckout: true,
+	isCheckout: false,
 	listCheckout: {
 		_id: "", // Hoặc null nếu bạn sử dụng ObjectId
 		checkout_auth: "",

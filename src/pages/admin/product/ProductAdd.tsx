@@ -37,7 +37,7 @@ import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
-type ProductType = "Phones" | "Laptops" | "Tablets";
+type ProductType = "phone" | "laptop" | "tablet";
 
 const ProductAdd = () => {
 	const user = isAuthenticate();
@@ -46,7 +46,7 @@ const ProductAdd = () => {
 	const navigate = useNavigate();
 	const [uploadProgress, setUploadProgress] = useState(0);
 	console.log("uploadProgress~", uploadProgress);
-	const [selectedCategory, setSelectedCategory] = useState<any>("Phones");
+	const [selectedCategory, setSelectedCategory] = useState<any>("phone");
 	const [fileUpload, setFileUpload] = useState<File | null>(null);
 
 	const form = useForm<CreateNewProductType>({
@@ -57,7 +57,7 @@ const ProductAdd = () => {
 			product_thumb: "",
 			product_price: 0,
 			product_quantity: 0,
-			product_category: "Phones",
+			product_category: "phone",
 			product_auth: _id,
 			product_attributes: {
 				brand: "",
@@ -285,9 +285,9 @@ const ProductAdd = () => {
 };
 
 const ProductAddView: Record<ProductType, JSX.Element> = {
-	Phones: <FormPhoneAdd></FormPhoneAdd>,
-	Laptops: <FormLaptopAdd></FormLaptopAdd>,
-	Tablets: <div>Tablets</div>,
+	phone: <FormPhoneAdd></FormPhoneAdd>,
+	laptop: <FormLaptopAdd></FormLaptopAdd>,
+	tablet: <div>Tablets</div>,
 };
 
 function CategoryForm(props: { category: ProductType }) {

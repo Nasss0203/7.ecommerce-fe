@@ -1,6 +1,6 @@
-import { findAllProducts } from "@/api/product.api";
-import { IBackEnd, IProduct } from "@/types/data";
-import { useEffect, useState } from "react";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { fetchFindAllProduct } from "@/redux/slice/product.slice";
+import { useEffect } from "react";
 
 interface IAuth {
 	data: {
@@ -43,22 +43,18 @@ export const getUserIdAndToken = () => {
 };
 
 export const getCategory = (product: any, key: string) => {
-	return product?.filter((item: any) => item.product_category === key);
+	return product?.data?.filter((item: any) => item.product_category === key);
 };
 
 export const getCategoryProduct = (key: string) => {
-	const [data, setData] = useState<IBackEnd<IProduct>>();
+	const dispatch = useAppDispatch();
+	const data = useAppSelector((state) => state.product.listProductAll);
 
 	useEffect(() => {
-		getAllProducts();
+		dispatch(fetchFindAllProduct());
 	}, []);
 
-	const getAllProducts = async () => {
-		const response = await findAllProducts();
-		setData(response);
-	};
-
-	const product = data?.metadata;
+	const product = data?.data;
 	const productData = getCategory(product, key);
 
 	return productData;
@@ -66,18 +62,20 @@ export const getCategoryProduct = (key: string) => {
 
 export const getCategoryDisplay = (category: string) => {
 	switch (category) {
-		case "Laptops":
+		case "laptop":
 			return "laptop";
-		case "Phones":
+		case "phone":
 			return "dien-thoai";
 		default:
 			return "";
 	}
 };
 
-export const formatCurrency = (amount: number) => {
+const formatCurrency = (amount: number) => {
 	return new Intl.NumberFormat("vi-VN", {
 		style: "currency",
 		currency: "VND",
 	}).format(amount);
 };
+
+export { formatCurrency };

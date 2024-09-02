@@ -18,22 +18,22 @@ const attributesPhone = {
 	],
 	brand: [
 		{
-			name: "Samsung",
+			name: "samsung",
 		},
 		{
-			name: "Iphone",
+			name: "iphone",
 		},
 		{
-			name: "Oppo",
+			name: "oppo",
 		},
 		{
-			name: "Xiaomi",
+			name: "xiaomi",
 		},
 		{
-			name: "Realme",
+			name: "realme",
 		},
 		{
-			name: "Nokia",
+			name: "nokia",
 		},
 	],
 	storage_capacity: [

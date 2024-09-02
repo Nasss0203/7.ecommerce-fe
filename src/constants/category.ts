@@ -2,19 +2,19 @@ import { ICategory } from "@/types/data";
 
 const categoryOptions: ICategory[] = [
 	{
-		name: "Phones",
+		name: "phone",
 	},
 	{
-		name: "Laptops",
+		name: "laptop",
 	},
 	{
-		name: "Tablets",
+		name: "tablet",
 	},
 ];
 
 const categoryForm = {
-	PHONE: "Phones",
-	LAPTOP: "Laptops",
+	PHONE: "phone",
+	LAPTOP: "laptop",
 };
 
 export { categoryForm, categoryOptions };

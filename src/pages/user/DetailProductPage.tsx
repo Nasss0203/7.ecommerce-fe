@@ -17,7 +17,7 @@ import {
 	DialogTrigger,
 } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Skeleton } from "@/components/ui/skeleton";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import {
 	addToCart,
@@ -87,22 +87,96 @@ const DetailProductPage = () => {
 		);
 	};
 
-	if (!product) return null;
+	if (!product)
+		return (
+			<div className='container px-3 space-y-5 lg:px-0'>
+				<Breadcrumb>
+					<BreadcrumbList>
+						<BreadcrumbItem>
+							<BreadcrumbLink>
+								<Skeleton className='w-24 h-3'></Skeleton>
+							</BreadcrumbLink>
+						</BreadcrumbItem>
+						<BreadcrumbSeparator />
+						<BreadcrumbItem>
+							<BreadcrumbLink>
+								<Skeleton className='w-24 h-3'></Skeleton>
+							</BreadcrumbLink>
+						</BreadcrumbItem>
+						<BreadcrumbSeparator />
+						<BreadcrumbItem>
+							<BreadcrumbPage>
+								<Skeleton className='h-3 w-96'></Skeleton>
+							</BreadcrumbPage>
+						</BreadcrumbItem>
+					</BreadcrumbList>
+				</Breadcrumb>
+				<div className='gap-10 lg:grid lg:grid-cols-12'>
+					<div className='flex flex-col gap-10 lg:col-span-6'>
+						<Skeleton className='w-full h-[250px]'></Skeleton>
+					</div>
+					<div className='flex flex-col justify-start gap-3 lg:gap-6 lg:col-span-6'>
+						<div className='flex flex-col gap-2 lg:gap-4'>
+							<div className='space-y-2'>
+								<Skeleton className='w-full h-6'></Skeleton>
+								<Skeleton className='w-full h-6'></Skeleton>
+							</div>
+							<div className='grid grid-cols-2'>
+								<div className='space-y-2'>
+									<Skeleton className='h-4 w-36'></Skeleton>
+									<Skeleton className='h-4 w-36'></Skeleton>
+								</div>
+							</div>
+						</div>
+						<div className='w-full border-t border-neutral-300'></div>
+						<div className='flex items-center gap-3'>
+							<div className='flex items-center gap-3'>
+								<Skeleton className='w-[170px] h-7'></Skeleton>
+								<Skeleton className='w-[140px] h-7'></Skeleton>
+							</div>
+						</div>
+						<div className='flex items-center gap-5 '>
+							<Skeleton className='w-[115px] h-10'></Skeleton>
+							<Skeleton className='w-[350px] h-10'></Skeleton>
+						</div>
+					</div>
+				</div>
+				<div className='gap-10 pt-5 lg:pt-0 lg:grid lg:grid-cols-12'>
+					<div className='flex flex-col gap-3 lg:col-span-6'>
+						<h2 className='text-xl font-bold'>
+							<Skeleton className='w-[190px] h-7'></Skeleton>
+						</h2>
+						<div className='flex flex-col items-center gap-2'>
+							{Array(7)
+								.fill(0)
+								.map((item, index) => (
+									<Skeleton
+										className='w-full h-4'
+										key={index}
+									></Skeleton>
+								))}
+							<Skeleton className='w-[280px] h-10'></Skeleton>
+						</div>
+					</div>
+				</div>
+			</div>
+		);
+
 	document.title = product.product_name;
 
 	return (
 		<div className='container px-3 space-y-5 lg:px-0'>
-			<Breadcrumb className='mt-5'>
+			<Breadcrumb>
 				<BreadcrumbList>
 					<BreadcrumbItem>
 						<BreadcrumbLink>
-							<Link to='/'>Home</Link>
+							<Link to='/'>Trang chủ</Link>
 						</BreadcrumbLink>
 					</BreadcrumbItem>
 					<BreadcrumbSeparator />
 					<BreadcrumbItem>
 						<BreadcrumbLink>
-							<Link to='/components'>
+							<Link to={`/${product?.product_category}`}>
 								{product?.product_category}
 							</Link>
 						</BreadcrumbLink>
@@ -209,61 +283,41 @@ const DetailProductPage = () => {
 				</div>
 			</div>
 			<div className='gap-10 pt-5 lg:pt-0 lg:grid lg:grid-cols-12'>
-				<div className='flex flex-col gap-10 lg:col-span-6'>
-					<Tabs defaultValue='description' className='w-full '>
-						<TabsList className='dark:data-[state=active]:bg-blue-500'>
-							<TabsTrigger
-								value='description'
-								className='dark:data-[state=active]:bg-blue-500'
-							>
-								Description
-							</TabsTrigger>
-							<TabsTrigger
-								value='password'
-								className='dark:data-[state=active]:bg-blue-500'
-							>
-								Password
-							</TabsTrigger>
-						</TabsList>
-						<TabsContent value='description'>
-							<div className='flex flex-col items-center gap-3'>
-								<div className=' lg:line-clamp-[8] line-clamp-4'>
-									<div
-										dangerouslySetInnerHTML={{
-											__html: product?.product_description,
-										}}
-									></div>
+				<div className='flex flex-col gap-3 lg:col-span-6'>
+					<h2 className='text-xl font-bold'>Thông tin sản phẩm</h2>
+					<div className='flex flex-col items-center gap-3'>
+						<div className=' lg:line-clamp-[8] line-clamp-4'>
+							<div
+								dangerouslySetInnerHTML={{
+									__html: product?.product_description,
+								}}
+							></div>
+						</div>
+						<Dialog>
+							<DialogTrigger>
+								<div className='py-3 w-[300px] text-base font-medium text-blue-500 border border-blue-500 rounded-md flex items-center gap-2 justify-center'>
+									Xem thêm
+									<span className='text-2xl'>
+										<IoMdArrowDropright />
+									</span>
 								</div>
-								<Dialog>
-									<DialogTrigger>
-										<div className='py-3 w-[300px] text-base font-medium text-blue-500 border border-blue-500 rounded-md flex items-center gap-2 justify-center'>
-											Xem thêm
-											<span className='text-2xl'>
-												<IoMdArrowDropright />
-											</span>
-										</div>
-									</DialogTrigger>
-									<DialogContent className='lg:max-w-[76rem] top-0 translate-y-0 h-[calc(100%-1%)]'>
-										<AlertDialogHeader>
-											<DialogTitle></DialogTitle>
-											<ScrollArea className='w-full lg:px-[150px] max-h-[calc(100vh-5rem)] mb-[100px] rounded-md'>
-												<DialogDescription>
-													<div
-														dangerouslySetInnerHTML={{
-															__html: product?.product_description,
-														}}
-													></div>
-												</DialogDescription>
-											</ScrollArea>
-										</AlertDialogHeader>
-									</DialogContent>
-								</Dialog>
-							</div>
-						</TabsContent>
-						<TabsContent value='password'>
-							Change your password here.
-						</TabsContent>
-					</Tabs>
+							</DialogTrigger>
+							<DialogContent className='lg:max-w-[76rem] top-0 translate-y-0 h-[calc(100%-1%)]'>
+								<AlertDialogHeader>
+									<DialogTitle></DialogTitle>
+									<ScrollArea className='w-full lg:px-[150px] max-h-[calc(100vh-5rem)] mb-[100px] rounded-md'>
+										<DialogDescription>
+											<div
+												dangerouslySetInnerHTML={{
+													__html: product?.product_description,
+												}}
+											></div>
+										</DialogDescription>
+									</ScrollArea>
+								</AlertDialogHeader>
+							</DialogContent>
+						</Dialog>
+					</div>
 				</div>
 			</div>
 		</div>

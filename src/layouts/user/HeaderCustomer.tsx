@@ -1,4 +1,5 @@
 import { searchProduct } from "@/api/product.api";
+import { Category } from "@/components/category";
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -32,7 +33,6 @@ const HeaderCustomer = () => {
 	);
 
 	const listCart = useAppSelector((state) => state.cart.listCart);
-	const dataCart = listCart?.cart_products;
 
 	const auth = isAuthenticate();
 	const dataAuth = auth?.data;
@@ -68,7 +68,7 @@ const HeaderCustomer = () => {
 		<div className='fixed z-50 flex flex-col w-full'>
 			<header className='py-3 bg-secondary-700 lg:py-0 '>
 				<div className='container px-3 space-y-3 lg:px-0 lg:space-y-0'>
-					<div className='flex items-center justify-between lg:py-5'>
+					<div className='flex items-center justify-between lg:py-5 '>
 						<Link to={"/"} className='flex items-center gap-2'>
 							<img
 								srcSet='Icon.png 2x'
@@ -149,8 +149,8 @@ const HeaderCustomer = () => {
 							<Link to={"/cart"} className='relative block'>
 								<BsCart />
 								<div className='absolute left-0 flex items-center justify-center w-4 h-4 text-[9px] font-medium text-blue-500 translate-x-3 -translate-y-4 bg-white rounded-full top-1/2'>
-									{listCart?.cart_products.length
-										? listCart?.cart_products.length
+									{listCart?.cart_products.length > 0
+										? listCart.cart_products.length
 										: 0}
 								</div>
 							</Link>
@@ -255,6 +255,9 @@ const HeaderCustomer = () => {
 							</div>
 						</div>
 					</div>
+				</div>
+				<div className='container pb-2'>
+					<Category></Category>
 				</div>
 			</header>
 		</div>

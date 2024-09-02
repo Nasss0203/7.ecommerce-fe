@@ -97,7 +97,7 @@ const initialState: {
 						totalPrice: 0,
 					},
 				],
-				createdOn: Date,
+				createdOn: "",
 			},
 		],
 		totalPages: 0,

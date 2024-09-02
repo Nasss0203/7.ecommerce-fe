@@ -1,14 +1,15 @@
 import {
 	actionPublishProduct,
 	findAllDraftsForShop,
+	findAllProducts,
 	findAllPublishForShop,
 	unActionPublishProduct,
 } from "@/api/product.api";
-import { IProduct } from "@/types/data";
+import { IProduct, IResponse } from "@/types/data";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 export const fetchAllDraftProduct = createAsyncThunk<IProduct[]>(
-	"fetchAllDraftProduct",
+	"product/fetchAllDraftProduct",
 	async () => {
 		const response = await findAllDraftsForShop();
 		const data = response?.metadata || [];
@@ -16,8 +17,17 @@ export const fetchAllDraftProduct = createAsyncThunk<IProduct[]>(
 	},
 );
 
+export const fetchFindAllProduct = createAsyncThunk<IProduct[]>(
+	"product/fetchFindAllProduct",
+	async () => {
+		const response = await findAllProducts();
+		const data = response?.metadata || [];
+		return data;
+	},
+);
+
 export const actionPublish = createAsyncThunk(
-	"actionPublish",
+	"product/actionPublish",
 	async (id: string, thunkAPI) => {
 		const response = await actionPublishProduct(id);
 		const data = response?.metadata || [];
@@ -29,7 +39,7 @@ export const actionPublish = createAsyncThunk(
 );
 
 export const findAllPublishProduct = createAsyncThunk<IProduct[]>(
-	"findAllPublishProduct",
+	"product/findAllPublishProduct",
 	async () => {
 		const response = await findAllPublishForShop();
 		const data = response?.metadata || [];
@@ -38,7 +48,7 @@ export const findAllPublishProduct = createAsyncThunk<IProduct[]>(
 );
 
 export const actionUnPublish = createAsyncThunk(
-	"actionUnPublish",
+	"product/actionUnPublish",
 	async (payload: string, thunkAPI) => {
 		const response = await unActionPublishProduct(payload);
 		const data = response?.metadata || [];
@@ -51,12 +61,18 @@ export const actionUnPublish = createAsyncThunk(
 
 const initialState: {
 	listProduct: IProduct[];
+	listProductAll: IResponse<IProduct[]>;
 	isPublish: boolean;
 	isUnPublish: boolean;
+	isLoading: boolean;
+	isSkeletonLoading: boolean;
 } = {
 	listProduct: [],
+	listProductAll: {},
 	isPublish: false,
 	isUnPublish: false,
+	isLoading: false,
+	isSkeletonLoading: true,
 };
 
 export const productSlice = createSlice({
@@ -68,6 +84,10 @@ export const productSlice = createSlice({
 		},
 		resetFetchPublish(state) {
 			state.isUnPublish = false;
+		},
+		actionFetchAllProduct(state) {
+			state.isLoading = false;
+			state.isSkeletonLoading = true;
 		},
 	},
 	extraReducers: (builder) => {
@@ -84,9 +104,24 @@ export const productSlice = createSlice({
 			.addCase(actionUnPublish.fulfilled, (state, action) => {
 				state.isUnPublish = true;
 			});
+		builder
+			.addCase(fetchFindAllProduct.pending, (state, action) => {
+				state.isLoading = true;
+				state.isSkeletonLoading = true;
+			})
+			.addCase(fetchFindAllProduct.fulfilled, (state, action) => {
+				state.isLoading = false;
+				state.isSkeletonLoading = false;
+				state.listProductAll.data = action.payload;
+			})
+			.addCase(fetchFindAllProduct.rejected, (state, action) => {
+				state.isLoading = false;
+				state.isSkeletonLoading = true;
+			});
 	},
 });
 // Action creators are generated for each case reducer function
-export const { resetFetchDraft, resetFetchPublish } = productSlice.actions;
+export const { resetFetchDraft, resetFetchPublish, actionFetchAllProduct } =
+	productSlice.actions;
 
 export default productSlice.reducer;

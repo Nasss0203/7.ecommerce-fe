@@ -12,9 +12,9 @@ export interface IBackEnd<T> {
 }
 
 export interface IResponse<T> {
-	currentPage: number;
-	data: T;
-	totalPages: number;
+	currentPage?: number;
+	data?: T;
+	totalPages?: number;
 }
 
 export interface IToken {

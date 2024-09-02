@@ -14,7 +14,8 @@ import {
 import { IBackEnd, IDiscount } from "@/types/data";
 import { formatCurrency, getUserIdAndToken } from "@/utils";
 import { useEffect, useLayoutEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { MdOutlineRemoveShoppingCart } from "react-icons/md";
+import { Link, useNavigate } from "react-router-dom";
 
 const CartPage = () => {
 	const { userId } = getUserIdAndToken();
@@ -24,6 +25,7 @@ const CartPage = () => {
 	const isAddCart = useAppSelector((state) => state.cart.isAddCart);
 	const listCart = useAppSelector((state) => state.cart.listCart);
 	const isCheckout = useAppSelector((state) => state.checkout.isCheckout);
+
 	const dataCart = listCart?.cart_products;
 
 	const [listDisount, setLisDiscount] = useState<IBackEnd<IDiscount>>();
@@ -41,8 +43,9 @@ const CartPage = () => {
 
 	useEffect(() => {
 		if (isCheckout === true) {
-			dispatch(resetCheckoutCart());
 			navigate("/checkout");
+
+			dispatch(resetCheckoutCart());
 		}
 	}, [isCheckout]);
 
@@ -186,7 +189,7 @@ const CartPage = () => {
 							{
 								codeId: "SHOP-1144",
 								discountId: "66addc5803d7cd621a209255",
-								shop_id: "66859264b627f62df4daf95d",
+								shop_id: userId,
 							},
 						],
 					},
@@ -198,135 +201,166 @@ const CartPage = () => {
 	};
 
 	return (
-		<div className='container flex flex-col gap-4 px-3 lg:px-0'>
-			<div className='space-y-4 '>
-				<div className='flex-col hidden w-full gap-3 pt-5 border rounded lg:flex border-neutral-400 '>
-					<h3 className='px-5 text-xl font-medium'>Cart</h3>
-					<div className='flex flex-col text-left'>
-						<div className='flex items-center text-xs font-semibold text-center uppercase bg-neutral-300'>
-							<div className='w-[5%] py-2 justify-center flex'>
-								<input
-									type='checkbox'
-									checked={selectAll}
-									onChange={handleSelectAll}
-								/>
+		<>
+			{dataCart && dataCart.length > 0 ? (
+				<div className='container flex flex-col gap-4 px-3 lg:px-0'>
+					<div className='space-y-4 '>
+						<div className='flex-col hidden w-full gap-3 pt-5 border rounded lg:flex border-neutral-400 '>
+							<h3 className='px-5 text-xl font-medium'>Cart</h3>
+							<div className='flex flex-col text-left'>
+								<div className='flex items-center text-xs font-semibold text-center uppercase bg-neutral-300'>
+									<div className='w-[5%] py-2 justify-center flex'>
+										<input
+											type='checkbox'
+											checked={selectAll}
+											onChange={handleSelectAll}
+										/>
+									</div>
+									<div className='w-[35%] text-left  py-2'>
+										Sản phẩm
+									</div>
+									<div className='w-[15%] py-4'>Giá</div>
+									<div className='w-[15%] py-4'>số lượng</div>
+									<div className='w-[15%] py-4'>
+										tổng tiền
+									</div>
+									<div className='w-[15%] py-4'>
+										xóa sản phẩm
+									</div>
+								</div>
+								<div className='h-[280px] overflow-x-auto'>
+									{dataCart?.map((item: any, index: any) => (
+										<CartDesktop
+											decreaseButton={() =>
+												handleIncreaseAndDecrease({
+													data: dataCart,
+													action: "decrease",
+													productId: item.productId,
+												})
+											}
+											increaseButton={() =>
+												handleIncreaseAndDecrease({
+													data: dataCart,
+													action: "increase",
+													productId: item.productId,
+												})
+											}
+											image={item.image}
+											name={item.name}
+											price={item.price}
+											quantity={item.quantity}
+											totalPrice={totalAmount}
+											key={index}
+											checked={selectedItems.includes(
+												item.productId,
+											)}
+											onChange={() =>
+												handleSelectItem(item.productId)
+											}
+											deleteItem={() =>
+												handleDeleteCart({
+													productId: item.productId,
+													userId: "66859264b627f62df4daf95d",
+												})
+											}
+										></CartDesktop>
+									))}
+								</div>
 							</div>
-							<div className='w-[35%] text-left  py-2'>
-								Sản phẩm
-							</div>
-							<div className='w-[15%] py-4'>Giá</div>
-							<div className='w-[15%] py-4'>số lượng</div>
-							<div className='w-[15%] py-4'>tổng tiền</div>
-							<div className='w-[15%] py-4'>xóa sản phẩm</div>
 						</div>
-						<div className='h-[280px] overflow-x-auto'>
-							{dataCart?.map((item: any, index: any) => (
-								<CartDesktop
-									decreaseButton={() =>
-										handleIncreaseAndDecrease({
-											data: dataCart,
-											action: "decrease",
-											productId: item.productId,
-										})
-									}
-									increaseButton={() =>
-										handleIncreaseAndDecrease({
-											data: dataCart,
-											action: "increase",
-											productId: item.productId,
-										})
-									}
-									image={item.image}
-									name={item.name}
-									price={item.price}
-									quantity={item.quantity}
-									totalPrice={totalAmount}
-									key={index}
-									checked={selectedItems.includes(
-										item.productId,
-									)}
-									onChange={() =>
-										handleSelectItem(item.productId)
-									}
-									deleteItem={() =>
-										handleDeleteCart({
-											productId: item.productId,
-											userId: "66859264b627f62df4daf95d",
-										})
-									}
-								></CartDesktop>
-							))}
+						{dataCart?.map((item: any, index: any) => (
+							<CartMobile
+								decreaseButton={() =>
+									handleIncreaseAndDecrease({
+										data: dataCart,
+										action: "decrease",
+										productId: item.productId,
+									})
+								}
+								increaseButton={() =>
+									handleIncreaseAndDecrease({
+										data: dataCart,
+										action: "increase",
+										productId: item.productId,
+									})
+								}
+								image={item.image}
+								name={item.name}
+								price={item.price}
+								quantity={item.quantity}
+								totalPrice={totalAmount}
+								key={index}
+								checked={selectedItems.includes(item.productId)}
+								onChange={() =>
+									handleSelectItem(item.productId)
+								}
+								deleteItem={() =>
+									handleDeleteCart({
+										productId: item.productId,
+										userId: userId,
+									})
+								}
+							></CartMobile>
+						))}
+						<div className='flex items-center justify-between'>
+							<div className='items-center hidden gap-3 ml-5 lg:flex'>
+								<div className='flex justify-center py-4'>
+									<input
+										type='checkbox'
+										checked={selectAll}
+										onChange={handleSelectAll}
+										id='all'
+									/>
+								</div>
+								<label className='text-lg' htmlFor='all'>
+									Chọn Tất Cả ({selectedItems.length})
+								</label>
+							</div>
+							<div className='flex flex-col items-center flex-1 gap-5 lg:flex-row lg:flex-none'>
+								<div className='flex items-center justify-between w-full gap-3 lg:w-auto'>
+									<span className='hidden text-lg lg:block'>
+										Tổng thanh toán:
+									</span>
+									<span className='text-sm lg:hidden'>
+										Tổng ({selectedItems.length} sản phẩm)
+									</span>
+									<span className='text-lg text-right text-blue-500 lg:text-xl'>
+										{formatCurrency(totalAmount)}
+									</span>
+								</div>
+								<div
+									className='w-full px-5 py-2 text-white bg-blue-500 rounded-md cursor-pointer lg:w-auto'
+									onClick={() => checkoutReview()}
+								>
+									Thanh Toán
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>
-				{dataCart?.map((item: any, index: any) => (
-					<CartMobile
-						decreaseButton={() =>
-							handleIncreaseAndDecrease({
-								data: dataCart,
-								action: "decrease",
-								productId: item.productId,
-							})
-						}
-						increaseButton={() =>
-							handleIncreaseAndDecrease({
-								data: dataCart,
-								action: "increase",
-								productId: item.productId,
-							})
-						}
-						image={item.image}
-						name={item.name}
-						price={item.price}
-						quantity={item.quantity}
-						totalPrice={totalAmount}
-						key={index}
-						checked={selectedItems.includes(item.productId)}
-						onChange={() => handleSelectItem(item.productId)}
-						deleteItem={() =>
-							handleDeleteCart({
-								productId: item.productId,
-								userId: userId,
-							})
-						}
-					></CartMobile>
-				))}
-				<div className='flex items-center justify-between'>
-					<div className='items-center hidden gap-3 ml-5 lg:flex'>
-						<div className='flex justify-center py-4'>
-							<input
-								type='checkbox'
-								checked={selectAll}
-								onChange={handleSelectAll}
-								id='all'
-							/>
+			) : (
+				<div className='container flex flex-col gap-4 px-3 mt-32 lg:px-0'>
+					<div className='flex flex-col gap-4'>
+						<div className='flex justify-center'>
+							<div className='text-[100px] text-red-500'>
+								<MdOutlineRemoveShoppingCart />
+							</div>
 						</div>
-						<label className='text-lg' htmlFor='all'>
-							Chọn Tất Cả ({selectedItems.length})
-						</label>
-					</div>
-					<div className='flex flex-col items-center flex-1 gap-5 lg:flex-row lg:flex-none'>
-						<div className='flex items-center justify-between w-full gap-3 lg:w-auto'>
-							<span className='hidden text-lg lg:block'>
-								Tổng thanh toán:
-							</span>
-							<span className='text-sm lg:hidden'>
-								Tổng ({selectedItems.length} sản phẩm)
-							</span>
-							<span className='text-lg text-right text-blue-500 lg:text-xl'>
-								{formatCurrency(totalAmount)}
-							</span>
-						</div>
-						<div
-							className='w-full px-5 py-2 text-white bg-blue-500 rounded-md cursor-pointer lg:w-auto'
-							onClick={() => checkoutReview()}
-						>
-							Thanh Toán
+						<h3 className='text-lg text-center'>
+							Không có sản phẩm nào trong giỏ hàng
+						</h3>
+						<div className='flex justify-center'>
+							<Link
+								to={"/"}
+								className='px-20 py-3 text-white bg-blue-500 rounded-lg'
+							>
+								Quay lại trang chủ
+							</Link>
 						</div>
 					</div>
 				</div>
-			</div>
-		</div>
+			)}
+		</>
 	);
 };
 

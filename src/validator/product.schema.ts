@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 // Define the product category schema
-const ProductCategorySchema = z.enum(["Phones", "Laptops", "Tablets"]);
+const ProductCategorySchema = z.enum(["phone", "laptop", "tablet"]);
 
 const CombinedAttributesSchema = z.object({
 	brand: z.string().optional(),
