@@ -14,7 +14,7 @@ import { useToast as ToastShadCn } from "@/components/ui/use-toast";
 import { SignUpBody, SignUpBodyType } from "@/validator/auth.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { toast as toasttify } from "react-toastify";
 
 const SignUpPage = () => {
@@ -53,7 +53,7 @@ const SignUpPage = () => {
 				<Form {...form}>
 					<form
 						onSubmit={form.handleSubmit(onSubmit)}
-						className='space-y-8'
+						className='space-y-4'
 					>
 						<div className='space-y-2'>
 							<FormField
@@ -61,11 +61,14 @@ const SignUpPage = () => {
 								name='name'
 								render={({ field }) => (
 									<FormItem>
-										<FormLabel>Username</FormLabel>
+										<FormLabel className=''>
+											Username
+										</FormLabel>
 										<FormControl>
 											<Input
 												placeholder='Enter your username'
 												{...field}
+												className='bg-transparent dark:bg-transparent'
 											/>
 										</FormControl>
 										<FormMessage />
@@ -83,6 +86,7 @@ const SignUpPage = () => {
 												placeholder='Enter your email'
 												{...field}
 												type='email'
+												className='bg-transparent dark:bg-transparent'
 											/>
 										</FormControl>
 										<FormMessage />
@@ -100,14 +104,23 @@ const SignUpPage = () => {
 												placeholder='************'
 												{...field}
 												type='password'
+												className='bg-transparent dark:bg-transparent'
 											/>
 										</FormControl>
 										<FormMessage />
 									</FormItem>
 								)}
 							/>
+							<div className='flex justify-end'>
+								<Link
+									to={"/sign-in"}
+									className='text-xs text-blue-400 underline'
+								>
+									Đăng nhập
+								</Link>
+							</div>
 						</div>
-						<Button type='submit' className='w-full bg-primary-500'>
+						<Button type='submit' className='w-full bg-blue-500'>
 							SIGN IN
 						</Button>
 					</form>

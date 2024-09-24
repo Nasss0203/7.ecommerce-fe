@@ -13,6 +13,7 @@ import {
 	Dialog,
 	DialogContent,
 	DialogDescription,
+	DialogHeader,
 	DialogTitle,
 	DialogTrigger,
 } from "@/components/ui/dialog";
@@ -272,13 +273,48 @@ const DetailProductPage = () => {
 								<LuPlus />
 							</button>
 						</div>
-						<Button
-							className='flex items-center gap-3 font-medium uppercase w-[300px]'
-							onClick={() => handleAddCart()}
-						>
-							Add to cart
-							<BsCart3 />
-						</Button>
+						{userId ? (
+							<Button
+								className='flex items-center gap-3 font-medium uppercase w-[300px] text-white'
+								onClick={() => handleAddCart()}
+							>
+								Add to cart
+								<BsCart3 />
+							</Button>
+						) : (
+							<Dialog>
+								<DialogTrigger>
+									<Button className='flex items-center gap-3 font-medium uppercase w-[300px] text-white'>
+										Add to cart
+										<BsCart3 />
+									</Button>
+								</DialogTrigger>
+								<DialogContent className='w-[400px]'>
+									<DialogHeader>
+										<DialogTitle className='mb-2 text-center'>
+											Thành viên
+										</DialogTitle>
+										<DialogDescription className='flex flex-col gap-5 text-center'>
+											Vui lòng đăng ký hoặc đăng nhập
+											<div className='flex items-center gap-3'>
+												<Link
+													to={"/sign-up"}
+													className='w-40 px-5 py-3 text-blue-500 border-[2px] border-blue-500 rounded-md'
+												>
+													Đăng ký
+												</Link>
+												<Link
+													to={"/sign-in"}
+													className='w-40 px-5 py-3 text-white bg-blue-500 rounded-md'
+												>
+													Đăng nhập
+												</Link>
+											</div>
+										</DialogDescription>
+									</DialogHeader>
+								</DialogContent>
+							</Dialog>
+						)}
 					</div>
 				</div>
 			</div>

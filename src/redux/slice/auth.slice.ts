@@ -16,8 +16,8 @@ export const authLogin = createAsyncThunk(
 	"auth/authLogin",
 	async (payload: IAuth, thunkAPI) => {
 		const response = await signIn({ ...payload });
+		console.log("response~", response);
 		const data = response?.metadata;
-		console.log("authLogin data~", data);
 		localStorage.setItem("auth", JSON.stringify(data));
 		const roles = data?.data.roles[0];
 		if (roles) {

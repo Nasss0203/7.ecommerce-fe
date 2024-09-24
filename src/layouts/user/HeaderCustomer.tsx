@@ -12,17 +12,18 @@ import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { logOut } from "@/redux/slice/auth.slice";
 import { fetchListCart } from "@/redux/slice/cart.slice";
 import { IBackEnd, IProduct } from "@/types/data";
-import { getUserIdAndToken, isAuthenticate } from "@/utils";
+import { getUserIdAndToken } from "@/utils";
 import { X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { BsCart } from "react-icons/bs";
-import { FaUserLock } from "react-icons/fa6";
+import { FaBars, FaUserLock } from "react-icons/fa6";
 import { GoPerson } from "react-icons/go";
 import { IoSearchOutline } from "react-icons/io5";
 import { Link, useLocation } from "react-router-dom";
 
 const HeaderCustomer = () => {
 	const { userId } = getUserIdAndToken();
+	console.log("userId~", userId);
 	const [searchTerm, setSearchTerm] = useState("");
 	const [searchResults, setSearchResults] = useState<IBackEnd<IProduct[]>>();
 	const location = useLocation();
@@ -33,9 +34,6 @@ const HeaderCustomer = () => {
 	);
 
 	const listCart = useAppSelector((state) => state.cart.listCart);
-
-	const auth = isAuthenticate();
-	const dataAuth = auth?.data;
 
 	useEffect(() => {
 		dispatch(fetchListCart({ userId: userId }));
@@ -154,14 +152,14 @@ const HeaderCustomer = () => {
 										: 0}
 								</div>
 							</Link>
-							{isAuthentication === true && dataAuth ? (
+							{isAuthentication === true && userId ? (
 								<DropdownMenu>
 									<DropdownMenuTrigger>
 										<div className='text-white outline-none bg-secondary-700 '>
 											<GoPerson />
 										</div>
 									</DropdownMenuTrigger>
-									<DropdownMenuContent className='w-[200px] mr-9 mt-2.5'>
+									<DropdownMenuContent className='w-[200px] mr-9 mt-2.5 dark:bg-white dark:text-neutral-900 dark:border-none '>
 										<DropdownMenuLabel>
 											My Account
 										</DropdownMenuLabel>
@@ -193,6 +191,9 @@ const HeaderCustomer = () => {
 									</DropdownMenuContent>
 								</DropdownMenu>
 							)}
+							<span className='block lg:hidden'>
+								<FaBars />
+							</span>
 						</div>
 					</div>
 					<div className='py-[14px] px-5 bg-white rounded  w-full flex items-center gap-2 relative md:hidden'>

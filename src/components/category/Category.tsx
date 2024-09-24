@@ -58,7 +58,7 @@ const Category = () => {
 					))}
 				</div>
 			</div> */}
-			<div className='flex items-center gap-5'>
+			<div className='items-center hidden gap-5 lg:flex '>
 				{category.map((item, index) => (
 					<Link
 						to={`/${item.url}`}

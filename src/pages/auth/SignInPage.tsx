@@ -15,7 +15,7 @@ import { isAuthenticate } from "@/utils";
 import { SignInBody, SignInBodyType } from "@/validator/auth.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const SignInPage = () => {
 	const dispatch = useAppDispatch();
@@ -49,7 +49,7 @@ const SignInPage = () => {
 				<Form {...form}>
 					<form
 						onSubmit={form.handleSubmit(onSubmit)}
-						className='space-y-8'
+						className='space-y-4'
 					>
 						<div className='space-y-2'>
 							<FormField
@@ -63,6 +63,7 @@ const SignInPage = () => {
 												placeholder='Enter your email'
 												{...field}
 												type='email'
+												className='bg-transparent dark:bg-transparent'
 												disabled={auth ? true : false}
 											/>
 										</FormControl>
@@ -81,6 +82,7 @@ const SignInPage = () => {
 												placeholder='************'
 												{...field}
 												type='password'
+												className='bg-transparent dark:bg-transparent'
 												disabled={auth ? true : false}
 											/>
 										</FormControl>
@@ -88,10 +90,18 @@ const SignInPage = () => {
 									</FormItem>
 								)}
 							/>
+							<div className='flex justify-end'>
+								<Link
+									to={"/sign-up"}
+									className='text-xs text-blue-400 underline'
+								>
+									Đăng ký
+								</Link>
+							</div>
 						</div>
 						<Button
 							type='submit'
-							className='w-full bg-primary-500'
+							className='w-full bg-blue-500'
 							disabled={auth ? true : false}
 						>
 							SIGN IN
