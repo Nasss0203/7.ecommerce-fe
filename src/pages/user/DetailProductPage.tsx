@@ -275,7 +275,7 @@ const DetailProductPage = () => {
 						</div>
 						{userId ? (
 							<Button
-								className='flex items-center gap-3 font-medium uppercase w-[300px] text-white'
+								className='flex items-center gap-3 font-medium uppercase  lg:w-[300px] text-white w-full'
 								onClick={() => handleAddCart()}
 							>
 								Add to cart
@@ -284,7 +284,7 @@ const DetailProductPage = () => {
 						) : (
 							<Dialog>
 								<DialogTrigger>
-									<Button className='flex items-center gap-3 font-medium uppercase w-[300px] text-white'>
+									<Button className=' items-center gap-3 font-medium uppercase  lg:w-[300px] text-white w-full'>
 										Add to cart
 										<BsCart3 />
 									</Button>
